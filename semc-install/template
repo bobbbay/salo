@@ -1,0 +1,17 @@
+# Template file for 'semc-install'
+pkgname=semc-install
+version=0.0.7
+revision=1
+hostmakedepends="curl git"
+makedepends=""
+depends=""
+short_desc="SEMC is an Open Source project to create Mission Control Technologies for big space agencies."
+maintainer="Bobbbay Bobbayan <abatterysingle@gmail.com>"
+license="MPL-2.0"
+homepage="https://github.com/semissioncontrol"
+distfiles="https://github.com/semissioncontrol/semc-install/archive/${version}.tar.gz"
+checksum="0fd2cbf617a157b4885e5f2853148eb2f000eeafbbbf93f3b0c86300b11ee5a5"
+
+do_install() {
+	vbin ./semc-install
+}
