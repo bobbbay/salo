@@ -1,6 +1,6 @@
 # Template file for 'semc-install'
 pkgname=semc-install
-version=0.0.7
+version=1.1.9
 revision=1
 #archs="i686 x86_64"
 #wrksrc=
@@ -19,8 +19,9 @@ maintainer="Bobbbay Bobbayan <abatterysingle@gmail.com>"
 license="MPL-2.0"
 homepage="github.com/semissioncontrol"
 distfiles="https://github.com/semissioncontrol/semc-install/archive/${version}.tar.gz"
-checksum=0fd2cbf617a157b4885e5f2853148eb2f000eeafbbbf93f3b0c86300b11ee5a5
+checksum=17b8036d6b0f3eacdaf810d24c6c239817fae1d2f3d91b5551db89288b723348
 
 do_install() {
 	vbin ./semc-install
 }
+
