@@ -1,0 +1,6 @@
+# Aliases for symbols, used by symbol_request().
+alias symbol:nf_log_dump_packet_common nf_log_common
+alias symbol:nf_log_dump_udp_header nf_log_common
+alias symbol:nf_log_dump_sk_uid_gid nf_log_common
+alias symbol:nf_log_l2packet nf_log_common
+alias symbol:nf_log_dump_tcp_header nf_log_common

@@ -1,0 +1,104 @@
+#!/bin/bash
+########################################################################
+# Begin $rc_base/init.d/cleanfs
+#
+# Description : Clean file system
+#
+# Authors     : Gerard Beekmans - gerard@linuxfromscratch.org
+#
+# Version     : 00.00
+#
+# Notes       :
+#
+########################################################################
+
+. /tools/etc/sysconfig/rc
+. ${rc_functions}
+
+# Function to create files/directory on boot.
+create_files() {
+	# Read in the configuration file.
+	exec 9>&0 < /tools/etc/sysconfig/createfiles
+		while read name type perm usr grp dtype maj min junk
+		do
+
+			# Ignore comments and blank lines.
+       			case "${name}" in
+				""|\#*) continue ;;
+			esac
+
+			# Ignore existing files.
+			if [ ! -e "${name}" ]; then
+				# Create stuff based on its type.
+				case "${type}" in
+					dir)
+						mkdir "${name}"
+						;;
+					file)
+						:> "${name}"
+						;;
+					dev)
+						case "${dtype}" in
+							char)
+								mknod "${name}" c ${maj} ${min}
+								;;
+							block)
+								mknod "${name}" b ${maj} ${min}
+								;;
+							pipe)
+								mknod "${name}" p
+								;;
+							*) 
+								boot_mesg -n "\nUnknown device type: ${dtype}" ${WARNING}
+								boot_mesg "" ${NORMAL}
+								;;
+						esac
+						;;
+					*)
+						boot_mesg -n "\nUnknown type: ${type}" ${WARNING}
+						boot_mesg "" ${NORMAL}
+						continue
+						;;
+				esac
+
+				# Set up the permissions, too.
+				chown ${usr}:${grp} "${name}"
+				chmod ${perm} "${name}"
+			fi
+		done
+	exec 0>&9 9>&-
+}
+
+case "${1}" in
+	start)
+		boot_mesg -n "Cleaning file systems:" ${INFO}
+
+		boot_mesg -n " /tmp" ${NORMAL}
+		cd /tmp &&
+		find . -xdev -mindepth 1 ! -name lost+found \
+			-delete || failed=1
+
+		> /var/run/utmp
+		if grep -q '^utmp:' /etc/group ; then
+			chmod 664 /var/run/utmp
+			chgrp utmp /var/run/utmp
+		fi
+
+		(exit ${failed})
+		evaluate_retval
+                boot_mesg "" ${NORMAL}
+		if [ -e /tools/etc/sysconfig/createfiles ]; then
+			if egrep -qv '^(#|$)' /tools/etc/sysconfig/createfiles 2>/dev/null; then
+				boot_mesg "Creating files and directories..."
+				create_files
+				evaluate_retval
+			fi
+		fi
+		;;
+	*)
+		echo "Usage: ${0} {start}"
+		exit 1
+		;;
+esac
+
+# End $rc_base/init.d/cleanfs

@@ -1,0 +1,51 @@
+#!/bin/bash
+########################################################################
+# Begin $rc_base/init.d/mountkernfs
+#
+# Description : Mount proc and sysfs
+#
+# Authors     : Gerard Beekmans - gerard@linuxfromscratch.org
+#
+# Version     : 00.00
+#
+# Notes       :
+#
+########################################################################
+
+. /tools/etc/sysconfig/rc
+. ${rc_functions}
+
+case "${1}" in
+	start)
+		boot_mesg -n "Mounting kernel-based file systems:" ${INFO}
+
+		if ! mountpoint /proc >/dev/null; then
+			boot_mesg -n " /proc" ${NORMAL}
+			mount -n -o nosuid,noexec,nodev -t proc proc /proc || failed=1
+		fi
+
+		if ! mountpoint /sys >/dev/null; then
+			boot_mesg -n " /sys" ${NORMAL}
+			mount -n -o nosuid,noexec,nodev -t sysfs sys /sys || failed=1
+		fi
+		if ! mountpoint /run >/dev/null; then
+			boot_mesg -n " /run" ${NORMAL}
+			mount -n -o mode=0755,nosuid,nodev -t tmpfs run /run || failed=1
+		fi
+		if ! mountpoint /dev >/dev/null; then
+			boot_mesg -n " /dev" ${NORMAL}
+			mount -n -o mode=0755,nosuid -t devtmpfs dev /dev || failed=1
+		fi
+		(exit ${failed})
+					
+                mkdir -m 1777 /run/lock
+                mkdir -p /dev/{pts,shm}           
+		;;
+
+	*)
+		echo "Usage: ${0} {start}"
+		exit 1
+		;;
+esac
+
+# End $rc_base/init.d/mountkernfs

@@ -1,0 +1,67 @@
+#!/bin/bash
+########################################################################
+# Begin $rc_base/init.d/udev
+#
+# Description : Udev Boot Script
+#
+# Authors     : Based on Open Suse Udev Rules
+#               kay.sievers@suse.de
+#
+# Adapted to  : Jim Gifford
+# LFS	      : Alexander E. Patrakov
+#
+# Version     : 00.00
+#
+# Notes       :
+#
+########################################################################
+
+. /tools/etc/sysconfig/rc
+. ${rc_functions}
+
+case "$1" in
+    start)
+	echo "" > /sys/kernel/uevent_helper
+
+	# start udevd
+	boot_mesg "\nStarting udevd..."
+	/tools/sbin/udevd --daemon
+	evaluate_retval
+
+	# start coldplugging
+	boot_mesg "Performing Coldplugging..."
+
+	# unlikely, but we may be faster than the first event
+	#mkdir -p /run/.udev/queue
+
+	# configure all devices
+	/tools/sbin/udevadm trigger --action=add --type=subsystems
+	/tools/sbin/udevadm trigger --action=add --type=devices
+	
+	# this replaces the old loop, exits after all devices are done
+	/tools/sbin/udevadm settle
+
+	echo_ok
+	;;
+
+    stop)
+	boot_mesg "Stopping udevd..."
+	killproc /tools/sbin/udevd
+	;;
+
+    restart)
+	boot_mesg "Restarting udevd..."
+	killproc /tools/sbin/udevd
+	loadproc /tools/sbin/udevd --daemon
+	evaluate_retval
+	;;
+
+    status)
+	statusproc /tools/sbin/udevd
+	;;
+
+    *)
+	echo "Usage: $0 {start|stop|restart|status|reload|force-reload}"
+	exit 1
+	;;
+esac
