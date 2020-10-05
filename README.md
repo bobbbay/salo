@@ -1,4 +1,4 @@
-# semcOS
+<img src="https://semissioncontrol.github.io/assets/logo/SEMC%20Logo%20Wide.png"/>
 
 This is semcOS. With the Open Source community, we plan to write Mission Control software for major Space Agencies. A distro built from the ground up to be fast and reliable, semcOS is hard-coded to just work.
 
