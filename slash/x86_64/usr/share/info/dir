@@ -24,6 +24,7 @@ Software development
 * Cpp: (cpp).                   The GNU C preprocessor.
 * Cpplib: (cppinternals).       Cpplib internals.
 * Gccgo: (gccgo).               A GCC-based compiler for the Go language
+* Make: (make).                 Remake files automatically.
 * g++: (gcc).                   The GNU C++ compiler.
 * gcc: (gcc).                   The GNU Compiler Collection.
 * gccinstall: (gccinstall).     Installing the GNU Compiler Collection.
