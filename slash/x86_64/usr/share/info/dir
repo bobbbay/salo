@@ -14,6 +14,9 @@ File: dir,	Node: Top	This is the top of the INFO tree
 
 * Menu:
 
+Basics
+* Bash: (bash).                 The GNU Bourne-Again SHell.
+
 GNU Libraries
 * libgomp: (libgomp).           GNU Offloading and Multi Processing Runtime 
                                   Library.
