@@ -71,3 +71,5 @@ Update GRUB, reboot, and you're in!
 
 ## Further information
 This software is licensed under the `Mozilla Public License 2.0`. Currently available for `x86_64` systems.
+
+We are currently going through LICENSE fixes. More on that soon!
