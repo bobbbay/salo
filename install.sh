@@ -28,8 +28,8 @@ cp ./0.0.4a/* ${DESTDIR}/etc/
 
 # Compile the kernel here
 
-# Grab the CLFS bootsripts here
-
 # Install zlib here
+
+# Install more things (like gcc) here
 
 # Final touchups here
