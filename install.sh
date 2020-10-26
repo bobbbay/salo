@@ -1,3 +1,5 @@
+export SEMCOS_DESTDIR
+
 # This section automatically creates the default directories for SEMC OS
 mkdir -pv ${DESTDIR}/{bin,boot{,/grub},dev,{etc/,}opt,home,lib/{firmware,modules},lib64,mnt}
 mkdir -pv ${DESTDIR}/{proc,media/{floppy,cdrom},sbin,srv,sys}
@@ -22,14 +24,32 @@ cp ./0.0.4a/* ${DESTDIR}/etc/
 
 # Intialize /var here
 
-# Initialize /boot here
-
 # Install busybox here
+wget https://github.com/semcos-packages/busybox/archive/1.31.1.tar.gz
+mv 1.31.1.tar.gz busybox-1.31.1.tar.gz
+tar xvf busybox-1.31.1.tar.gz
+cd busybox-1.31.1.tar.gz
+make defconfig
+# No extra config needed for now
+make
+make CONFIG_PREFIX=$SEMCOS_DESTDIR install
+
+# Extra pl script we might need
+cp -v examples/depmod.pl /usr/bin
+chmod 755 /usr/bin/depmod.pl
 
 # Compile the kernel here
+# Will this work?
+wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/config-5.4.69
+wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/System.map-5.4.69
+wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/vmlinuz-5.4.69
+# Hope so, if not we can compile the kernel
+
+depmod.pl -F $SEMCOS_DESTDIR/boot/System.map-5.4.69 -b $SEMCOS_DESTDIR/lib/modules/5.4.69
 
 # Install zlib here
 
 # Install more things (like gcc) here
 
 # Final touchups here
+umount $SEMCOS_DESTDIR
