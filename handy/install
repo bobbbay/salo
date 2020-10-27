@@ -1,5 +1,6 @@
 #!/bin/sh
 export SEMCOS_DESTDIR=/mnt/semcos
+mkdir $SEMCOS_DESTDIR
 
 # This section automatically creates the default directories for SEMC OS
 mkdir -pv ${DESTDIR}/{bin,boot{,/grub},dev,{etc/,}opt,home,lib/{firmware,modules},lib64,mnt}
