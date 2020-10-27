@@ -1,2 +1,2 @@
-# bin/lto-dump is a file over 200 mb
-lto-dump
+# Get rid of the target directory when commiting for handy
+handy/*/target/
