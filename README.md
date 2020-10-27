@@ -6,6 +6,8 @@ We use BusyBox, thanks to its small size and super speed. Plans are to modify so
 
 ## Installation
 
+#### The following guide is deprecated 0 nevertheless, I'm keeping it up temporarily - until we have an official installer. Check out `handy/install` for a more up-to-date script on generating this distro.
+
 This guide assumes that you have GRUB already installed.
 
 Grab any USB install image. Log in, and:
