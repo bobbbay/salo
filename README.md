@@ -1,12 +1,18 @@
 <img src="https://semissioncontrol.github.io/assets/logo/SEMC%20Logo%20Wide.png"/>
 
-This is semcOS. With the Open Source community, we plan to write Mission Control software for major Space Agencies. A distro built from the ground up to be fast and reliable, semcOS is hard-coded to just work.
+Space. The Final Frontier. Where man hesitates to go, for it is one of the most dangerous realms that can be found. Not a world, but a multitude of worlds, accessible through only one tool — the space rocket. But tools of great power rely on systems of even more tremendously large strength. These systems are the ones that are created here, at SEMC. The Space Exploration Mission Control organization strives to create powerful tools and services, Open Sourced.
 
-We use BusyBox, thanks to its small size and super speed. Plans are to modify some of BusyBox's core systems to be more efficient and cohesive with our goals. 
+And this is SEMC OS. A from-scratch distro written to be fast and reliable. Why? Because large space agencies lack one. There should be a unification when it comes to softwares that control the future of humanity - and this is where SEMC OS comes in. Hooked? Read on!
+
+We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to be more efficient and cohesive with our goals. 
 
 ## Installation
 
-#### The following guide is deprecated 0 nevertheless, I'm keeping it up temporarily - until we have an official installer. Check out `handy/install` for a more up-to-date script on generating this distro.
+An installer is coming soon! For now, trying piecing together an install process with [`handy/install`](/handy/install). 
+
+<!--
+
+#### The following guide is deprecated - furthermore, you're a weird to be looking at the source of this README. Nevertheless, I'm keeping the instructions up temporarily - until we have an official installer. Check out `handy/install` for a more up-to-date script on generating this distro.
 
 This guide assumes that you have GRUB already installed.
 
@@ -70,8 +76,23 @@ And now, change the line that says "/dev/sda6" to your `<partition>`.
 
 Update GRUB, reboot, and you're in! 
 
+-->
+
+## Contribution
+
+[Rockets Still Not Fueled](https://github.com/semissioncontrol/semcOS/search?utf8=%E2%9C%93&q=TODO) | [Small Obstacles for Takeoff](https://github.com/semissioncontrol/semcOS/issues?q=is%3Aopen+is%3Aissue+label%3A%22Good+First+Issue%22) | [etc contents](https://github.com/semcos-packages/etc)
+
+#### Useful Resources
+
+ - [Build a Custom Minimal Linux Distribution from Source by Petros Koutoupis](https://www.linuxjournal.com/content/diy-build-custom-minimal-linux-distribution-source)
+ - [site:linuxfromscratch.org "install zlib"](http://google.com/search?q=site:linuxfromscratch.org%20%22install%20zlib%22) will search for the LFS instuctions for installing ZLib - which are awesome!
 
 ## Further information
-This software is licensed under the `Mozilla Public License 2.0`. Currently available for `x86_64` systems.
 
-We are currently going through LICENSE fixes. More on that soon!
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+SEMC OS Authors, Top Contributors and Nexus Aurora High members retain the rights of SEMC OS. Contributors mean each individual or legal entity that creates, contributes to the creation of, or owns this software.
+
+You can find our packages repositories [here](https://github.com/semcos-packages/). 
