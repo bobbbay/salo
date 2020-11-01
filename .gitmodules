@@ -1,0 +1,12 @@
+[submodule "packages/etc"]
+	path = packages/etc
+	url = https://github.com/semcos-packages/etc
+[submodule "packages/busybox"]
+	path = packages/busybox
+	url = https://github.com/semcos-packages/busybox
+[submodule "packages/neofetch"]
+	path = packages/neofetch
+	url = https://github.com/semcos-packages/neofetch
+[submodule "packages/pfetch"]
+	path = packages/pfetch
+	url = https://github.com/semcos-packages/pfetch
