@@ -8,7 +8,14 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 
 ## Installation
 
-An installer is coming soon! For now, trying piecing together an install process with [`handy/install`](/handy/install). 
+```bash
+git clone https://github.com/semissioncontrol/semcOS
+cd semcOS
+./semcos devel init x86_64
+./semcos devel install /dev/sdXY
+```
+
+Replacing `/dev/sdXY` with the partition you'd like to install SEMC OS onto. 
 
 <!--
 
