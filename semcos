@@ -40,7 +40,7 @@ devel)
         rm -rf mnt && echo "-- Removed mnt"
         ;;
     *)
-        echo $"Usage: $0 $1 {init}"
+        echo $"Usage: $0 $1 {init|install}"
         exit 1
     esac
     ;;
