@@ -22,6 +22,11 @@ devel)
         tar xfp semcos-$3.tar.xz && echo "--- Extracted successfully"
         exit 0
         ;;
+    partition)
+        echo "cfdisk will now be launched. Create a partition, write, and quit. Remember your partition number for $0 $1 install."
+        cfdisk
+        echo "Now run $0 $1 install /dev/sdXY (replacing XY with your new partition) to complete the install."
+        ;;
     install)
         umount mnt && echo "-- Cleaned mnt"
         rm -rf mnt && echo "-- Removed mnt"
@@ -39,8 +44,17 @@ devel)
         umount mnt && echo "-- Cleaned mnt"
         rm -rf mnt && echo "-- Removed mnt"
         ;;
+    commit)
+        git add $3 && echo "-- Added $3"
+        echo "Creating tarball - this might take a while."
+        tar cfJ semcos-tmp-build.tar.gz build/* && echo "-- Tarball created"
+        git add semcos-tmp-build.tar.gz && echo "Tarball added"
+        echo "Now launching git commit. The --signoff option has been enabled - please do not delete the Signed-off-by line."
+        sleep 0.75
+        git commit --signoff
+        ;;
     *)
-        echo $"Usage: $0 $1 {init|install}"
+        echo $"Usage: $0 $1 {init|partition|install|commit}"
         exit 1
     esac
     ;;
