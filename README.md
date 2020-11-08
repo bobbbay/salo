@@ -102,4 +102,4 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 SEMC OS Authors, Top Contributors and Nexus Aurora High members retain the rights of SEMC OS. Contributors mean each individual or legal entity that creates, contributes to the creation of, or owns this software.
 
-You can find our packages repositories [here](https://github.com/semcos-packages/). 
+You can find our packages repositories [here](https://github.com/semcos-packages/) and [here](https://github.com/quantum-package-manager/repo). 
