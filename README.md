@@ -4,7 +4,7 @@ Space. The Final Frontier. Where man hesitates to go, for it is one of the most 
 
 And this is SEMC OS. A from-scratch distro written to be fast and reliable. Why? Because large space agencies lack one. There should be a unification when it comes to softwares that control the future of humanity - and this is where SEMC OS comes in. Hooked? Read on!
 
-we use the [quantum package manager](https://github.com/quantum-package-manager/quantum-lua): Quantum is primarily a non-root pkg manager that installs things to a users home directory.
+we use the [Quantum package manager](https://github.com/quantum-package-manager/quantum-lua): Quantum is primarily a non-root pkg manager that installs things to a users home directory.
 This feature was originally created so that computers running SEMCOS wouldn't have death by package manager, but then we split off into a seperate project.
 
 ## Installation
