@@ -3,3 +3,6 @@ handy/*/target/
 
 build/
 mnt/
+
+# Get rid of useless tarballs
+*.tar.*z
