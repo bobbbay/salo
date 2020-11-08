@@ -17,6 +17,33 @@ cd semcOS
 
 Replacing `/dev/sdXY` with the partition you'd like to install SEMC OS onto. 
 
+## Development
+
+Once you're in the SEMC OS Git repo, and have run the install commands, you'll be given a `build` directory. This is what you can use to install and produce in the future.
+
+Let's run though (pretend) installing Zlib on SEMC OS. Unzip the Zlib tarball, `cd` into that directory, and run the following commands:
+
+```sh
+export SEMCOS="/home/you/path/to/semcOS/build"
+sed -i 's/-O3/-Os/g' configure
+./configure --prefix=/usr --shared
+make && make DESTDIR=${SEMCOS}/ install
+```
+
+What's happening there? Essentially, we're setting a variable `SEMCOS`, which stores the `build` directory of our SEMC OS system. Then, we run a quick `sed` command to fix some known errors with Zlib. You can generally find these sorts of patches at [Linux From Scratch](http://www.linuxfromscratch.org/lfs/view/stable/). Many packages won't need this command.
+
+Then, we run `configure`. Useful `configure` instructions can also be found at Linux From Scratch. Although `./configure` *could* work for the most part, it's best to look into which flags should be enabled/disabled. 
+
+Finally, we run two commands in one - `make`, which compiles everything, and `make install`, which installs our compiled files. Be careful though - `make install` without any flags will install it onto your system, while `make DESTDIR=${SEMCOS}/ install` will install Zlib to our SEMC OS build directory. This is really just setting the Destination Directory to `/home/you/path/to/semcOS/build`. 
+
+Note that it's regular if `make` takes a long time to run. You can usually find, yet again, SBU times (how long it takes for the package to compile relative to your system) at Linux From Scratch as well. 
+
+A wiki is in the works.
+
+## Post-development
+
+So, we just installed Zlib to our system. Now, let's run some commands to set this up for a Pull Request!
+
 <!--
 
 #### The following guide is deprecated - furthermore, you're a weird to be looking at the source of this README. Nevertheless, I'm keeping the instructions up temporarily - until we have an official installer. Check out `handy/install` for a more up-to-date script on generating this distro.
