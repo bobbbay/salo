@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! [ $(id -u) = 0 ]; then
+   echo "Error: Please run this script as root."
+   exit 1
+fi
+
 case "$1" in
 devel)
     case "$2" in
