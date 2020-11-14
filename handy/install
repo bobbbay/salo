@@ -247,9 +247,9 @@ tar xvf mpfr*
 wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.0.tar.gz
 tar xvf mpc*
 
-mv gmp*/  gcc*/gmp
-mv mpfr*/ gcc*/mpfr
-mv mpc*/  gcc*/mpc
+mv ${SEMCOS_DESTDIR}/builds/gmp*/ ${SEMCOS_DESTDIR}/builds/gcc*/gmp
+mv ${SEMCOS_DESTDIR}/builds/mpfr*/ ${SEMCOS_DESTDIR}/builds/gcc*/mpfr
+mv ${SEMCOS_DESTDIR}/builds/mpc*/ ${SEMCOS_DESTDIR}/builds/gcc*/mpc
 
 mkdir gcc-static
 cd gcc-static
