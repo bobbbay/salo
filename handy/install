@@ -247,9 +247,12 @@ tar xvf mpfr*
 wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.0.tar.gz
 tar xvf mpc*
 
-mv ${SEMCOS_DESTDIR}/builds/gmp*/ ${SEMCOS_DESTDIR}/builds/gcc*/gmp
-mv ${SEMCOS_DESTDIR}/builds/mpfr*/ ${SEMCOS_DESTDIR}/builds/gcc*/mpfr
-mv ${SEMCOS_DESTDIR}/builds/mpc*/ ${SEMCOS_DESTDIR}/builds/gcc*/mpc
+# TODO: instead of using `gcc-10.2.0`, use `gcc*`. Currently doesn't work
+# because a) mv wants to move to the literal `*` character, and b) my brain
+# doesn't work
+mv ${SEMCOS_DESTDIR}/builds/gmp*/ ${SEMCOS_DESTDIR}/builds/gcc-10.2.0/gmp
+mv ${SEMCOS_DESTDIR}/builds/mpfr*/ ${SEMCOS_DESTDIR}/builds/gcc-10.2.0/mpfr
+mv ${SEMCOS_DESTDIR}/builds/mpc*/ ${SEMCOS_DESTDIR}/builds/gcc-10.2.0/mpc
 
 mkdir gcc-static
 cd gcc-static
