@@ -1,64 +1,416 @@
-#!/bin/sh
+#!/bin/bash
+
+# Turn on some environment configurations, which will save us
+# in the future
+set +h -u
+umask 022
+export LC_ALL=POSIX
+
+# Force to run as root
+if [[ `id -u` -ne 0 ]] ; then echo "Run this script as root." ; exit 1 ; fi
+
 export SEMCOS_DESTDIR=/mnt/semcos
 mkdir $SEMCOS_DESTDIR
 
-# This section automatically creates the default directories for SEMC OS
-mkdir -pv ${DESTDIR}/{bin,boot{,/grub},dev,{etc/,}opt,home,lib/{firmware,modules},lib64,mnt}
-mkdir -pv ${DESTDIR}/{proc,media/{floppy,cdrom},sbin,srv,sys}
-mkdir -pv ${DESTDIR}/var/{lock,log,mail,run,spool}
-mkdir -pv ${DESTDIR}/var/{opt,cache,lib/{misc,locate},local}
-install -dv -m 0750 ${DESTDIR}/root
-install -dv -m 1777 ${DESTDIR}{/var,}/tmp
-install -dv ${DESTDIR}/etc/init.d
-mkdir -pv ${DESTDIR}/usr/{,local/}{bin,include,lib{,64},sbin,src}
-mkdir -pv ${DESTDIR}/usr/{,local/}share/{doc,info,locale,man}
-mkdir -pv ${DESTDIR}/usr/{,local/}share/{misc,terminfo,zoneinfo}
-mkdir -pv ${DESTDIR}/usr/{,local/}share/man/man{1,2,3,4,5,6,7,8}
-for dir in ${DESTDIR}/usr{,/local}; do
+export PATH=${SEMCOS_DESTDIR}/cross-tools/bin:/bin:/usr/bin
+
+# Create the directory structure, which is specified by the Linux Foundation
+# at http://refspecs.linuxfoundation.org/fhs.shtml
+mkdir -pv ${SEMCOS_DESTDIR}/{bin,boot{,/grub},dev,{etc/,}opt,home,lib/{firmware,modules},lib64,mnt}
+mkdir -pv ${SEMCOS_DESTDIR}/{proc,media/{floppy,cdrom},sbin,srv,sys}
+mkdir -pv ${SEMCOS_DESTDIR}/var/{lock,log,mail,run,spool}
+mkdir -pv ${SEMCOS_DESTDIR}/var/{opt,cache,lib/{misc,locate},local}
+install -dv -m 0750 ${SEMCOS_DESTDIR}/root
+install -dv -m 1777 ${SEMCOS_DESTDIR}{/var,}/tmp
+install -dv ${SEMCOS_DESTDIR}/etc/init.d
+mkdir -pv ${SEMCOS_DESTDIR}/usr/{,local/}{bin,include,lib{,64},sbin,src}
+mkdir -pv ${SEMCOS_DESTDIR}/usr/{,local/}share/{doc,info,locale,man}
+mkdir -pv ${SEMCOS_DESTDIR}/usr/{,local/}share/{misc,terminfo,zoneinfo}
+mkdir -pv ${SEMCOS_DESTDIR}/usr/{,local/}share/man/man{1,2,3,4,5,6,7,8}
+for dir in ${SEMCOS_DESTDIR}/usr{,/local}; do
     ln -sv share/{man,doc,info} ${dir}
 done
 
-# This section installs /etc/ - it needs touchups, maybe
-# even use it with the package manager?
-git clone https://github.com/semcos-packages/etc/
-cd etc/
-cp ./0.0.4a/* ${DESTDIR}/etc/
-cd
+# Install and link some files
+install -dv ${SEMCOS_DESTDIR}/cross-tools{,/bin}
+ln -svf ../proc/mounts ${SEMCOS_DESTDIR}/etc/mtab
 
-# Intialize /var here
+# Create the /etc/passwd file
+cat > ${SEMCOS_DESTDIR}/etc/passwd << "EOF"
+root::0:0:root:/root:/bin/ash
+EOF
 
-# Interesting, we'll be needing Quantum for this. I wonder how
-# it'll work. I think we'll be using Quantum to install in a 
-# different DESTDIR. Hopefully that works out OK. 
+# Create the /etc/group file
+cat > ${SEMCOS_DESTDIR}/etc/group << "EOF"
+root:x:0:
+bin:x:1:
+sys:x:2:
+kmem:x:3:
+tty:x:4:
+daemon:x:6:
+disk:x:8:
+dialout:x:10:
+video:x:12:
+utmp:x:13:
+usb:x:14:
+EOF
 
-# Install busybox here
-wget https://github.com/semcos-packages/busybox/archive/1.31.1.tar.gz
-mv 1.31.1.tar.gz busybox-1.31.1.tar.gz
-tar xvf busybox-1.31.1.tar.gz
-cd busybox-1.31.1.tar.gz
-make defconfig
-# No extra config needed for now
-make
-make CONFIG_PREFIX=$SEMCOS_DESTDIR install
+# Create the /etc/fstab
+cat > ${SEMCOS_DESTDIR}/etc/fstab << "EOF"
+# file system  mount-point  type   options          dump  fsck
+#                                                         order
 
-# Extra pl script we might need
-cp -v examples/depmod.pl /usr/bin
-chmod 755 /usr/bin/depmod.pl
+rootfs          /               auto    defaults        1      1
+proc            /proc           proc    defaults        0      0
+sysfs           /sys            sysfs   defaults        0      0
+devpts          /dev/pts        devpts  gid=4,mode=620  0      0
+tmpfs           /dev/shm        tmpfs   defaults        0      0
+EOF
 
-cd
+# Create the /etc/profile
+cat > ${SEMCOS_DESTDIR}/etc/profile << "EOF"
+export PATH=/bin:/usr/bin
 
-# Compile the kernel here
-# Will this work?
-wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/config-5.4.69
-wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/System.map-5.4.69
-wget https://github.com/semissioncontrol/semcOS/releases/download/untagged-690c9bdd0d29c5771bca/vmlinuz-5.4.69
-# Hope so, if not we can compile the kernel
+if [ `id -u` -eq 0 ] ; then
+        PATH=/bin:/sbin:/usr/bin:/usr/sbin
+        unset HISTFILE
+fi
 
-depmod.pl -F $SEMCOS_DESTDIR/boot/System.map-5.4.69 -b $SEMCOS_DESTDIR/lib/modules/5.4.69
+# Set up some environment variables.
+export USER=`id -un`
+export LOGNAME=$USER
+export HOSTNAME=`/bin/hostname`
+export HISTSIZE=1000
+export HISTFILESIZE=1000
+export PAGER='/bin/more '
+export EDITOR='/bin/vi'
+EOF
 
-# Install zlib here
+# Specify our hostname
+echo "semc" > ${SEMCOS_DESTDIR}/etc/hostname
 
-# Install more things (like gcc) here
+# Create the /etc/issue file
+cat > ${SEMCOS_DESTDIR}/etc/issue<< "EOF"
+Welcome to SEMC OS.
+Kernel \r \m
 
-# Final touchups here
+EOF
+
+# Create the /etc/inittab file
+cat > ${SEMCOS_DESTDIR}/etc/inittab<< "EOF"
+::sysinit:/etc/rc.d/startup
+
+tty1::respawn:/sbin/getty 38400 tty1
+tty2::respawn:/sbin/getty 38400 tty2
+tty3::respawn:/sbin/getty 38400 tty3
+tty4::respawn:/sbin/getty 38400 tty4
+tty5::respawn:/sbin/getty 38400 tty5
+tty6::respawn:/sbin/getty 38400 tty6
+
+::shutdown:/etc/rc.d/shutdown
+::ctrlaltdel:/sbin/reboot
+EOF
+
+# Create the mdev file
+cat > ${SEMCOS_DESTDIR}/etc/mdev.conf<< "EOF"
+# Devices:
+# Syntax: %s %d:%d %s
+# devices user:group mode
+
+# null does already exist; therefore ownership has to
+# be changed with command
+null    root:root 0666  @chmod 666 $MDEV
+zero    root:root 0666
+grsec   root:root 0660
+full    root:root 0666
+
+random  root:root 0666
+urandom root:root 0444
+hwrandom root:root 0660
+
+# console does already exist; therefore ownership has to
+# be changed with command
+console root:tty 0600 @mkdir -pm 755 fd && cd fd && for x
+ ↪in 0 1 2 3 ; do ln -sf /proc/self/fd/$x $x; done
+
+kmem    root:root 0640
+mem     root:root 0640
+port    root:root 0640
+ptmx    root:tty 0666
+
+# ram.*
+ram([0-9]*)     root:disk 0660 >rd/%1
+loop([0-9]+)    root:disk 0660 >loop/%1
+sd[a-z].*       root:disk 0660 */lib/mdev/usbdisk_link
+hd[a-z][0-9]*   root:disk 0660 */lib/mdev/ide_links
+
+tty             root:tty 0666
+tty[0-9]        root:root 0600
+tty[0-9][0-9]   root:tty 0660
+ttyO[0-9]*      root:tty 0660
+pty.*           root:tty 0660
+vcs[0-9]*       root:tty 0660
+vcsa[0-9]*      root:tty 0660
+
+ttyLTM[0-9]     root:dialout 0660 @ln -sf $MDEV modem
+ttySHSF[0-9]    root:dialout 0660 @ln -sf $MDEV modem
+slamr           root:dialout 0660 @ln -sf $MDEV slamr0
+slusb           root:dialout 0660 @ln -sf $MDEV slusb0
+fuse            root:root  0666
+
+# misc stuff
+agpgart         root:root 0660  >misc/
+psaux           root:root 0660  >misc/
+rtc             root:root 0664  >misc/
+
+# input stuff
+event[0-9]+     root:root 0640 =input/
+ts[0-9]         root:root 0600 =input/
+
+# v4l stuff
+vbi[0-9]        root:video 0660 >v4l/
+video[0-9]      root:video 0660 >v4l/
+
+# load drivers for usb devices
+usbdev[0-9].[0-9]       root:root 0660 */lib/mdev/usbdev
+usbdev[0-9].[0-9]_.*    root:root 0660
+EOF
+
+cat > ${SEMCOS_DESTDIR}/boot/grub/grub.cfg<< "EOF"
+
+set default=0
+set timeout=5
+
+set root=(hd0,1)
+
+menuentry "SEMC OS" {
+        linux   /boot/vmlinuz-5.4.77 root=/dev/sda1 ro quiet
+}
+EOF
+
+# Finally, create and assign the proper log files and permissions
+touch ${SEMCOS_DESTDIR}/var/run/utmp ${SEMCOS_DESTDIR}/var/log/{btmp,lastlog,wtmp}
+chmod -v 664 ${SEMCOS_DESTDIR}/var/run/utmp ${SEMCOS_DESTDIR}/var/log/lastlog
+
+# Now, unset our gcc variables just in case
+unset CFLAGS
+unset CXXFLAGS
+
+# Specify some environment variables we'll be using
+# throughout the install
+export SEMCOS_HOST=$(echo ${MACHTYPE} | sed "s/-[^-]*/-cross/")
+export SEMCOS_TARGET=x86_64-unknown-linux-gnu
+export SEMCOS_CPU=k8
+export SEMCOS_ARCH=$(echo ${SEMCOS_TARGET} | sed -e 's/-.*//' -e 's/i.86/i386/')
+export SEMCOS_ENDIAN=little
+
+# Now, create our builds directory and enter it
+mkdir ${SEMCOS_DESTDIR}/builds
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------------------- LINUX KERNEL HEADERS --------------------------
+# Yes, I'm using those fancy pantsy weird comment seperation thingies, 
+# have a problem bud?
+
+wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.77.tar.xz
+tar xvf linux*
+cd linux*/
+make mrproper
+make ARCH=${SEMCOS_ARCH} headers_check && make ARCH=${SEMCOS_ARCH} INSTALL_HDR_PATH=dest headers_install
+cp -rv dest/include/* ${SEMCOS_DESTDIR}/usr/include
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# --------------------------- GNU BINUTILS ------------------------------
+wget https://ftp.gnu.org/gnu/binutils/binutils-2.35.1.tar.xz
+tar xvf binutils*
+mkdir binutils-build
+cd binutils-build/
+../binutils*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
+--target=${SEMCOS_TARGET} --with-sysroot=${SEMCOS_DESTDIR} \
+--disable-nls --enable-shared --disable-multilib
+make configure-host && make
+ln -sv lib ${SEMCOS_DESTDIR}/cross-tools/lib64
+make install
+cp -v ../binutils*/include/libiberty.h ${SEMCOS_DESTDIR}/usr/include
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------------------- STATIC GCC ---------------------------
+
+wget https://bigsearcher.com/mirrors/gcc/releases/gcc-10.2.0/gcc-10.2.0.tar.gz
+tar xvf gcc*
+wget https://gmplib.org/download/gmp/gmp-6.2.0.tar.xz
+tar xvf gmp*
+wget https://www.mpfr.org/mpfr-current/mpfr-4.1.0.tar.xz
+tar xvf mpfr*
+wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.0.tar.gz
+tar xvf mpc*
+
+mv gmp*/  gcc*/gmp
+mv mpfr*/ gcc*/mpfr
+mv mpc*/  gcc*/mpc
+
+mkdir gcc-static
+cd gcc-static
+
+AR=ar LDFLAGS="-Wl,-rpath,${SEMCOS_DESTDIR}/cross-tools/lib" \
+../gcc*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
+--build=${SEMCOS_HOST} --host=${SEMCOS_HOST} \
+--target=${SEMCOS_TARGET} \
+--with-sysroot=${SEMCOS_DESTDIR}/target --disable-nls \
+--disable-shared \
+--with-mpfr-include=$(pwd)/../gcc*/mpfr/src \
+--with-mpfr-lib=$(pwd)/mpfr/src/.libs \
+--without-headers --with-newlib --disable-decimal-float \
+--disable-libgomp --disable-libmudflap --disable-libssp \
+--disable-threads --enable-languages=c,c++ \
+--disable-multilib --with-arch=${SEMCOS_CPU}
+
+make all-gcc all-target-libgcc && \
+make install-gcc install-target-libgcc
+
+ln -vs libgcc.a `${SEMCOS_TARGET}-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------------ GLIBC ---------------------
+tar xvf https://ftp.gnu.org/gnu/libc/glibc-2.32.tar.xz
+
+mkdir glibc-build
+cd glibc-build/
+
+echo "libc_cv_forced_unwind=yes" > config.cache
+echo "libc_cv_c_cleanup=yes" >> config.cache
+echo "libc_cv_ssp=no" >> config.cache
+echo "libc_cv_ssp_strong=no" >> config.cache
+
+BUILD_CC="gcc" CC="${SEMCOS_TARGET}-gcc" \
+AR="${SEMCOS_TARGET}-ar" \
+RANLIB="${SEMCOS_TARGET}-ranlib" CFLAGS="-O2" \
+../glibc*/configure --prefix=/usr \
+--host=${SEMCOS_TARGET} --build=${SEMCOS_HOST} \
+--disable-profile --enable-add-ons --with-tls \
+--enable-kernel=2.6.32 --with-__thread \
+--with-binutils=${SEMCOS_DESTDIR}/cross-tools/bin \
+--with-headers=${SEMCOS_DESTDIR}/usr/include \
+--cache-file=config.cache
+make && make install_root=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------------ GCC FINAL -------------------
+mkdir gcc-build
+cd gcc-build/
+
+AR=ar LDFLAGS="-Wl,-rpath,${SEMCOS_DESTDIR}/cross-tools/lib" \
+../gcc*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
+--build=${SEMCOS_HOST} --target=${SEMCOS_TARGET} \
+--host=${SEMCOS_HOST} --with-sysroot=${SEMCOS_DESTDIR} \
+--disable-nls --enable-shared \
+--enable-languages=c,c++ --enable-c99 \
+--enable-long-long \
+--with-mpfr-include=$(pwd)/../gcc*/mpfr/src \
+--with-mpfr-lib=$(pwd)/mpfr/src/.libs \
+--disable-multilib --with-arch=${SEMCOS_CPU}
+
+make && make install
+
+cp -v ${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib64/libgcc_s.so.1 ${SEMCOS_DESTDIR}/lib64
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ----------------- CROSS COMPILER COMPLETE -----------------
+
+# Let's set our new x-compiler flags
+export CC="${SEMCOS_TARGET}-gcc"
+export CXX="${SEMCOS_TARGET}-g++"
+export CPP="${SEMCOS_TARGET}-gcc -E"
+export AR="${SEMCOS_TARGET}-ar"
+export AS="${SEMCOS_TARGET}-as"
+export LD="${SEMCOS_TARGET}-ld"
+export RANLIB="${SEMCOS_TARGET}-ranlib"
+export READELF="${SEMCOS_TARGET}-readelf"
+export STRIP="${SEMCOS_TARGET}-strip"
+
+# ----------- BUSYBOX ------------
+https://busybox.net/downloads/busybox-1.31.1.tar.bz2
+tar xvf busybox*
+cd busybox*/
+
+make CROSS_COMPILE="${SEMCOS_TARGET}-" defconfig
+# Customize busybox here
+make CROSS_COMPILE="${SEMCOS_TARGET}-"
+make CROSS_COMPILE="${SEMCOS_TARGET}-" \
+CONFIG_PREFIX="${SEMCOS_DESTDIR}" install
+
+# Install extra pl script
+cp -v examples/depmod.pl ${SEMCOS_DESTDIR}/cross-tools/bin
+chmod 755 ${SEMCOS_DESTDIR}/cross-tools/bin/depmod.pl
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# -------------- KERNEL --------------
+make ARCH=${SEMCOS_ARCH} \
+CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig
+# Customize kernel here
+make ARCH=${SEMCOS_ARCH} \
+CROSS_COMPILE=${SEMCOS_TARGET}-
+make ARCH=${SEMCOS_ARCH} \
+CROSS_COMPILE=${SEMCOS_TARGET}- \
+INSTALL_MOD_PATH=${SEMCOS_DESTDIR} modules_install
+
+# Throw these into /boot
+cp -v arch/x86/boot/bzImage ${SEMCOS_DESTDIR}/boot/vmlinuz-5.4.77
+cp -v System.map ${SEMCOS_DESTDIR}/boot/System.map-5.4.77
+cp -v .config ${SEMCOS_DESTDIR}/boot/config-5.4.77
+
+# Run previously mentioned perl script
+${SEMCOS_DESTDIR}/cross-tools/bin/depmod.pl \
+-F ${SEMCOS_DESTDIR}/boot/System.map-5.4.77 \
+-b ${SEMCOS_DESTDIR}/lib/modules/5.4.77
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ----------- BOOTSCRIPTS -------------
+wget http://ftp.lfs-matrix.net/pub/clfs/conglomeration/clfs-embedded-bootscripts/clfs-embedded-bootscripts-1.0-pre5.tar.bz2
+tar xvf clfs-embedded-bootscripts*.tar.bz2
+cd clfs-embedded-bootscripts*/
+
+make DESTDIR=${SEMCOS_DESTDIR}/ install-bootscripts
+ln -sv ../rc.d/startup ${SEMCOS_DESTDIR}/etc/init.d/rcS
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ---------------- ZLIB -------------------
+wget https://zlib.net/fossils/zlib-1.2.11.tar.gz
+tar xvf zlib*.tar.gz
+cd zlib*/
+
+sed -i 's/-O3/-Os/g' configure
+./configure --prefix=/usr --shared
+make && make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+mv -v ${SEMCOS_DESTDIR}/usr/lib/libz.so.* ${SEMCOS_DESTDIR}/lib
+ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so
+ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so.1
+ln -svf ../lib/libz.so.1 ${SEMCOS_DESTDIR}/lib64/libz.so.1
+
+# ----------- PACKAGES INTALLATION COMPLETE --------------
+
+# Touchups time! Strip all debug symbols, keeping the files footprint
+# to an absolute minimum
+find ${SEMCOS_DESTDIR}/{,usr/}{bin,lib,sbin} -type f -exec strip --strip-debug '{}' ';'
+find ${SEMCOS_DESTDIR}/{,usr/}lib64 -type f -exec strip --strip-debug '{}' ';'
+
+# Change file ownerships and create nodes here
+chown -R root:root ${SEMCOS_DESTDIR}
+chgrp 13 ${SEMCOS_DESTDIR}/var/run/utmp ${SEMCOS_DESTDIR}/var/log/lastlog
+mknod -m 0666 ${SEMCOS_DESTDIR}/dev/null c 1 3
+mknod -m 0600 ${SEMCOS_DESTDIR}/dev/console c 5 1
+chmod 4755 ${SEMCOS_DESTDIR}/bin/busybox
+
+# Unmount
 umount $SEMCOS_DESTDIR
+
+echo "Installation complete."
