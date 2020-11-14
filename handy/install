@@ -2,7 +2,7 @@
 
 # Turn on some environment configurations, which will save us
 # in the future
-set +h -u
+set +h -u -e
 umask 022
 export LC_ALL=POSIX
 
