@@ -278,7 +278,8 @@ ln -vs libgcc.a `${SEMCOS_TARGET}-gcc -print-libgcc-file-name | sed 's/libgcc/&_
 cd ${SEMCOS_DESTDIR}/builds
 
 # ------------------ GLIBC ---------------------
-tar xvf https://ftp.gnu.org/gnu/libc/glibc-2.32.tar.xz
+wget https://ftp.gnu.org/gnu/libc/glibc-2.32.tar.xz
+tar xvf glibc*
 
 mkdir glibc-build
 cd glibc-build/
@@ -337,7 +338,7 @@ export READELF="${SEMCOS_TARGET}-readelf"
 export STRIP="${SEMCOS_TARGET}-strip"
 
 # ----------- BUSYBOX ------------
-https://busybox.net/downloads/busybox-1.31.1.tar.bz2
+wget https://busybox.net/downloads/busybox-1.31.1.tar.bz2
 tar xvf busybox*
 cd busybox*/
 
