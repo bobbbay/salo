@@ -379,7 +379,7 @@ ${SEMCOS_DESTDIR}/cross-tools/bin/depmod.pl \
 cd ${SEMCOS_DESTDIR}/builds
 
 # ----------- BOOTSCRIPTS -------------
-wget http://ftp.lfs-matrix.net/pub/clfs/conglomeration/clfs-embedded-bootscripts/clfs-embedded-bootscripts-1.0-pre5.tar.bz2
+wget http://ftp.osuosl.org/pub/clfs/conglomeration/clfs-embedded-bootscripts/clfs-embedded-bootscripts-1.0-pre5.tar.bz2
 tar xvf clfs-embedded-bootscripts*.tar.bz2
 cd clfs-embedded-bootscripts*/
 
