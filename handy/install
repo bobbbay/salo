@@ -355,6 +355,8 @@ chmod 755 ${SEMCOS_DESTDIR}/cross-tools/bin/depmod.pl
 cd ${SEMCOS_DESTDIR}/builds
 
 # -------------- KERNEL --------------
+cd linux*/
+
 make ARCH=${SEMCOS_ARCH} \
 CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig
 # Customize kernel here
