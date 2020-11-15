@@ -338,7 +338,7 @@ export READELF="${SEMCOS_TARGET}-readelf"
 export STRIP="${SEMCOS_TARGET}-strip"
 
 # ----------- BUSYBOX ------------
-wget https://busybox.net/downloads/busybox-1.31.1.tar.bz2
+wget https://busybox.net/downloads/busybox-1.32.0.tar.bz2
 tar xvf busybox*
 cd busybox*/
 
