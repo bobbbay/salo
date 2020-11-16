@@ -178,76 +178,6 @@ usbdev[0-9].[0-9]       root:root 0660 */lib/mdev/usbdev
 usbdev[0-9].[0-9]_.*    root:root 0660
 EOF
 
-cat > ${SEMCOS_DESTDIR}/etc/network/interfaces << "EOF"
-auto eth0
-iface eth0 inet dhcp
-auto wlan0
-iface wlan0 inet dhcp
-EOF
-
-cat > ${SEMCOS_DESTDIR}/etc/network.conf << "EOF"
-# Global Networking Configuration
-# interface configuration is in /etc/network.d/
-
-INTERFACE="eth0"
-
-# set to yes to enable networking
-NETWORKING=yes
-
-# set to yes to set default route to gateway
-USE_GATEWAY=no
-
-# set to gateway IP address
-GATEWAY=10.0.2.2
-EOF
-
-mkdir -pv ${SEMCOS_DESTDIR}/etc/network/if-{post-{up,down},pre-{up,down},up,down}.d
-mkdir -pv ${SEMCOS_DESTDIR}/usr/share/udhcpc
-
-# TODO: Put this in the /etc contents, not in here
-cat > ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script << "EOF"
-#!/bin/sh
-# udhcpc Interface Configuration
-# Based on http://lists.debian.org/debian-boot/2002/11/msg00500.html
-# udhcpc script edited by Tim Riker <Tim@Rikers.org>
-
-[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
-
-RESOLV_CONF="/etc/resolv.conf"
-[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
-[ -n "$subnet" ] && NETMASK="netmask $subnet"
-
-case "$1" in
-    deconfig)
-            /sbin/ifconfig $interface 0.0.0.0
-            ;;
-
-    renew|bound)
-            /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-
-            if [ -n "$router" ] ; then
-                    while route del default gw 0.0.0.0 dev $interface ; do
-                            true
-                    done
-
-                    for i in $router ; do
-                            route add default gw $i dev $interface
-                    done
-            fi
-
-            echo -n > $RESOLV_CONF
-            [ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
-            for i in $dns ; do
-                    echo nameserver $i >> $RESOLV_CONF
-            done
-            ;;
-esac
-
-exit 0
-EOF
-
-chmod +x ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script
-
 cat > ${SEMCOS_DESTDIR}/boot/grub/grub.cfg<< "EOF"
 
 set default=0
@@ -504,6 +434,76 @@ make DESTDIR=${SEMCOS_DESTDIR}/ install
 cd ${SEMCOS_DESTDIR}/builds
 
 # ----------- PACKAGES INTALLATION COMPLETE --------------
+
+cat > ${SEMCOS_DESTDIR}/etc/network/interfaces << "EOF"
+auto eth0
+iface eth0 inet dhcp
+auto wlan0
+iface wlan0 inet dhcp
+EOF
+
+cat > ${SEMCOS_DESTDIR}/etc/network.conf << "EOF"
+# Global Networking Configuration
+# interface configuration is in /etc/network.d/
+
+INTERFACE="eth0"
+
+# set to yes to enable networking
+NETWORKING=yes
+
+# set to yes to set default route to gateway
+USE_GATEWAY=no
+
+# set to gateway IP address
+GATEWAY=10.0.2.2
+EOF
+
+mkdir -pv ${SEMCOS_DESTDIR}/etc/network/if-{post-{up,down},pre-{up,down},up,down}.d
+mkdir -pv ${SEMCOS_DESTDIR}/usr/share/udhcpc
+
+# TODO: Put this in the /etc contents, not in here
+cat > ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script << "EOF"
+#!/bin/sh
+# udhcpc Interface Configuration
+# Based on http://lists.debian.org/debian-boot/2002/11/msg00500.html
+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
+
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+
+RESOLV_CONF="/etc/resolv.conf"
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+case "$1" in
+    deconfig)
+            /sbin/ifconfig $interface 0.0.0.0
+            ;;
+
+    renew|bound)
+            /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+
+            if [ -n "$router" ] ; then
+                    while route del default gw 0.0.0.0 dev $interface ; do
+                            true
+                    done
+
+                    for i in $router ; do
+                            route add default gw $i dev $interface
+                    done
+            fi
+
+            echo -n > $RESOLV_CONF
+            [ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
+            for i in $dns ; do
+                    echo nameserver $i >> $RESOLV_CONF
+            done
+            ;;
+esac
+
+exit 0
+EOF
+
+chmod +x ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script
 
 # Touchups time! Strip all debug symbols, keeping the files footprint
 # to an absolute minimum
