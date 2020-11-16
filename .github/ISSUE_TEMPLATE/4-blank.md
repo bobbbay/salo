@@ -1,5 +1,5 @@
 ---
-name: "4. Blank \U0001F4C3"
+name: "Blank \U0001F4C3"
 about: Stop forcing me to use your templates.
 title: ''
 labels: ''
