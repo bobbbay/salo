@@ -1,5 +1,5 @@
 ---
-name: 2. Feature ✨
+name: Feature ✨
 about: That would be cool, and that would be cool, and that would be cool...
 title: This is a cool thing (please replace title)
 labels: Feature
