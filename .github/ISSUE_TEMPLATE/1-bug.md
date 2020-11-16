@@ -1,5 +1,5 @@
 ---
-name: "1. Bug \U0001F41B"
+name: "Bug \U0001F41B"
 about: Caterpillars are cool. Please make sure you've read over the wiki before submitting.
 title: This thing doesn't work (please replace title)
 labels: Bug
