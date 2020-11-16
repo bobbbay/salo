@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links: 
+  - name: Wiki
+    url: https://wiki.semc-dev.org/
+    about: Try reading this before submitting an issue!
+  - name: Discord
+    url: https://semc-dev.org/invite
+    url: https://discord.gg/2cscJcx
