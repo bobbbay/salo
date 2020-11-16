@@ -1,5 +1,5 @@
 ---
-name: 3. Question ❓
+name: Question ❓
 about: Not a bug, just a clarification.
 title: What does this button do? (please replace title)
 labels: Question
