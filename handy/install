@@ -37,7 +37,7 @@ ln -svf ../proc/mounts ${SEMCOS_DESTDIR}/etc/mtab
 
 # Create the /etc/passwd file
 cat > ${SEMCOS_DESTDIR}/etc/passwd << "EOF"
-root::0:0:root:/root:/bin/ash
+root::0:0:root:/root:/bin/sh
 EOF
 
 # Create the /etc/group file
@@ -130,8 +130,7 @@ hwrandom root:root 0660
 
 # console does already exist; therefore ownership has to
 # be changed with command
-console root:tty 0600 @mkdir -pm 755 fd && cd fd && for x
- ↪in 0 1 2 3 ; do ln -sf /proc/self/fd/$x $x; done
+console root:tty 0600 @mkdir -pm 755 fd && cd fd && for x in 0 1 2 3 ; do ln -sf /proc/self/fd/$x $x; done
 
 kmem    root:root 0640
 mem     root:root 0640
@@ -141,8 +140,8 @@ ptmx    root:tty 0666
 # ram.*
 ram([0-9]*)     root:disk 0660 >rd/%1
 loop([0-9]+)    root:disk 0660 >loop/%1
-sd[a-z].*       root:disk 0660 */lib/mdev/usbdisk_link
-hd[a-z][0-9]*   root:disk 0660 */lib/mdev/ide_links
+sd[a-z].*       root:disk 0660
+hd[a-z][0-9]*   root:disk 0660
 
 tty             root:tty 0666
 tty[0-9]        root:root 0600
@@ -175,6 +174,76 @@ video[0-9]      root:video 0660 >v4l/
 usbdev[0-9].[0-9]       root:root 0660 */lib/mdev/usbdev
 usbdev[0-9].[0-9]_.*    root:root 0660
 EOF
+
+cat > ${SEMCOS_DESTDIR}/etc/network/interfaces << "EOF"
+auto eth0
+iface eth0 inet dhcp
+auto wlan0
+iface wlan0 inet dhcp
+EOF
+
+cat > ${SEMCOS_DESTDIR}/etc/network.conf << "EOF"
+# Global Networking Configuration
+# interface configuration is in /etc/network.d/
+
+INTERFACE="eth0"
+
+# set to yes to enable networking
+NETWORKING=yes
+
+# set to yes to set default route to gateway
+USE_GATEWAY=no
+
+# set to gateway IP address
+GATEWAY=10.0.2.2
+EOF
+
+mkdir -pv ${SEMCOS_DESTDIR}/etc/network/if-{post-{up,down},pre-{up,down},up,down}.d
+mkdir -pv ${SEMCOS_DESTDIR}/usr/share/udhcpc
+
+# TODO: Put this in the /etc contents, not in here
+cat > ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script << "EOF"
+#!/bin/sh
+# udhcpc Interface Configuration
+# Based on http://lists.debian.org/debian-boot/2002/11/msg00500.html
+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
+
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+
+RESOLV_CONF="/etc/resolv.conf"
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+case "$1" in
+    deconfig)
+            /sbin/ifconfig $interface 0.0.0.0
+            ;;
+
+    renew|bound)
+            /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+
+            if [ -n "$router" ] ; then
+                    while route del default gw 0.0.0.0 dev $interface ; do
+                            true
+                    done
+
+                    for i in $router ; do
+                            route add default gw $i dev $interface
+                    done
+            fi
+
+            echo -n > $RESOLV_CONF
+            [ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
+            for i in $dns ; do
+                    echo nameserver $i >> $RESOLV_CONF
+            done
+            ;;
+esac
+
+exit 0
+EOF
+
+chmod +x ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script
 
 cat > ${SEMCOS_DESTDIR}/boot/grub/grub.cfg<< "EOF"
 
@@ -343,7 +412,7 @@ tar xvf busybox*
 cd busybox*/
 
 make CROSS_COMPILE="${SEMCOS_TARGET}-" defconfig
-# Customize busybox here
+make CROSS_COMPILE="${SEMCOS_TARGET}-" menuconfig
 make CROSS_COMPILE="${SEMCOS_TARGET}-"
 make CROSS_COMPILE="${SEMCOS_TARGET}-" \
 CONFIG_PREFIX="${SEMCOS_DESTDIR}" install
@@ -401,6 +470,35 @@ mv -v ${SEMCOS_DESTDIR}/usr/lib/libz.so.* ${SEMCOS_DESTDIR}/lib
 ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so
 ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so.1
 ln -svf ../lib/libz.so.1 ${SEMCOS_DESTDIR}/lib64/libz.so.1
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------ IANA ETC ----------------
+
+wget http://ftp.osuosl.org/pub/lfs/lfs-packages/conglomeration/iana-etc/iana-etc-2.30.tar.bz2
+wget http://patches.clfs.org/embedded-dev/iana-etc-2.30-update-2.patch
+
+tar xvf iana*.tar.bz2
+cd iana*/
+patch -Np1 -i ../iana-etc-2.30-update-2.patch
+
+make get
+make STRIP=yes
+make DESTDIR=${SEMCOS_DESTDIR} install
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ------------- SYSSTAT --------------
+wget https://github.com/sysstat/sysstat/archive/v12.4.0.tar.gz
+mv 12.4.0.tar.gz sysstat-12.4.0.tar.gz
+tar xvf sysstat*
+cd sysstat*.
+
+./configure --prefix=/usr --enable-documentation
+make
+make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
 
 # ----------- PACKAGES INTALLATION COMPLETE --------------
 
