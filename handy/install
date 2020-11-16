@@ -10,7 +10,10 @@ export LC_ALL=POSIX
 if [[ `id -u` -ne 0 ]] ; then echo "Run this script as root." ; exit 1 ; fi
 
 export SEMCOS_DESTDIR=/mnt/semcos
-mkdir $SEMCOS_DESTDIR
+mkdir $SEMCOS_DESTDIR || echo "/mnt/semcos already found, continuing to wipe"
+
+sleep 0.5
+rm -rf /mnt/semcos/*
 
 export PATH=${SEMCOS_DESTDIR}/cross-tools/bin:/bin:/usr/bin
 
