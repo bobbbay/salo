@@ -423,9 +423,9 @@ cd ${SEMCOS_DESTDIR}/builds
 
 # ------------- SYSSTAT --------------
 wget https://github.com/sysstat/sysstat/archive/v12.4.0.tar.gz
-mv 12.4.0.tar.gz sysstat-12.4.0.tar.gz
+mv v12.4.0.tar.gz sysstat-12.4.0.tar.gz
 tar xvf sysstat*
-cd sysstat*.
+cd sysstat*/
 
 ./configure --prefix=/usr --enable-documentation
 make
@@ -442,6 +442,9 @@ auto wlan0
 iface wlan0 inet dhcp
 EOF
 
+mkdir -pv ${SEMCOS_DESTDIR}/etc/network/if-{post-{up,down},pre-{up,down},up,down}.d
+mkdir -pv ${SEMCOS_DESTDIR}/usr/share/udhcpc
+
 cat > ${SEMCOS_DESTDIR}/etc/network.conf << "EOF"
 # Global Networking Configuration
 # interface configuration is in /etc/network.d/
@@ -457,9 +460,6 @@ USE_GATEWAY=no
 # set to gateway IP address
 GATEWAY=10.0.2.2
 EOF
-
-mkdir -pv ${SEMCOS_DESTDIR}/etc/network/if-{post-{up,down},pre-{up,down},up,down}.d
-mkdir -pv ${SEMCOS_DESTDIR}/usr/share/udhcpc
 
 # TODO: Put this in the /etc contents, not in here
 cat > ${SEMCOS_DESTDIR}/usr/share/udhcpc/default.script << "EOF"
