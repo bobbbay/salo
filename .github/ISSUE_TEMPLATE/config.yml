@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links: 
-  - name: Wiki
-    url: https://wiki.semc-dev.org/
-    about: Try reading this before submitting an issue!
   - name: Discord
     url: https://discord.gg/2cscJcx
     about: For questions that don't feel like a GitHub issue, ask away on the Discord server!
