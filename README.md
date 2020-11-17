@@ -9,13 +9,14 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 ## Installation
 
 ```bash
-git clone https://github.com/semissioncontrol/semcOS
-cd semcOS
-./semcos devel init x86_64
-./semcos devel install /dev/sdXY
+mkdir /mnt/semcos/
+mount /dev/sdXY /mnt/semcos
+handy/install
 ```
 
-Replacing `/dev/sdXY` with the partition you'd like to install SEMC OS onto. 
+This will insall SEMC OS onto `/dev/sdXY` (replace `XY` with your partition). This *does* take a while, due to it being compiled from scratch. On an average modern PC, this would take ~30 minutes. 
+
+You can also set Makeflags, if you know how to, to speed up the process.
 
 ## Development
 
