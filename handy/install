@@ -426,7 +426,7 @@ cd make*/
 make
 make DESTDIR=${SEMCOS_DESTDIR} install
 
-cd ${SEMCOS+DESTDIR}/builds
+cd ${SEMCOS_DESTDIR}/builds
 
 # ------------ IANA ETC ----------------
 
