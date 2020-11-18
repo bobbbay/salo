@@ -94,7 +94,7 @@ echo "semc" > ${SEMCOS_DESTDIR}/etc/hostname
 
 # Create the /etc/issue file
 cat > ${SEMCOS_DESTDIR}/etc/issue<< "EOF"
-Welcome to SEMC OS.
+SEMC OS 0.0.5-alpha. Putting the I/O in Io.
 Kernel \r \m
 
 EOF
