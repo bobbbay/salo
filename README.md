@@ -9,9 +9,9 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 ## Installation
 
 ```bash
-mkdir /mnt/semcos/
-mount /dev/sdXY /mnt/semcos
-handy/install
+# mkdir /mnt/semcos/
+# mount /dev/sdXY /mnt/semcos
+# handy/install
 ```
 
 This will insall SEMC OS onto `/dev/sdXY` (replace `XY` with your partition). This *does* take a while, due to it being compiled from scratch. On an average modern PC, this would take ~30 minutes. 
@@ -20,12 +20,15 @@ You can also set Makeflags, if you know how to, to speed up the process.
 
 ## Development
 
-Once you're in the SEMC OS Git repo, and have run the install commands, you'll be given a `build` directory. This is what you can use to install and produce in the future.
-
-Let's run though (pretend) installing Zlib on SEMC OS. Unzip the Zlib tarball, `cd` into that directory, and run the following commands:
+Let's run though (pretend) installing Zlib on SEMC OS. Add the following to the `handy/install` file (it's already there :wink:). 
 
 ```sh
-export SEMCOS="/home/you/path/to/semcOS/build"
+export SEMCOS="/mnt/semcos"
+
+wget zlibtarball.com # change this to a link to the tarball!
+tar xvf zlib*.tar.*z
+cd zlib*/
+
 sed -i 's/-O3/-Os/g' configure
 ./configure --prefix=/usr --shared
 make && make DESTDIR=${SEMCOS}/ install
@@ -46,7 +49,7 @@ A wiki is in the works.
 So, we just installed Zlib to our system. Now, let's run some commands to set this up for a Pull Request!
 
 ```
-./semcos devel commit *
+./semcos devel commit handy/install
 ```
 
 What this'll do is add all files, throw in a tarball, and start a commit. `--signoff` is enabled by default - please do not delete the `Signed-off-by: ` line. Git Signoff was introduced due to the [SCO lawsuit](http://en.wikipedia.org/wiki/SCO_v._IBM), and binds you to the legal statements mentioned [here](https://developercertificate.org/). In short, you're verifying that the code you wrote was yours, or more specifically that you have not infringed someone else's Intelectual Property with the code you have contributed. 
