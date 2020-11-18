@@ -457,6 +457,7 @@ cd ${SEMCOS_DESTDIR}/builds
 
 # ----------- PACKAGES INTALLATION COMPLETE --------------
 
+mkdir ${SEMCOS_DESTDIR}/etc/network/
 cat > ${SEMCOS_DESTDIR}/etc/network/interfaces << "EOF"
 auto eth0
 iface eth0 inet dhcp
