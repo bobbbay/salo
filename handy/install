@@ -415,7 +415,7 @@ cd bash*/
 make
 make DESTDIR=${SEMCOS_DESTDIR} install
 
-cd ${SEMCOS+DESTDIR}/builds
+cd ${SEMCOS_DESTDIR}/builds
 
 # ----------------- MAKE --------------------
 wget https://ftp.gnu.org/gnu/make/make-4.3.tar.gz
