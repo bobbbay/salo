@@ -51,11 +51,8 @@ devel)
         ;;
     commit)
         git add $3 && echo "-- Added $3"
-        echo "Creating tarball - this might take a while."
-        tar cfJ semcos-tmp-build.tar.gz build/* && echo "-- Tarball created"
-        git add semcos-tmp-build.tar.gz && echo "Tarball added"
         echo "Now launching git commit. The --signoff option has been enabled - please do not delete the Signed-off-by line."
-        sleep 0.75
+        sleep 1.25
         git commit --signoff
         ;;
     *)
