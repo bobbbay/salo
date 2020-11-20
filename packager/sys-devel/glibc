@@ -1,0 +1,26 @@
+
+# ------------------ GLIBC ---------------------
+wget https://ftp.gnu.org/gnu/libc/glibc-2.32.tar.xz
+tar xvf glibc*
+
+mkdir glibc-build
+cd glibc-build/
+
+echo "libc_cv_forced_unwind=yes" > config.cache
+echo "libc_cv_c_cleanup=yes" >> config.cache
+echo "libc_cv_ssp=no" >> config.cache
+echo "libc_cv_ssp_strong=no" >> config.cache
+
+BUILD_CC="gcc" CC="${SEMCOS_TARGET}-gcc" \
+AR="${SEMCOS_TARGET}-ar" \
+RANLIB="${SEMCOS_TARGET}-ranlib" CFLAGS="-O2" \
+../glibc*/configure --prefix=/usr \
+--host=${SEMCOS_TARGET} --build=${SEMCOS_HOST} \
+--disable-profile --enable-add-ons --with-tls \
+--enable-kernel=2.6.32 --with-__thread \
+--with-binutils=${SEMCOS_DESTDIR}/cross-tools/bin \
+--with-headers=${SEMCOS_DESTDIR}/usr/include \
+--cache-file=config.cache
+make && make install_root=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
