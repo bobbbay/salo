@@ -1,0 +1,15 @@
+# ---------------- ZLIB -------------------
+wget https://zlib.net/fossils/zlib-1.2.11.tar.gz
+tar xvf zlib*.tar.gz
+cd zlib*/
+
+sed -i 's/-O3/-Os/g' configure
+./configure --prefix=/usr --shared
+make && make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+mv -v ${SEMCOS_DESTDIR}/usr/lib/libz.so.* ${SEMCOS_DESTDIR}/lib
+ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so
+ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so.1
+ln -svf ../lib/libz.so.1 ${SEMCOS_DESTDIR}/lib64/libz.so.1
+
+cd ${SEMCOS_DESTDIR}/builds
