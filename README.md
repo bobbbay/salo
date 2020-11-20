@@ -15,14 +15,14 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
  - [ ] Create a "package manager" that can be invoked from SEMC OS
    - [ ] We can now add defaults - a cool vimrc is an example
    - [ ] Write buildfiles for everything that is being installed in the installer
-     - [ ] `/etc`
-     - [ ] For cross-compiler
-       - [ ] Kernel headers
-       - [ ] GNU Binutils
-       - [ ] Static GCC
-       - [ ] Glibc
-       - [ ] Final GCC
-     - [ ] Busybox
+     - [x] `/etc`
+     - [x] For cross-compiler
+       - [x] Kernel headers
+       - [x] GNU Binutils
+       - [x] Static GCC
+       - [x] Glibc
+       - [x] Final GCC
+     - [x] Busybox
      - [ ] Kernel itself
      - [ ] CLFS Bootscripts
      - [ ] Zlib
