@@ -6,6 +6,43 @@ And this is SEMC OS. A from-scratch distro written to be fast and reliable. Why?
 
 We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to be more efficient and cohesive with our goals. 
 
+### TODO
+
+ - [ ] Add support for gcc
+ - [ ] Add support for wireless networks
+   - [ ] Add netplug to installer
+   - [ ] Make sure mdev can recognize our devices (wlan0)
+ - [ ] Create a "package manager" that can be invoked from SEMC OS
+   - [ ] We can now add defaults - a cool vimrc is an example
+   - [ ] Write buildfiles for everything that is being installed in the installer
+     - [ ] `/etc`
+     - [ ] For cross-compiler
+       - [ ] Kernel headers
+       - [ ] GNU Binutils
+       - [ ] Static GCC
+       - [ ] Glibc
+       - [ ] Final GCC
+     - [ ] Busybox
+     - [ ] Kernel itself
+     - [ ] CLFS Bootscripts
+     - [ ] Zlib
+     - [ ] Bash
+     - [ ] Make
+     - [ ] IANA-ETC
+     - [ ] Sysstat
+   - [ ] Make this have dependencies - Kernel needs kernel headers first
+   - [ ] Make sure we are storing things in `/builds`
+ - [ ] Support more programming languages
+   - [x] Go
+   - [x] Fortran
+   - [ ] Lua
+   - [ ] Lua ffi with C
+
+### BUGS
+
+ - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
+ - [ ] gcc can act up - heck, we need to install it correctly, see [#26](https://github.com/semissioncontrol/semcos/issues/26)
+
 ## Installation
 
 ```bash
@@ -72,5 +109,3 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 SEMC OS Authors, Top Contributors and Nexus Aurora High members retain the rights of SEMC OS. Contributors mean each individual or legal entity that creates, contributes to the creation of, or owns this software.
-
-You can find our packages repositories [here](https://github.com/semcos-packages/). 
