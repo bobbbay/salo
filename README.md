@@ -24,14 +24,14 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
        - [x] Final GCC
      - [x] Busybox
      - [ ] Kernel itself
-     - [ ] CLFS Bootscripts
-     - [ ] Zlib
-     - [ ] Bash
-     - [ ] Make
-     - [ ] IANA-ETC
-     - [ ] Sysstat
+     - [x] CLFS Bootscripts
+     - [x] Zlib
+     - [x] Bash
+     - [x] Make
+     - [x] IANA-ETC
+     - [x] Sysstat
    - [ ] Make this have dependencies - Kernel needs kernel headers first
-   - [ ] Make sure we are storing things in `/builds`
+   - [x] Make sure we are storing things in `/builds`
  - [ ] Support more programming languages
    - [x] Go
    - [x] Fortran
