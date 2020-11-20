@@ -3,3 +3,5 @@
 set +h -u -e
 umask 022
 export LC_ALL=POSIX
+
+export PATH=${SEMCOS_DESTDIR}/cross-tools/bin:/bin:/usr/bin
