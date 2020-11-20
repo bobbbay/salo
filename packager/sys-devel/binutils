@@ -1,0 +1,14 @@
+# --------------------------- GNU BINUTILS ------------------------------
+wget https://ftp.gnu.org/gnu/binutils/binutils-2.35.1.tar.xz
+tar xvf binutils*
+mkdir binutils-build
+cd binutils-build/
+../binutils*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
+--target=${SEMCOS_TARGET} --with-sysroot=${SEMCOS_DESTDIR} \
+--disable-nls --enable-shared --disable-multilib
+make configure-host && make
+ln -sv lib ${SEMCOS_DESTDIR}/cross-tools/lib64
+make install
+cp -v ../binutils*/include/libiberty.h ${SEMCOS_DESTDIR}/usr/include
+
+cd ${SEMCOS_DESTDIR}/builds
