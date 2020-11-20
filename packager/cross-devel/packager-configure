@@ -1,0 +1,10 @@
+# Let's set our new x-compiler flags
+export CC="${SEMCOS_TARGET}-gcc"
+export CXX="${SEMCOS_TARGET}-g++"
+export CPP="${SEMCOS_TARGET}-gcc -E"
+export AR="${SEMCOS_TARGET}-ar"
+export AS="${SEMCOS_TARGET}-as"
+export LD="${SEMCOS_TARGET}-ld"
+export RANLIB="${SEMCOS_TARGET}-ranlib"
+export READELF="${SEMCOS_TARGET}-readelf"
+export STRIP="${SEMCOS_TARGET}-strip"
