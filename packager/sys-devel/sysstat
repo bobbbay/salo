@@ -1,0 +1,11 @@
+# ------------- SYSSTAT --------------
+wget https://github.com/sysstat/sysstat/archive/v12.4.0.tar.gz
+mv v12.4.0.tar.gz sysstat-12.4.0.tar.gz
+tar xvf sysstat*
+cd sysstat*/
+
+./configure --prefix=/usr --enable-documentation
+make
+make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
