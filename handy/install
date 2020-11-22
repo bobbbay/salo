@@ -339,6 +339,21 @@ export RANLIB="${SEMCOS_TARGET}-ranlib"
 export READELF="${SEMCOS_TARGET}-readelf"
 export STRIP="${SEMCOS_TARGET}-strip"
 
+# --------------- NATIVE GCC ---------------
+
+cd binutils*/
+mkdir -v ../binutils-build-native
+cd ../binutils-build-native
+
+AR=ar AS=as ../binutils*/configure --prefix=/usr \
+    --build=${SEMCOS_HOST} --host=${SEMCOS_TARGET} \
+    --target=${SEMCOS_TARGET} --enable-shared
+
+make configure-host
+make tooldir=/usr
+make DESTDIR=${SEMCOS_DESTDIR} tooldir=/usr install
+
+
 # ----------- BUSYBOX ------------
 wget https://busybox.net/downloads/busybox-1.32.0.tar.bz2
 tar xvf busybox*
