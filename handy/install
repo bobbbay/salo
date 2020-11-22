@@ -72,10 +72,10 @@ EOF
 
 # Create the /etc/profile
 cat > ${SEMCOS_DESTDIR}/etc/profile << "EOF"
-export PATH=/bin:/usr/bin
+export PATH=/bin:/usr/bin:/usr/local/bin
 
 if [ `id -u` -eq 0 ] ; then
-        PATH=/bin:/sbin:/usr/bin:/usr/sbin
+        PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
         unset HISTFILE
 fi
 
@@ -352,6 +352,34 @@ AR=ar AS=as ../binutils*/configure --prefix=/usr \
 make configure-host
 make tooldir=/usr
 make DESTDIR=${SEMCOS_DESTDIR} tooldir=/usr install
+
+cd ${SEMCOS_DESTDIR}/builds
+
+cd gcc*/
+cp libiberty/Makefile.in{,.orig}
+sed 's/install_to_$(SEMCOS_DESTDIR) //' libiberty/Makefile.in.orig > \
+    libiberty/Makefile.in
+cp gcc/gccbug.in{,.orig}
+sed 's/@have_mktemp_command@/yes/' gcc/gccbug.in.orig > gcc/gccbug.in
+cp gcc/Makefile.in{,.orig}
+sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
+mkdir -v ../gcc-build-native
+cd ../gcc-build-native
+
+LDFLAGS="-Wl,-rpath-link,${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib" \
+    ../gcc*/configure --prefix=/usr --libexecdir=/usr/lib \
+    --build=${SEMCOS_HOST} --host=${SEMCOS_TARGET} --target=${SEMCOS_TARGET} \
+    --enable-shared --enable-threads=posix --enable-__cxa_atexit \
+    --enable-c99 --enable-long-long --enable-clocale=gnu \
+    --enable-languages=c,c++ --disable-libstdcxx-pch
+
+cp Makefile{,.orig}
+sed "/^HOST_\(GMP\|PPL\|CLOOG\)\(LIBS\|INC\)/s:-[IL]/\(lib\|include\)::" \
+    Makefile.orig > Makefile
+make
+make DESTDIR=${SEMCOS_DESTDIR} install
+ln -sfv ../usr/bin/cpp ${SEMCOS_DESTDIR}/lib
+ln -sfv gcc ${SEMCOS_DESTDIR}/usr/bin/cc
 
 
 # ----------- BUSYBOX ------------
