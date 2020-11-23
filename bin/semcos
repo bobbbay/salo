@@ -1,5 +1,16 @@
 #!/bin/bash
 
+case $1 in
+    "check")
+        if mount | grep /mnt/semcos > /dev/null; then
+            echo "/mnt/semcos is mounted"
+        else
+            echo "warn: /mnt/semcos is not mounted"
+            exit 1
+        fi
+        exit 0
+esac
+
 # Turn on some environment configurations, which will save us
 # in the future
 set +h -u -e
