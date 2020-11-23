@@ -8,6 +8,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 
 ### TODO
 
+ - [x] Completely rewrite installation process!
  - [ ] Add support for gcc
  - [ ] Add support for wireless networks
    - [ ] Add netplug to installer
