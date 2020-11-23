@@ -9,6 +9,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 ### TODO
 
  - [x] Completely rewrite installation process!
+ - [x] More functional installer
  - [ ] Add support for gcc
  - [ ] Add support for wireless networks
    - [ ] Add netplug to installer
@@ -59,14 +60,17 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 ## Installation
 
 ```bash
+# git clone https://github.com/semissioncontrol/semcos
+# cd semcos
 # mkdir /mnt/semcos/
 # mount /dev/sdXY /mnt/semcos
-# handy/install
+# bin/semcos check
+# bin/semcos
 ```
 
-This will insall SEMC OS onto `/dev/sdXY` (replace `XY` with your partition). This *does* take a while, due to it being compiled from scratch. On an average modern PC, this could take ~30 minutes. 
+Replacing `/dev/sdXY` with the device partition you'd like to install to (for example, `/dev/sda1`). `bin/semcos check` will give you warnings about your installation - make sure you read them up! You won't be prevented to continue with installation though - that choice is up to you. 
 
-You can also set Makeflags, if you know how to, to speed up the process.
+The compilation takes some time, due to it being largely from scratch. Soon there will be a non cross compiled option. At the moment, on an average modern PC, this could take ~30 minutes. 
 
 ## Development
 
