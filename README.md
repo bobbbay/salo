@@ -12,6 +12,9 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
  - [ ] Add support for wireless networks
    - [ ] Add netplug to installer
    - [ ] Make sure mdev can recognize our devices (wlan0)
+ - [x] Add aliases, such as `q=quantum`, to default `/etc/profile`
+ - [ ] Tell the CLFS Bootscripts to set the hostname to `semc` immediately
+ - [ ] Install git
  - [ ] Create a "package manager" that can be invoked from SEMC OS
    - [ ] We can now add defaults - a cool vimrc is an example
    - [ ] Write buildfiles for everything that is being installed in the installer
@@ -37,9 +40,18 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
    - [x] Fortran
    - [ ] Lua
    - [ ] Lua ffi with C
+ - [ ] Get a working version of [Quantum](http://github.com/quantum-package-manager/) onto SEMC OS
+ - [ ] Make sure c++ works correctly - last time there were complaints about it acting up
+ - [ ] Close up [#7](https://github.com/semissioncontrol/semcos/issues/7), large refactoring. This is very close to completion!
+ - [ ] Add support for Wayland and Sway (contact Mr. Petro)
+ - [ ] Get better documentation - maybe use the GitHub built-in wiki function?
+ - [ ] Test if docker can work on this machine (needed for ESS)
 
-### BUGS
+### Known Bugs
 
+ - [x] Startup scripts are not run - newest version does not contain this issue
+ - [x] On boot, I get an error of `/dev/tty{1..6} not found` - newest version does not contain this issue
+ - [ ] My hostname is `(none)`
  - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
  - [ ] gcc can act up - heck, we need to install it correctly, see [#26](https://github.com/semissioncontrol/semcos/issues/26)
 
@@ -51,7 +63,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 # handy/install
 ```
 
-This will insall SEMC OS onto `/dev/sdXY` (replace `XY` with your partition). This *does* take a while, due to it being compiled from scratch. On an average modern PC, this would take ~30 minutes. 
+This will insall SEMC OS onto `/dev/sdXY` (replace `XY` with your partition). This *does* take a while, due to it being compiled from scratch. On an average modern PC, this could take ~30 minutes. 
 
 You can also set Makeflags, if you know how to, to speed up the process.
 
