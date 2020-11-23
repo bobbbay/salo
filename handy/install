@@ -87,6 +87,10 @@ export HISTSIZE=1000
 export HISTFILESIZE=1000
 export PAGER='/bin/more '
 export EDITOR='/bin/vi'
+
+alias q=quantum
+alias m=man
+alias s=halt
 EOF
 
 # Specify our hostname
