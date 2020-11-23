@@ -356,7 +356,10 @@ export STRIP="${SEMCOS_TARGET}-strip"
 
 # --------------- NATIVE GCC ---------------
 
-cd binutils*/
+# TODO: set this to binutils* so that we don't have to
+# change for every version, currently does not work as
+# there is binutils-build as well as binutils-2.35.1
+cd binutils-2.35.1/
 mkdir -v ../binutils-build-native
 cd ../binutils-build-native
 

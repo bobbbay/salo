@@ -1,0 +1,21 @@
+
+# ------------------ GCC FINAL -------------------
+mkdir gcc-build
+cd gcc-build/
+
+AR=ar LDFLAGS="-Wl,-rpath,${SEMCOS_DESTDIR}/cross-tools/lib" \
+../gcc*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
+--build=${SEMCOS_HOST} --target=${SEMCOS_TARGET} \
+--host=${SEMCOS_HOST} --with-sysroot=${SEMCOS_DESTDIR} \
+--disable-nls --enable-shared \
+--enable-languages=c,c++,go,fortran --enable-c99 \
+--enable-long-long \
+--with-mpfr-include=$(pwd)/../gcc*/mpfr/src \
+--with-mpfr-lib=$(pwd)/mpfr/src/.libs \
+--disable-multilib --with-arch=${SEMCOS_CPU}
+
+make && make install
+
+cp -v ${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib64/libgcc_s.so.1 ${SEMCOS_DESTDIR}/lib64
+
+cd ${SEMCOS_DESTDIR}/builds
