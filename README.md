@@ -59,6 +59,14 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
  - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
  - [ ] gcc can act up - heck, we need to install it correctly, see [#26](https://github.com/semissioncontrol/semcos/issues/26)
 
+### Plans for the near future
+
+We'd like to hit the Distrowatch Requirments, as shown:
+
+> New distributions should be installable on their own without requiring another distribution to be in place to bootstrap them. There should be an ISO or IMG file users can download, we do not list projects which are available only on cloud services (ie Amazon Linux) or as Docker containers. Also, new projects should have their own website. Distributions which only have a project page on build services like SUSE Studio will not be featured. Or that are only mentioned on a page of a larger company website as a promo or demo tool will not be listed.
+
+If we can get this, we'll have a path paved out for us. The future after this is uncertain, like many things :sparkles:
+
 ## Installation
 
 ```bash
