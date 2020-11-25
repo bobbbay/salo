@@ -10,6 +10,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 
  - [x] Completely rewrite installation process!
  - [ ] Completely rewrite installation process 2.0, featuring C + Qt
+ - [ ] Meet the [DistroWatch requirments](https://distrowatch.com/dwres.php?resource=submit)
  - [x] More functional installer
  - [ ] Add support for gcc
  - [ ] Add support for wireless networks
