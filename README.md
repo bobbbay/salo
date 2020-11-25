@@ -9,6 +9,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
 ### TODO
 
  - [x] Completely rewrite installation process!
+ - [ ] Completely rewrite installation process 2.0, featuring C + Qt
  - [x] More functional installer
  - [ ] Add support for gcc
  - [ ] Add support for wireless networks
@@ -16,7 +17,7 @@ We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to
    - [ ] Make sure mdev can recognize our devices (wlan0)
  - [x] Add aliases, such as `q=quantum`, to default `/etc/profile`
  - [ ] Tell the CLFS Bootscripts to set the hostname to `semc` immediately
- - [ ] Install git
+ - [x] Install git
  - [ ] Create a "package manager" that can be invoked from SEMC OS
    - [ ] We can now add defaults - a cool vimrc is an example
    - [ ] Write buildfiles for everything that is being installed in the installer
