@@ -82,6 +82,8 @@ Replacing `/dev/sdXY` with the device partition you'd like to install to (for ex
 
 The compilation takes some time, due to it being largely from scratch. Soon there will be a non cross compiled option. At the moment, on an average modern PC, this could take ~30 minutes. 
 
+> Disclaimer: Compilation may not work on WSL or WSL2. Proceed at your own debugging.
+
 ## Development
 
 Let's run though (pretend) installing Zlib on SEMC OS. Add the following to the `handy/install` file (it's already there :wink:). 
