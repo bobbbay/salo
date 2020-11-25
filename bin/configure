@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "DO NOT USE THIS YET."
+
+echo "Writing to makefile..."
+cat >> Makefile << "EOF"
+all:
+	gcc bin/semcos.c -o bin/semcos
+EOF
+
+echo "Done."
