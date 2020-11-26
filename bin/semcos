@@ -373,7 +373,8 @@ make DESTDIR=${SEMCOS_DESTDIR} tooldir=/usr install
 
 cd ${SEMCOS_DESTDIR}/builds
 
-cd gcc*/
+# TODO: set this to enter the directory with *
+cd gcc-10.2.0/
 cp libiberty/Makefile.in{,.orig}
 sed 's/install_to_$(SEMCOS_DESTDIR) //' libiberty/Makefile.in.orig > \
     libiberty/Makefile.in
@@ -399,6 +400,9 @@ make DESTDIR=${SEMCOS_DESTDIR} install
 ln -sfv ../usr/bin/cpp ${SEMCOS_DESTDIR}/lib
 ln -sfv gcc ${SEMCOS_DESTDIR}/usr/bin/cc
 
+echo -e "\a"
+
+cd ${SEMCOS_DESTDIR}/builds
 
 # ----------- BUSYBOX ------------
 wget https://busybox.net/downloads/busybox-1.32.0.tar.bz2
