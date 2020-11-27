@@ -378,8 +378,8 @@ cd gcc-10.2.0/
 cp libiberty/Makefile.in{,.orig}
 sed 's/install_to_$(SEMCOS_DESTDIR) //' libiberty/Makefile.in.orig > \
     libiberty/Makefile.in
-cp gcc/gccbug.in{,.orig}
-sed 's/@have_mktemp_command@/yes/' gcc/gccbug.in.orig > gcc/gccbug.in
+# cp gcc/gccbug.in{,.orig}
+# sed 's/@have_mktemp_command@/yes/' gcc/gccbug.in.orig > gcc/gccbug.in
 cp gcc/Makefile.in{,.orig}
 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
 mkdir -v ../gcc-build-native
