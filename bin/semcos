@@ -11,6 +11,7 @@ case $1 in
         exit 0
 esac
 
+MAKEFLAGS="-j$(nrpoc)"
 # Turn on some environment configurations, which will save us
 # in the future
 set +h -u -e
@@ -246,7 +247,7 @@ cd binutils-build/
 ../binutils*/configure --prefix=${SEMCOS_DESTDIR}/cross-tools \
 --target=${SEMCOS_TARGET} --with-sysroot=${SEMCOS_DESTDIR} \
 --disable-nls --enable-shared --disable-multilib
-make configure-host && make
+make configure-host && make ${MAKEFLAGS}
 ln -sv lib ${SEMCOS_DESTDIR}/cross-tools/lib64
 make install
 cp -v ../binutils*/include/libiberty.h ${SEMCOS_DESTDIR}/usr/include
@@ -316,7 +317,7 @@ RANLIB="${SEMCOS_TARGET}-ranlib" CFLAGS="-O2" \
 --with-binutils=${SEMCOS_DESTDIR}/cross-tools/bin \
 --with-headers=${SEMCOS_DESTDIR}/usr/include \
 --cache-file=config.cache
-make && make install_root=${SEMCOS_DESTDIR}/ install
+make ${MAKEFLAGS} && make install_root=${SEMCOS_DESTDIR}/ install
 
 cd ${SEMCOS_DESTDIR}/builds
 
@@ -335,7 +336,7 @@ AR=ar LDFLAGS="-Wl,-rpath,${SEMCOS_DESTDIR}/cross-tools/lib" \
 --with-mpfr-lib=$(pwd)/mpfr/src/.libs \
 --disable-multilib --with-arch=${SEMCOS_CPU}
 
-make && make install
+make ${MAKEFLAGS} && make install
 
 cp -v ${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib64/libgcc_s.so.1 ${SEMCOS_DESTDIR}/lib64
 
@@ -368,7 +369,7 @@ AR=ar AS=as ../binutils*/configure --prefix=/usr \
     --target=${SEMCOS_TARGET} --enable-shared
 
 make configure-host
-make tooldir=/usr
+make tooldir=/usr ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR} tooldir=/usr install
 
 cd ${SEMCOS_DESTDIR}/builds
@@ -395,7 +396,7 @@ LDFLAGS="-Wl,-rpath-link,${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib" \
 cp Makefile{,.orig}
 sed "/^HOST_\(GMP\|PPL\|CLOOG\)\(LIBS\|INC\)/s:-[IL]/\(lib\|include\)::" \
     Makefile.orig > Makefile
-make
+make ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR} install
 ln -sfv ../usr/bin/cpp ${SEMCOS_DESTDIR}/lib
 ln -sfv gcc ${SEMCOS_DESTDIR}/usr/bin/cc
@@ -425,10 +426,10 @@ cd ${SEMCOS_DESTDIR}/builds
 cd linux*/
 
 make ARCH=${SEMCOS_ARCH} \
-CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig
+CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig 
 # Customize kernel here
 make ARCH=${SEMCOS_ARCH} \
-CROSS_COMPILE=${SEMCOS_TARGET}-
+CROSS_COMPILE=${SEMCOS_TARGET}- ${MAKEFLAGS}
 make ARCH=${SEMCOS_ARCH} \
 CROSS_COMPILE=${SEMCOS_TARGET}- \
 INSTALL_MOD_PATH=${SEMCOS_DESTDIR} modules_install
@@ -462,7 +463,7 @@ cd zlib*/
 
 sed -i 's/-O3/-Os/g' configure
 ./configure --prefix=/usr --shared
-make && make DESTDIR=${SEMCOS_DESTDIR}/ install
+make ${MAKEFLAGS} && make DESTDIR=${SEMCOS_DESTDIR}/ install
 
 mv -v ${SEMCOS_DESTDIR}/usr/lib/libz.so.* ${SEMCOS_DESTDIR}/lib
 ln -svf ../../lib/libz.so.1 ${SEMCOS_DESTDIR}/usr/lib/libz.so
@@ -477,7 +478,7 @@ tar xvf bash*.tar.gz
 cd bash*/
 
 ./configure
-make
+make ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR} install
 
 cd ${SEMCOS_DESTDIR}/builds
@@ -488,7 +489,7 @@ tar xvf make*
 cd make*/
 
 ./configure
-make
+make ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR} install
 
 cd ${SEMCOS_DESTDIR}/builds
@@ -503,7 +504,7 @@ cd iana*/
 patch -Np1 -i ../iana-etc-2.30-update-2.patch
 
 make get
-make STRIP=yes
+make STRIP=yes ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR} install
 
 cd ${SEMCOS_DESTDIR}/builds
@@ -515,7 +516,7 @@ tar xvf sysstat*
 cd sysstat*/
 
 ./configure --prefix=/usr --enable-documentation
-make
+make ${MAKEFLAGS}
 make DESTDIR=${SEMCOS_DESTDIR}/ install
 
 cd ${SEMCOS_DESTDIR}/builds
