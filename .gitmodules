@@ -10,3 +10,6 @@
 [submodule "packages/pfetch"]
 	path = archive/packages/pfetch
 	url = https://github.com/semcos-packages/pfetch
+[submodule "docs/manuals"]
+	path = docs/manuals
+	url = https://github.com/semissioncontrol/manuals
