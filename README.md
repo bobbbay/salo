@@ -137,6 +137,8 @@ Done? Create a Pull Request, and you're done!
 ## Extra
 <!-- TODO: better title -->
 
+The current installer accepts environment variables. There are a few variables that can be set.
+
 ## Contribution
 
 [Rockets Still Not Fueled](https://github.com/semissioncontrol/semcOS/search?utf8=%E2%9C%93&q=TODO) | [Small Obstacles for Takeoff](https://github.com/semissioncontrol/semcOS/issues?q=is%3Aopen+is%3Aissue+label%3A%22Good+First+Issue%22)
