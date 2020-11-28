@@ -76,6 +76,8 @@ TL;DR:
 
 If we can get this, we'll have a path paved out for us. The future after this is uncertain, like many things :sparkles:
 
+As a side note, we currently have a working bootstrap script. This'll allow us to create our distribution from another distribution. This is the `bin/semcos` file. Future plans contain a graphical installer, which would replace the bootstrap script, on a Live CD, which would replace the need for an existing distribution. This would knowck off the first two requirments on the Distrowatch list. 
+
 ## Installation
 
 ```bash
