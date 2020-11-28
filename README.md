@@ -123,11 +123,12 @@ A wiki is in the works.
 
 So, we just installed Zlib to our system. Now, let's run some commands to set this up for a Pull Request!
 
-```
-./semcos devel commit handy/install
+```sh
+git add bin/semcos
+git commit -m "My commit" --signoff
 ```
 
-What this'll do is add all files, throw in a tarball, and start a commit. `--signoff` is enabled by default - please do not delete the `Signed-off-by: ` line. Git Signoff was introduced due to the [SCO lawsuit](http://en.wikipedia.org/wiki/SCO_v._IBM), and binds you to the legal statements mentioned [here](https://developercertificate.org/). In short, you're verifying that the code you wrote was yours, or more specifically that you have not infringed someone else's Intelectual Property with the code you have contributed. 
+What this'll do is add all files and start a commit. Please try enabling `--signoff`, and don't delete the `Signed-off-by: ` line. Git Signoff was introduced due to the [SCO lawsuit](http://en.wikipedia.org/wiki/SCO_v._IBM), and binds you to the legal statements mentioned [here](https://developercertificate.org/). In short, you're verifying that the code you wrote was yours, or more specifically that you have not infringed someone else's Intelectual Property with the code you have contributed. 
 
 Done? Create a Pull Request, and you're done!
 
