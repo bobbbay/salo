@@ -18,7 +18,7 @@ umask 022
 export LC_ALL=POSIX
 
 # Force to run as root
-if [[ `id -u` -ne 0 ]] ; then echo "Run this script as root." ; exit 1 ; fi
+if [[ `id -u` -ne 0 ]] ; then echo "Run this script as root." ; sleep 5 ; fi
 
 THREADS=${THREADS:-$( expr $(nproc) - 1 ) }
 
@@ -26,7 +26,8 @@ function semcmake() {
     make -j${THREADS}
 }
 
-export SEMCOS_DESTDIR=/mnt/semcos
+# TODO: cleaner result
+export SEMCOS_DESTDIR=$DEST
 mkdir $SEMCOS_DESTDIR || echo "/mnt/semcos already found, continuing to wipe"
 
 sleep 0.5
