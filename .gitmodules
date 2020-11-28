@@ -13,3 +13,6 @@
 [submodule "docs/manuals"]
 	path = docs/manuals
 	url = https://github.com/semissioncontrol/manuals
+[submodule "docs/wiki"]
+	path = docs/wiki
+	url = https://github.com/semissioncontrol/wiki
