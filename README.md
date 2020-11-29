@@ -141,6 +141,10 @@ If you check out `bin/`, you'll see a few scripts. Generally, you'll be looking 
 
 The experimental (and theoretically not-working) script that has more "features" - also known as customizablity. Do not confuse this with the resulting system - the resulting system will be the same as `semcos`. See [Extra](#extra) for more details.
 
+#### `semcos-bare`
+
+The theoretical script that does not build a cross-compiler, resulting in faster build time, but restricting you to target only your own CPU archictecture.
+
 ## Extra
 <!-- TODO: better title -->
 
