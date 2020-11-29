@@ -153,6 +153,11 @@ The stable script that installs `semcos`.
 
 The default, in-development script that builds SEMC OS. 
 
+**DO NOT TOUCH SCRIPTS:**
+
+ - `configure`
+ - `semcos.c`
+
 ## Extra
 <!-- TODO: better title -->
 
