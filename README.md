@@ -137,6 +137,10 @@ Done? Create a Pull Request, and you're done!
 ## Other executables
 If you check out `bin/`, you'll see a few scripts. Generally, you'll be looking for `semcos-stable` or `semcos`, but here is the documentation for all scripts:
 
+#### `semcos-featureful`
+
+The experimental (and theoretically not-working) script that has more "features" - also known as customizablity. Do not confuse this with the resulting system - the resulting system will be the same as `semcos`. See [Extra](#extra) for more details.
+
 ## Extra
 <!-- TODO: better title -->
 
