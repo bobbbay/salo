@@ -60,7 +60,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
 
  - [x] Startup scripts are not run - newest version does not contain this issue
  - [x] On boot, I get an error of `/dev/tty{1..6} not found` - newest version does not contain this issue
- - [ ] My hostname is `(none)`
+ - [ ] My hostname is `(none)` - non-crucial work in progess
  - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
  - [ ] gcc can act up - heck, we need to install it correctly, see [#26](https://github.com/semissioncontrol/semcos/issues/26)
 
