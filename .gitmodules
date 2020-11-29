@@ -1,15 +1,3 @@
-[submodule "packages/etc"]
-	path = archive/packages/etc
-	url = https://github.com/semcos-packages/etc
-[submodule "packages/busybox"]
-	path = archive/packages/busybox
-	url = https://github.com/semcos-packages/busybox
-[submodule "packages/neofetch"]
-	path = archive/packages/neofetch
-	url = https://github.com/semcos-packages/neofetch
-[submodule "packages/pfetch"]
-	path = archive/packages/pfetch
-	url = https://github.com/semcos-packages/pfetch
 [submodule "docs/manuals"]
 	path = docs/manuals
 	url = https://github.com/semissioncontrol/manuals
