@@ -4,7 +4,7 @@ Space. The Final Frontier. Where man hesitates to go, for it is one of the most 
 
 And this is SEMC OS. A from-scratch distro written to be fast and reliable. Why? Because large space agencies lack one. There should be a unification when it comes to softwares that control the future of humanity - and this is where SEMC OS comes in. Hooked? Read on!
 
-See [welcome.md](welcome.md).
+See [welcome.md](docs/welcome.md).
 
 ### TODO
 
