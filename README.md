@@ -145,6 +145,14 @@ The experimental (and theoretically not-working) script that has more "features"
 
 The theoretical script that does not build a cross-compiler, resulting in faster build time, but restricting you to target only your own CPU archictecture.
 
+#### `semcos-stable`
+
+The stable script that installs `semcos`.
+
+#### `semcos`
+
+The default, in-development script that builds SEMC OS. 
+
 ## Extra
 <!-- TODO: better title -->
 
