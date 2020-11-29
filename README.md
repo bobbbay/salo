@@ -56,6 +56,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
    - [ ] Wiki
    - [ ] Blog
    - [ ] Bugzilla
+   - [ ] Manuals
 
 ### Known Bugs
 
