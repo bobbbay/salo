@@ -291,7 +291,7 @@ AR=ar LDFLAGS="-Wl,-rpath,${SEMCOS_DESTDIR}/cross-tools/lib" \
 --with-mpfr-lib=$(pwd)/mpfr/src/.libs \
 --without-headers --with-newlib --disable-decimal-float \
 --disable-libgomp --disable-libmudflap --disable-libssp \
---disable-threads --enable-languages=c,c++ \
+--disable-threads --enable-languages=c,c++,go,fortran \
 --disable-multilib --with-arch=${SEMCOS_CPU}
 
 make all-gcc all-target-libgcc && \
@@ -397,7 +397,7 @@ LDFLAGS="-Wl,-rpath-link,${SEMCOS_DESTDIR}/cross-tools/${SEMCOS_TARGET}/lib" \
     --build=${SEMCOS_HOST} --host=${SEMCOS_TARGET} --target=${SEMCOS_TARGET} \
     --enable-shared --enable-threads=posix --enable-__cxa_atexit \
     --enable-c99 --enable-long-long --enable-clocale=gnu \
-    --enable-languages=c,c++ --disable-libstdcxx-pch
+    --enable-languages=c,c++,go,fortran --disable-libstdcxx-pch
 
 cp Makefile{,.orig}
 sed "/^HOST_\(GMP\|PPL\|CLOOG\)\(LIBS\|INC\)/s:-[IL]/\(lib\|include\)::" \
