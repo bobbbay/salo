@@ -50,6 +50,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
  - [ ] Add support for Wayland and Sway (contact Mr. Petro)
  - [ ] Get better documentation - maybe use the GitHub built-in wiki function?
  - [ ] Test if docker can work on this machine (needed for ESS)
+ - [ ] Work with Quantum
  - [ ] Public Relations side:
    - [ ] Website
    - [ ] Wiki
