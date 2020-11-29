@@ -363,6 +363,9 @@ export STRIP="${SEMCOS_TARGET}-strip"
 
 # --------------- NATIVE GCC ---------------
 
+# BUG: mention mpfr and co. to this build so that it 
+# knows where they are and that it can use them.
+
 # TODO: set this to binutils* so that we don't have to
 # change for every version, currently does not work as
 # there is binutils-build as well as binutils-2.35.1
