@@ -4,7 +4,7 @@ Space. The Final Frontier. Where man hesitates to go, for it is one of the most 
 
 And this is SEMC OS. A from-scratch distro written to be fast and reliable. Why? Because large space agencies lack one. There should be a unification when it comes to softwares that control the future of humanity - and this is where SEMC OS comes in. Hooked? Read on!
 
-We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to be more efficient and cohesive with our goals. 
+See [welcome.md](welcome.md).
 
 ### TODO
 
@@ -183,5 +183,7 @@ Asks the script to not force running as root. Beware! Default: `n`.
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+We use BusyBox's packages. Plans are to modify some of BusyBox's core systems to be more efficient and cohesive with our goals. 
 
 SEMC OS Authors, Top Contributors and Nexus Aurora High members retain the rights of SEMC OS. Contributors mean each individual or legal entity that creates, contributes to the creation of, or owns this software.
