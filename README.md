@@ -134,6 +134,9 @@ What this'll do is add all files and start a commit. Please try enabling `--sign
 
 Done? Create a Pull Request, and you're done!
 
+## Other executables
+If you check out `bin/`, you'll see a few scripts. Generally, you'll be looking for `semcos-stable` or `semcos`, but here is the documentation for all scripts:
+
 ## Extra
 <!-- TODO: better title -->
 
