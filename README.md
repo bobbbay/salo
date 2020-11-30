@@ -12,6 +12,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
  - [ ] Completely rewrite installation process 2.0, featuring C + Qt
  - [ ] Meet the [DistroWatch requirments](https://distrowatch.com/dwres.php?resource=faq#newdistro) for [application](https://distrowatch.com/dwres.php?resource=submit)
  - [x] More functional installer
+ - [ ] Add tarball caching to installer
  - [ ] Add support for gcc
  - [ ] Add support for wireless networks
    - [ ] Add netplug to installer
