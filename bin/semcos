@@ -1,11 +1,12 @@
 #!/bin/bash
 
+# TODO: Add better colors here
 case $1 in
     "check")
         if mount | grep /mnt/semcos > /dev/null; then
             echo "/mnt/semcos is mounted"
         else
-            echo "warning: /mnt/semcos is not mounted"
+            echo -e " \e[43mwarning\e[0m: /mnt/semcos is not mounted"
         fi
         
         # check for host dependencies here
