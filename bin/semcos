@@ -6,11 +6,12 @@ case $1 in
         if mount | grep /mnt/semcos > /dev/null; then
             echo "/mnt/semcos is mounted"
         else
-            echo -e " \e[43mwarning\e[0m: /mnt/semcos is not mounted"
+            echo -e "\e[43mwarning\e[0m: /mnt/semcos is not mounted"
         fi
         
         # check for host dependencies here
         
+        echo -e "Check complete."
         exit 0
 esac
 
