@@ -39,8 +39,6 @@ rm -rf /mnt/semcos/*
 
 export PATH=${SEMCOS_DESTDIR}/cross-tools/bin:/bin:/usr/bin
 
-date >> ${SEMCOS_DESTDIR}/builds/date_start
-
 # Create the directory structure, which is specified by the Linux Foundation
 # at http://refspecs.linuxfoundation.org/fhs.shtml
 mkdir -pv ${SEMCOS_DESTDIR}/{bin,boot{,/grub},dev,{etc/,}opt,home,lib/{firmware,modules},lib64,mnt}
@@ -681,7 +679,5 @@ chmod 4755 ${SEMCOS_DESTDIR}/bin/busybox
 
 # Unmount
 umount $SEMCOS_DESTDIR
-
-date >> ${SEMCOS_DESTDIR}/builds/date_end
 
 echo "Installation complete."
