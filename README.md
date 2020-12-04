@@ -13,7 +13,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
  - [ ] Meet the [DistroWatch requirments](https://distrowatch.com/dwres.php?resource=faq#newdistro) for [application](https://distrowatch.com/dwres.php?resource=submit)
  - [x] More functional installer
  - [ ] Add tarball caching to installer
- - [ ] Add support for gcc
+ - [x] Add support for gcc
  - [ ] Add support for wireless networks
    - [ ] Add netplug to installer
    - [ ] Make sure mdev can recognize our devices (wlan0)
@@ -46,7 +46,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
    - [ ] Lua
    - [ ] Lua ffi with C
  - [ ] Get a working version of [Quantum](http://github.com/quantum-package-manager/) onto SEMC OS
- - [ ] Make sure c++ works correctly - last time there were complaints about it acting up
+ - [x] Make sure c++ works correctly - last time there were complaints about it acting up
  - [ ] Close up [#7](https://github.com/semissioncontrol/semcos/issues/7), large refactoring. This is very close to completion!
  - [ ] Add support for Wayland and Sway (contact Mr. Petro)
  - [ ] Get better documentation - maybe use the GitHub built-in wiki function?
@@ -65,7 +65,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
  - [x] On boot, I get an error of `/dev/tty{1..6} not found` - newest version does not contain this issue
  - [ ] My hostname is `(none)` - non-crucial work in progess
  - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
- - [ ] gcc can act up - heck, we need to install it correctly, see [#26](https://github.com/semissioncontrol/semcos/issues/26)
+ - [x] gcc can act up - resolved at `0.0.5a`
 
 [Submit a Bug!](https://github.com/semissioncontrol/semcos/issues/new?assignees=&labels=Bug&template=1-bug.md&title=This+thing+doesn%27t+work+%28please+replace+title%29)
 
