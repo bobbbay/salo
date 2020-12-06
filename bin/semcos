@@ -17,9 +17,8 @@ esac
 
 # Turn on some environment configurations, which will save us
 # in the future
+# TODO: add feature to toggle set flags
 set +h -u -e
-# TODO: add feature to toggle this
-set +e
 umask 022
 export LC_ALL=POSIX
 
