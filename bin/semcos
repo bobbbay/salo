@@ -8,9 +8,9 @@ case $1 in
         else
             echo -e "\e[43mwarning\e[0m: /mnt/semcos is not mounted"
         fi
-        
+
         # check for host dependencies here
-        
+
         echo -e "Check complete."
         exit 0
 esac
@@ -31,11 +31,14 @@ function semcmake() {
     make -j${THREADS}
 }
 
+export INSTALLER_DIR=`pwd`
+echo "Currently in " $INSTALLER_DIR
+
 # TODO: cleaner result
 export SEMCOS_DESTDIR=$DEST
 mkdir $SEMCOS_DESTDIR || echo "/mnt/semcos already found, continuing to wipe"
 
-sleep 0.5
+sleep 10
 rm -rf /mnt/semcos/*
 
 export PATH=${SEMCOS_DESTDIR}/cross-tools/bin:/bin:/usr/bin
@@ -238,7 +241,7 @@ mkdir ${SEMCOS_DESTDIR}/builds
 cd ${SEMCOS_DESTDIR}/builds
 
 # ------------------------- LINUX KERNEL HEADERS --------------------------
-# Yes, I'm using those fancy pantsy weird comment seperation thingies, 
+# Yes, I'm using those fancy pantsy weird comment seperation thingies,
 # have a problem bud?
 
 wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.77.tar.xz
@@ -368,7 +371,7 @@ export STRIP="${SEMCOS_TARGET}-strip"
 
 # --------------- NATIVE GCC ---------------
 
-# BUG: mention mpfr and co. to this build so that it 
+# BUG: mention mpfr and co. to this build so that it
 # knows where they are and that it can use them.
 
 # TODO: set this to binutils* so that we don't have to
@@ -440,7 +443,7 @@ cd ${SEMCOS_DESTDIR}/builds
 cd linux*/
 
 make ARCH=${SEMCOS_ARCH} \
-CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig 
+CROSS_COMPILE=${SEMCOS_TARGET}- x86_64_defconfig
 # Customize kernel here
 semcmake ARCH=${SEMCOS_ARCH} \
 CROSS_COMPILE=${SEMCOS_TARGET}-
@@ -464,6 +467,9 @@ cd ${SEMCOS_DESTDIR}/builds
 wget http://ftp.osuosl.org/pub/clfs/conglomeration/clfs-embedded-bootscripts/clfs-embedded-bootscripts-1.0-pre5.tar.bz2
 tar xvf clfs-embedded-bootscripts*.tar.bz2
 cd clfs-embedded-bootscripts*/
+
+# Apply clfs patch
+patch Makefile ${INSTALLER_DIR}/patches/clfs-embedded-bootscripts-1.0-pre5.patch
 
 make DESTDIR=${SEMCOS_DESTDIR}/ install-bootscripts
 ln -sv ../rc.d/startup ${SEMCOS_DESTDIR}/etc/init.d/rcS
