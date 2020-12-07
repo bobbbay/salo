@@ -1,0 +1,13 @@
+--- semc-out/builds/clfs-embedded-bootscripts-1.0-pre5/Makefile 2011-02-13 11:48:57.000000000 +0800
++++ makefile.mine       2020-12-08 06:50:23.836695153 +0800
+@@ -19,7 +19,9 @@
+        rm -rf "dist/clfs-embedded-bootscripts-$(VERSION)"
+
+ create-dirs:
+-       install -d -m ${DIRMODE} ${EXTDIR}/rc.d/{init.d,start,stop}
++       install -d -m ${DIRMODE} ${EXTDIR}/rc.d/init.d
++       install -d -m ${DIRMODE} ${EXTDIR}/rc.d/start
++       install -d -m ${DIRMODE} ${EXTDIR}/rc.d/stop
+
+ install-bootscripts: create-dirs
+        install -m ${CONFMODE} clfs/rc.d/init.d/functions ${EXTDIR}/rc.d/init.d/
