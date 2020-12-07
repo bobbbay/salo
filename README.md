@@ -66,6 +66,7 @@ See [welcome.md](docs/welcome.md) for a warm welcome.
  - [ ] My hostname is `(none)` - non-crucial work in progess
  - [ ] Wireless does not work - see [#25](https://github.com/semissioncontrol/semcos/issues/25)
  - [x] gcc can act up - resolved at `0.0.5a`
+ - [ ] bootscripts do not run at startup
 
 [Submit a Bug!](https://github.com/semissioncontrol/semcos/issues/new?assignees=&labels=Bug&template=1-bug.md&title=This+thing+doesn%27t+work+%28please+replace+title%29)
 
