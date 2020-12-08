@@ -1,8 +1,1 @@
-# Get rid of the target directory when commiting for handy
-handy/*/target/
 
-build/
-mnt/
-
-# Get rid of useless tarballs
-*.tar.*z
