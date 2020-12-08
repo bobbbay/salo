@@ -92,15 +92,14 @@ As a side note, we currently have a working bootstrap script. This'll allow us t
 ## Installation
 
 ```bash
-# git clone https://github.com/semissioncontrol/semcos
-# cd semcos
-# mkdir /mnt/semcos/
-# mount /dev/sdXY /mnt/semcos
-# bin/semcos check
-# bin/semcos
+~ # mount /dev/sdXY /mnt/semcos
+~ # wget https://github.com/semissioncontrol/semcos/releases/download/development/semcos-x86_64.tar.gz
+~ # cd /mnt/semcos; tar xvpf ~/semcos-x86_64.tar.gz
 ```
 
-Replacing `/dev/sdXY` with the device partition you'd like to install to (for example, `/dev/sda1`). `bin/semcos check` will give you warnings about your installation - make sure you read them up! You won't be prevented to continue with installation though - that choice is up to you. 
+## Development
+
+To work on development, clone the respository. Running `bin/semcos` will compile the bootstrapper. `bin/semcos check` will give you warnings about your installation - make sure you read them up! You won't be prevented to continue with installation though - that choice is up to you. 
 
 The compilation takes some time, due to it being largely from scratch. Soon there will be a non cross compiled option. At the moment, on an average modern PC, this could take ~30 minutes. 
 
