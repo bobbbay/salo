@@ -480,7 +480,7 @@ tar xvf clfs-embedded-bootscripts*.tar.bz2
 cd clfs-embedded-bootscripts*/
 
 # Apply clfs patch
-patch Makefile ${INSTALLER_DIR}/patches/clfs-embedded-bootscripts-1.0-pre5.patch
+patch < ${INSTALLER_DIR}/patches/clfs-embedded-bootscripts-1.0-pre5.patch
 
 make DESTDIR=${SEMCOS_DESTDIR}/ install-bootscripts
 ln -sv ../rc.d/startup ${SEMCOS_DESTDIR}/etc/init.d/rcS
