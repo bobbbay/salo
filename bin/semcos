@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# TODO:
+# - [ ] Add tarball caching for bad network speeds, as an option
+# - [ ] Fix destdir error
+# - [ ] Add support for wireless
+# - [ ] Hostname directly to kernel
+# - [ ] Add nano as a better editor
+# - [ ] Quantum support
+# - [ ] Wayland + SwayWM
+
 # TODO: Add better colors here
 case $1 in
     "check")
