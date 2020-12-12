@@ -552,6 +552,34 @@ make DESTDIR=${SEMCOS_DESTDIR}/ install
 
 cd ${SEMCOS_DESTDIR}/builds
 
+# --------------------- LIBXML2 (dep of wayland) -------------------------
+wget http://xmlsoft.org/sources/libxml2-2.9.10.tar.gz
+tar xvf libxml*
+cd libxml*/
+
+sed -i '/if Py/{s/Py/(Py/;s/)/))/}' python/{types.c,libxml.c}
+./configure --prefix=/usr    \
+            --disable-static \
+            --with-history   \
+            --with-python=/usr/bin/python3 &&
+semcmake
+make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
+
+# ----------------------- WAYLAND ------------------------
+wget https://wayland.freedesktop.org/releases/wayland-1.18.0.tar.xz
+tar xvf wayland*
+cd wayland*/
+
+./configure --prefix=/usr    \
+            --disable-static \
+            --disable-documentation &&
+semcmake
+make DESTDIR=${SEMCOS_DESTDIR}/ install
+
+cd ${SEMCOS_DESTDIR}/builds
+
 # ----------- PACKAGES INTALLATION COMPLETE --------------
 
 mkdir ${SEMCOS_DESTDIR}/etc/network/
