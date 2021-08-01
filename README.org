@@ -1,0 +1,3 @@
+* SEMC
+
+Welcome to the a monorepo for SEMC's core utilities. To find a copy of the Salo standard, please visit [[./salo/standard/]].

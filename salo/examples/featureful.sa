@@ -1,0 +1,26 @@
+-- Comment
+
+description : String;
+description = "A system flake for my x86_64 server";
+
+packages = [
+  pkgs.git
+];
+
+hardware.pulseaudio = {
+  enable = true;
+  extraModules = [ pkgs.pulseaudio-modules-bt ];
+  package = pkgs.pulseaudioFull;
+  support32Bit = true;
+  extraConfig = "
+    load-module module-bluetooth-policy auto_switch=2
+  ";
+};
+
+{
+  networking.hostName = "MyServer",
+
+  environment.systemPackages = packages,
+
+  hardware,
+}

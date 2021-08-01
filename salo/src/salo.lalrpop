@@ -1,0 +1,50 @@
+use std::str::FromStr;
+use crate::ast::{Node, BinaryOp, Type};
+
+grammar;
+
+pub Salo: Vec<Node> = {
+    <Expr+>,
+};
+
+Expr: Node = {
+    <lhs:Expr> <op:BinaryExprOp> <rhs:Term> ";" => Node::BinaryExpr { lhs: Box::new(lhs), rhs: Box::new(rhs), op },
+    <name:Ident> ":" <type_name:TypeName> ";" => Node::Declaration(name, Box::new(Node::Value(type_name))),
+    <name:Ident> "=" <value:Value> ";" => Node::Declaration(name, Box::new(value)),
+    Term => <>,
+    r"--[^\n\r]*[\n\r]*" => Node::Comment(<>.to_string()),
+};
+
+BinaryExprOp: BinaryOp = {
+    "+" => BinaryOp::Add,
+    "-" => BinaryOp::Sub,
+};
+
+Value: Node = {
+    Str,
+    Term,
+};
+
+Str: Node = {
+    "\"" <Ident> "\"" => Node::Value(Type::Str(Some(<>))),
+};
+
+Ident: String = {
+    r"[A-Za-z]+" => String::from(<>)
+};
+
+Term: Node = {
+    "(" <Term> ")" => <>,
+    Num => Node::Value(Type::Int(Some(<>))),
+};
+
+Num: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
+
+TypeName: Type = {
+    "String" => Type::Str(None),
+    "Int" => Type::Int(None),
+}
+
+Comment: Node = {
+    r"--[^\n\r]*[\n\r]*" => Node::Comment(<>.to_string()), // Skip -- comments
+}
