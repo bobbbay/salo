@@ -7,7 +7,8 @@ use std::sync::Arc;
 
 static COMMANDS: &[(&str, &str)] = &[
     (":h", "You're looking at it"),
-    (":a <expr>", "Print out the generated AST of <expr>"),
+    (":t <expr>", "Get the type of <expr>"),
+    (":a <expr>", "Get the generated AST of <expr>"),
     (":q", "Goodbye"),
 ];
 
@@ -34,6 +35,9 @@ crate fn repl() {
                     println!("  {:15} - {}", cmd, help);
                 }
                 println!();
+            }
+            ":type" | ":t" => {
+                unimplemented!()
             }
             ":ast" | ":a" => {
                 let code = Code::new(args, "stdin");

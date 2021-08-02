@@ -15,18 +15,18 @@ subcommands:
                 about: The file to evaluate
                 required: true
                 index: 1
-    - remote:
-        about: remote deployment commands
-        args:
-            - FILE:
-                about: The file to evaluate
-                required: true
-                index: 1
-            - apply:
-                short: a
-                long: apply
-                about: Apply a configuration
-            - deploy:
-                short: d
-                long: deploy
-                about: Deploy a configuration
+#    - remote:
+#        about: remote deployment commands
+#        args:
+#            - FILE:
+#                about: The file to evaluate
+#                required: true
+#                index: 1
+#            - apply:
+#                short: a
+#                long: apply
+#                about: Apply a configuration
+#            - deploy:
+#                short: d
+#                long: deploy
+#                about: Deploy a configuration

@@ -1,8 +1,11 @@
+//! An implementation of the Salo standard in Rust.
+
 #![feature(format_args_capture)]
 #![feature(crate_visibility_modifier)]
+// [TODO] I would like to deny missing_docs too, but LALRPOP does not write docs to generated files.
+#![deny(unsafe_code, unused_import_braces)]
 
-#[macro_use]
-extern crate lalrpop_util;
+#[macro_use] extern crate lalrpop_util;
 
 mod ast;
 mod parser;
@@ -10,51 +13,44 @@ mod repl;
 mod util;
 lalrpop_mod!(pub salo);
 
-use crate::repl::repl;
-use crate::util::Result;
 use clap::{load_yaml, App};
-use color_eyre::owo_colors::OwoColorize;
 use tracing::{error, info};
 
-fn setup() -> Result<()> {
-    if std::env::var("SALO_LOG").unwrap_or("0".to_string()) == "1" {
-        if std::env::var("RUST_BACKTRACE").is_err() {
-            std::env::set_var("RUST_BACKTRACE", "1")
-        }
-        color_eyre::install()?;
+use crate::util::{setup, Code, Result};
+use crate::parser::parse;
+use crate::repl::repl;
 
-        if std::env::var("RUST_LOG").is_err() {
-            std::env::set_var("RUST_LOG", "info")
+fn main() -> Result<()> {
+    setup()?;
+
+    let yaml = load_yaml!("../cli.yaml");
+    let matches = App::from(yaml).get_matches();
+
+    match matches.subcommand() {
+        Some(("eval", subcommands)) => {
+            let filename = subcommands.value_of("FILE").unwrap();
+            let content = std::fs::read_to_string(filename);
+
+            let content = match content {
+                Ok(content) => content,
+                Err(_) => {
+                    eprintln!("Error: File not found.");
+                    error!("File not found");
+                    std::process::exit(1);
+                }
+            };
+
+            info!("Evaluating file {}", filename);
+
+            let code = Code::new(&content, "stdin");
+            let _ast = parse(code)?;
+
+            info!("Finished evaluation");
         }
-        tracing_subscriber::fmt::fmt()
-            .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
-            .init();
-    } else {
-        // We're in a non-debug environment
-        color_eyre::config::HookBuilder::default()
-            .issue_url(concat!(env!("CARGO_PKG_REPOSITORY"), "/issues/new"))
-            .add_issue_metadata("version", env!("CARGO_PKG_VERSION"))
-            .panic_section(format!("{}", "This is a compiler error.".red()))
-            .install()?;
+        _ => repl(),
     }
 
-    info!("Setup complete");
     Ok(())
-}
-
-#[derive(Debug)]
-crate struct Code<'a> {
-    content: &'a str,
-    filename: &'a str,
-}
-
-impl<'a> Code<'a> {
-    crate fn new(code: &'a str, filename: &'a str) -> Self {
-        Self {
-            content: code,
-            filename,
-        }
-    }
 }
 
 #[cfg(test)]
@@ -94,41 +90,4 @@ mod tests {
 
         Ok(())
     }
-}
-
-use crate::parser::parse;
-
-fn main() -> Result<()> {
-    setup()?;
-
-    let yaml = load_yaml!("../cli.yaml");
-    let matches = App::from(yaml).get_matches();
-
-    match matches.subcommand() {
-        Some(("eval", subcommands)) => {
-            let filename = subcommands.value_of("FILE").unwrap();
-            let content = std::fs::read_to_string(filename);
-
-            let content = match content {
-                Ok(content) => content,
-                Err(_) => {
-                    eprintln!("Error: File not found.");
-                    error!("File not found");
-                    std::process::exit(1);
-                }
-            };
-
-            info!("Evaluating file {}", filename);
-
-            let code = Code::new(&content, "stdin");
-            let _ast = parse(code)?;
-            info!("Finished evaluation");
-        }
-        Some(("remote", _subcommands)) => {
-            println!("[TODO]");
-        }
-        _ => repl(),
-    }
-
-    Ok(())
 }

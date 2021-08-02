@@ -40,11 +40,12 @@
    Now that we're familiar with the REPL, we can continue to learning Salo's configuration language. From this point on, every code block that begins with ~>~ is run in the REPL.
 
 *** Types
-   
+ 
    Salo has many types, mostly springing off of Nix's types. These include:
 
    * Bool
    * Int
+   * Nat
    * Str
    * Attrs
    * Array
@@ -67,6 +68,19 @@
    #+end_src
   
   Because Salo is smart enough to infer that ~a~'s type is String. More on type inference in the [[Type Inference]] section.
+
+
+**** A side note on dependent types
+
+     To better understand how our types work, let's create them.
+
+     #+begin_src salo
+     type Nat = Z | S Nat
+     #+end_src
+
+     This declaration for Natural numbers in the prelude states that a Natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0= - =Z=.
+
+     This allows us to construct non-primitive types based on anything.
 
 *** Functions
 
@@ -301,3 +315,5 @@ Evaluates to:
     1. Note that here we use a special type, ~ssh~, to indicate the location of the remote host. This implements the ~Protocol~ type class, which enables scalability for more protocls added in the future.
 
     Running ~salo apply <file>~ will check for a connection with the remote host, and go through each stesp as outlined in [[The apply stage]]. If successful, ~salo deploy <file>~ it will continue to deploy in [[The deploy stage]]. Note that ~salo deploy~ will secretly run ~salo apply~ if not applied already.
+
+** TODO Literate programming

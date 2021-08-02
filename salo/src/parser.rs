@@ -1,10 +1,11 @@
-use crate::ast::Node;
-use crate::salo::SaloParser;
-use crate::util::Result;
-use crate::Code;
 use ariadne::{ColorGenerator, Label, Report, ReportKind, Source};
 use lalrpop_util::ParseError;
-use tracing::{error, info};
+use tracing::{error, info, warn};
+
+use crate::ast::Node;
+use crate::salo::SaloParser;
+use crate::util::Code;
+use crate::util::Result;
 
 // [HACK]
 fn vec_str(v: &Vec<String>) -> String {
@@ -28,6 +29,8 @@ crate fn parse(code: Code) -> Result<Vec<Node>> {
             Ok(expr)
         }
         Err(e) => {
+            warn!("Encountered error, will abort soon");
+            
             let _colors = ColorGenerator::new();
 
             error!("{:#?}", &e);
@@ -73,16 +76,9 @@ crate fn parse(code: Code) -> Result<Vec<Node>> {
                     .with_message(format!("Unspecified error {}", error)),
             };
 
-            // [HACK]
-            let content = if code.content.replace(" ", "").len() == 0 {
-                "<no content>"
-            } else {
-                code.content
-            };
-
             report
                 .finish()
-                .print((code.filename, Source::from(content)))?;
+                .print((code.filename, Source::from(code.content)))?;
 
             return Ok(vec![]);
         }

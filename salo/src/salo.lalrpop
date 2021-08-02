@@ -3,47 +3,83 @@ use crate::ast::{Node, BinaryOp, Type};
 
 grammar;
 
+// Main //
+
+// A Salo program contains 0 or more expressions.
 pub Salo: Vec<Node> = {
-    <Expr+>,
+    <Expr*>,
 };
 
+// Expressions //
+
+// Each Expr is a Node in the AST.
 Expr: Node = {
+    // Binary operation
     <lhs:Expr> <op:BinaryExprOp> <rhs:Term> ";" => Node::BinaryExpr { lhs: Box::new(lhs), rhs: Box::new(rhs), op },
+
+    // Type declaration
     <name:Ident> ":" <type_name:TypeName> ";" => Node::Declaration(name, Box::new(Node::Value(type_name))),
+    // Value assignement
     <name:Ident> "=" <value:Value> ";" => Node::Declaration(name, Box::new(value)),
-    Term => <>,
-    r"--[^\n\r]*[\n\r]*" => Node::Comment(<>.to_string()),
+
+    // A value by itself
+    <Value> ";" => <>,
+
+    // Or a comment
+    Comment,
 };
+
+// Values //
+
+// At a high level, a value can be a string, term, or
+// [TODO] bool.
+Value: Node = {
+    Bool,
+    Str,
+    Term,
+};
+
+
+Bool: Node = {
+  "true" => Node::Value(Type::Bool(Some(true))),
+  "false" => Node::Value(Type::Bool(Some(false))),
+};
+
+// A Str is anything that matches the following regex
+Str: Node = {
+    r#"".*""# => Node::Value(Type::Str(Some(<>.to_string()))),
+};
+
+// A term is a number that includes ()
+Term: Node = {
+    "(" <Term> ")" => <>,
+    Num => Node::Value(Type::Int(Some(<>))),
+};
+
+// A number
+Num: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
+
+// Misc //
+
+// A "raw" type name
+TypeName: Type = {
+    "String" => Type::Str(None),
+    "Int" => Type::Int(None),
+}
+
+// A valid identifier
+Ident: String = {
+    r"[A-Za-z]+" => String::from(<>)
+};
+
+// Operations //
 
 BinaryExprOp: BinaryOp = {
     "+" => BinaryOp::Add,
     "-" => BinaryOp::Sub,
 };
 
-Value: Node = {
-    Str,
-    Term,
-};
-
-Str: Node = {
-    "\"" <Ident> "\"" => Node::Value(Type::Str(Some(<>))),
-};
-
-Ident: String = {
-    r"[A-Za-z]+" => String::from(<>)
-};
-
-Term: Node = {
-    "(" <Term> ")" => <>,
-    Num => Node::Value(Type::Int(Some(<>))),
-};
-
-Num: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
-
-TypeName: Type = {
-    "String" => Type::Str(None),
-    "Int" => Type::Int(None),
-}
+// [TODO] Unary operations
 
 Comment: Node = {
     r"--[^\n\r]*[\n\r]*" => Node::Comment(<>.to_string()), // Skip -- comments
