@@ -1,1 +1,1 @@
-This is the WIP repository for Salo, SEMC's configuration toolset. A copy of the standard can be found in [[./standard]].
+This is the WIP implementation for Salo, SEMC's configuration toolset. A copy of the standard can be found in [[./standard]].

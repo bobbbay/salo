@@ -1,3 +1,6 @@
 * SEMC
 
-Welcome to the a monorepo for SEMC's core utilities. To find a copy of the Salo standard, please visit [[./salo/standard/]].
+This is the monorepository for SEMC's core utilities.
+
+ * To find the Salo source code, please visit [[./salo]]
+ * To find a copy of the Salo standard, please visit [[./salo/standard]].
