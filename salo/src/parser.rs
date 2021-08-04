@@ -2,7 +2,7 @@ use ariadne::{ColorGenerator, Label, Report, ReportKind, Source};
 use lalrpop_util::ParseError;
 use tracing::{error, info, warn};
 
-use crate::ast::Node;
+use crate::ast::Expr;
 use crate::salo::SaloParser;
 use crate::util::Code;
 use crate::util::Result;
@@ -20,7 +20,7 @@ fn vec_str(v: &Vec<String>) -> String {
     res
 }
 
-crate fn parse(code: Code) -> Result<Vec<Node>> {
+crate fn parse(code: Code) -> Result<Vec<Expr>> {
     let expr = SaloParser::new().parse(code.content);
 
     match expr {

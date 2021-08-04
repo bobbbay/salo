@@ -1,86 +1,87 @@
 use std::str::FromStr;
-use crate::ast::{Node, BinaryOp, Type};
+use crate::ast::{Expr, Ident, Type, Value};
 
 grammar;
 
-// Main //
+//! Main ///
 
 // A Salo program contains 0 or more expressions.
-pub Salo: Vec<Node> = {
+pub Salo: Vec<Expr<'input>> = {
     <Expr*>,
 };
 
-// Expressions //
+// An expression is one of the following:
+Expr: Expr<'input> = {
+    /// A value by itself
+    /// ```salo
+    /// true
+    /// ```
+    <Value> ";" => Expr::Value(<>),
 
-// Each Expr is a Node in the AST.
-Expr: Node = {
-    // Binary operation
-    <lhs:Expr> <op:BinaryExprOp> <rhs:Term> ";" => Node::BinaryExpr { lhs: Box::new(lhs), rhs: Box::new(rhs), op },
+    /// An untyped assignement
+    /// ```salo
+    /// x = true;
+    /// ```
+    <name:Ident> "=" <value:Value> ";" => Expr::Var { name, t: None, value: Some(Box::new(value)) },
 
-    // Type declaration
-    <name:Ident> ":" <type_name:TypeName> ";" => Node::Declaration(name, Box::new(Node::Value(type_name))),
-    // Value assignement
-    <name:Ident> "=" <value:Value> ";" => Node::Declaration(name, Box::new(value)),
+    /// A typed assignement
+    /// ```salo
+    /// x : Bool;
+    /// ```
+    <name:Ident> ":" <t:TypeName> ";" => Expr::Var { name, t: Some(t), value: None },
 
-    // A value by itself
-    <Value> ";" => <>,
+    /// A function annotation
+    /// ```salo
+    /// f : Bool -> Bool -> Bool;
+    /// ```
+    <name:Ident> ":" <args:(<TypeName> "->")+> <returns:TypeName> ";" => Expr::Value(Value::Fn {
+        name,
+        args: Some(args),
+        value: Some(returns),
+        matches: None,
+        body: None,
+    }),
 
-    // Or a comment
-    Comment,
+    /// A function declaration
+    /// ```salo
+    /// f x y = true
+    /// ```
+    <name:Ident> <matches:(<Ident>)+> "=" <body:Expr> => Expr::Value(Value::Fn {
+        name,
+        args: None,
+        value: None,
+        matches: Some(matches),
+        body: Some(Box::new(body)),
+    }),
 };
 
-// Values //
-
-// At a high level, a value can be a string, term, or
-// [TODO] bool.
-Value: Node = {
-    Bool,
-    Str,
-    Term,
+Value: Value<'input> = {
+    Bool => Value::Bool(<>),
+    Num => Value::Num(<>),
+    Str => Value::Str(<>),
 };
 
+//! Types ///
 
-Bool: Node = {
-  "true" => Node::Value(Type::Bool(Some(true))),
-  "false" => Node::Value(Type::Bool(Some(false))),
+// true / false
+Bool: bool = {
+    "true" => true,
+    "false" => false,
 };
 
-// A Str is anything that matches the following regex
-Str: Node = {
-    r#"".*""# => Node::Value(Type::Str(Some(<>.to_string()))),
-};
-
-// A term is a number that includes ()
-Term: Node = {
-    "(" <Term> ")" => <>,
-    Num => Node::Value(Type::Int(Some(<>))),
-};
-
-// A number
 Num: i32 = r"[0-9]+" => i32::from_str(<>).unwrap();
 
-// Misc //
+Str: &'input str = r#"".*""#;
 
-// A "raw" type name
+// Not specifically a type, but rather the textual representation of types.
 TypeName: Type = {
-    "String" => Type::Str(None),
-    "Int" => Type::Int(None),
-}
-
-// A valid identifier
-Ident: String = {
-    r"[A-Za-z]+" => String::from(<>)
+    "Bool" => Type::Bool,
+    "Num" => Type::Num,
+    "Str" => Type::Str,
 };
 
-// Operations //
-
-BinaryExprOp: BinaryOp = {
-    "+" => BinaryOp::Add,
-    "-" => BinaryOp::Sub,
+//! Misc ///
+// Any valid identifier
+Ident: Ident<'input> = {
+    r"[A-Za-z]+" => Ident(<>),
 };
-
-// [TODO] Unary operations
-
-Comment: Node = {
-    r"--[^\n\r]*[\n\r]*" => Node::Comment(<>.to_string()), // Skip -- comments
-}

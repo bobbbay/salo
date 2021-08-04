@@ -1,39 +1,41 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::fmt::Debug;
+
+#[derive(Debug, PartialEq)]
+pub enum Expr<'life> {
+    Var {
+        name: Ident<'life>,
+        t: Option<Type>,
+        value: Option<Box<Value<'life>>>,
+    },
+
+    Value(Value<'life>),
+
+    A,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Ident<'life>(pub &'life str);
 
 #[derive(Debug, PartialEq)]
 pub enum Type {
-    Bool(Option<bool>),
-    Str(Option<String>),
-    Int(Option<i32>),
+    Bool,
+    Num,
+    Str,
+    Fn,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Node {
-    Import(PathBuf),   // import ./profiles/dev.nix
-    ImportLib(String), // import std.rustPlatform.buildRustPackage
+pub enum Value<'life> {
+    Bool(bool),
+    Num(i32),
+    Str(&'life str),
 
-    Declaration(String, Box<Node>), // pname = "ripgrep"
+    Fn {
+        name: Ident<'life>,
+        args: Option<Vec<Type>>,
+        value: Option<Type>,
 
-    Derivation {
-        name: String,
-        content: Box<Node>,
+        matches: Option<Vec<Ident<'life>>>,
+        body: Option<Box<Expr<'life>>>,
     },
-
-    AttrSet(HashMap<String, Box<Node>>),
-
-    Value(Type),
-
-    BinaryExpr {
-        op: BinaryOp,
-        lhs: Box<Node>,
-        rhs: Box<Node>,
-    },
-
-    Comment(String),
-}
-
-#[derive(Debug, PartialEq)]
-pub enum BinaryOp {
-    Add, // x + y
-    Sub, // x - y
 }
