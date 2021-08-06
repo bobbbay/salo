@@ -1,4 +1,8 @@
-This is the WIP implementation for Salo, SEMC's configuration toolset. A copy of the standard can be found in [[./standard]].
+* Salo
+
+This is the WIP implementation for Salo, SEMC's configuration toolset. More information on Salo can be found in [[../docs]].
+
+** Usage
 
 To open the REPL, run:
 

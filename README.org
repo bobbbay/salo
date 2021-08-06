@@ -1,6 +1,6 @@
 * SEMC
 
-This is the monorepository for SEMC's core utilities.
+This is the monorepository for Salo, the system configuration and deployment toolset.
 
- * To find the Salo source code, please visit [[./salo]]
- * To find a copy of the Salo standard, please visit [[./salo/standard]].
+ * To find documentation, please visit [[./docs]]
+ * To find the Salo compiler source code, please visit [[./salo]]

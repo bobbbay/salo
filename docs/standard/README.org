@@ -1,6 +1,6 @@
 * Salo MVP
 
-  Welcome to the Salo MVP document. This paper outlines what Salo is, what it hopes to accomplish, and what advantages it provides.
+  Welcome to the Salo MVP document. This document outlines what Salo is, what it hopes to accomplish, and what advantages it provides.
 
 ** Overview
 
