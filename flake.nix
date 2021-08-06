@@ -18,13 +18,13 @@
           pkgs = nixpkgs.legacyPackages.${system};
         in
           {
-            packages.salo = (
+            packages.saloc = (
               naersk.lib.${system}.override {
                 inherit (fenix.packages.${system}.minimal) cargo rustc;
               }
-            ).buildPackage { src = ./salo; };
+            ).buildPackage { src = ./saloc; };
 
-            defaultPackage = self.packages.${system}.salo;
+            defaultPackage = self.packages.${system}.saloc;
 
             devShell = pkgs.mkShell {
               buildInputs = with pkgs; [ cargo-watch ];

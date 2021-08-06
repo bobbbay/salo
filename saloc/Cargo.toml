@@ -1,5 +1,5 @@
 [package]
-name = "salo"
+name = "saloc"
 version = "0.1.0"
 edition = "2018"
 repository = "https://github.com/semc-labs/salo"
