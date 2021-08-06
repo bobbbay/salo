@@ -10,7 +10,7 @@ pub enum Expr<'life> {
 
     Value(Value<'life>),
 
-    A,
+    Skip(),
 }
 
 #[derive(Debug, PartialEq)]

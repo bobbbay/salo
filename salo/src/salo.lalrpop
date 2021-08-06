@@ -18,6 +18,13 @@ Expr: Expr<'input> = {
     /// ```
     <Value> ";" => Expr::Value(<>),
 
+    /// A comment
+    /// ```salo
+    /// -- It's a comment in a comment. Yes, this
+    /// -- goes all the way down.
+    /// ```
+    r"--[^\n\r]*[\n\r]*" => Expr::Skip(),
+    
     /// An untyped assignement
     /// ```salo
     /// x = true;

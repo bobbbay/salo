@@ -2,10 +2,12 @@
 
 #![feature(format_args_capture)]
 #![feature(crate_visibility_modifier)]
+#![feature(test)]
 // [TODO] I would like to deny missing_docs too, but LALRPOP does not write docs to generated files.
 #![deny(unsafe_code, unused_import_braces)]
 
-#[macro_use] extern crate lalrpop_util;
+#[macro_use]
+extern crate lalrpop_util;
 
 mod ast;
 mod parser;
@@ -16,9 +18,9 @@ lalrpop_mod!(pub salo);
 use clap::{load_yaml, App};
 use tracing::{error, info};
 
-use crate::util::{setup, Code, Result};
 use crate::parser::parse;
 use crate::repl::repl;
+use crate::util::{setup, Code, Result};
 
 fn main() -> Result<()> {
     setup()?;
@@ -55,38 +57,45 @@ fn main() -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
+    use test::Bencher;
+
     use super::*;
     use crate::ast::*;
     use crate::parser::parse;
 
-    #[test]
-    fn parse_simple_1() -> Result<()> {
-        setup()?;
+    #[bench]
+    fn parse_1(b: &mut Bencher) -> Result<()> {
+        b.iter(|| -> Result<()> {
+            let content = r#"
+            description : Str;
+            description = "A simple example of Salo's syntax";
+            "#;
 
-        let content = r#"
-        1 + 1;
-        2 - 1;
-        "#;
+            let code = Code::new(content, "stdin");
 
-        let code = Code::new(content, "stdin");
+            let res = parse(code)?;
 
-        let res = parse(code)?;
+            assert_eq!(
+                res,
+                [
+                    Expr::Var {
+                        name: Ident("description",),
+                        t: Some(Type::Str),
+                        value: None,
+                    },
+                    Expr::Var {
+                        name: Ident("description",),
+                        t: None,
+                        value: Some(Box::new(Value::Str(
+                            "\"A simple example of Salo's syntax\""
+                        ))),
+                    },
+                ]
+            );
 
-        assert_eq!(
-            res,
-            [
-                Node::BinaryExpr {
-                    op: BinaryOp::Add,
-                    lhs: Box::new(Node::Value(Type::Int(Some(1)))),
-                    rhs: Box::new(Node::Value(Type::Int(Some(1)))),
-                },
-                Node::BinaryExpr {
-                    op: BinaryOp::Sub,
-                    lhs: Box::new(Node::Value(Type::Int(Some(2)))),
-                    rhs: Box::new(Node::Value(Type::Int(Some(1)))),
-                },
-            ]
-        );
+            Ok(())
+        });
 
         Ok(())
     }
