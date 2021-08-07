@@ -3,4 +3,4 @@
 This is the monorepository for Salo, the system configuration and deployment toolset.
 
  * To find documentation, please visit [[./docs]]
- * To find the Salo compiler source code, please visit [[./salo]]
+ * To find the Salo compiler source code, please visit [[./saloc]]
