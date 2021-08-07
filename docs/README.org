@@ -16,17 +16,17 @@
 
    Salo aims to:
 
-   * Use a static and dependent type system to check code at compile-time
-   * Enable modular configuration
-   * /Extend/ the Nix package manager - not /subsume/ it - to ease device management
+   * Use a static and dependent type system to check code at compile-time;
+   * Enable modular configuration;
+   * /Extend/ the Nix package manager (not /subsume/ it) to ease mass and remote device management.
 
 ** The basics
 
-   This section outlines the basics of Salo's syntax. If you'd like to skip the basics and check out an example instead, scroll down to the [[Example configuration]].
+This section outlines the basics of Salo's syntax. If you'd like to skip this and check out an example instead, scroll down to the [[Example Configuration]].
 
 *** The REPL
 
-   Before starting, let's get familiar with Salo's REPL. Run ~salo~ with no arguments in the command line once Salo is installed to open up the prompt:
+   Before starting, let's get familiar with Salo's REPL. Run ~salo~ with no arguments in the command line (once Salo is installed) to open up the prompt:
 
    #+begin_src salo-repl
    > Welcome to the Salo REPL!
@@ -43,7 +43,7 @@
 
 *** Types
  
-   Salo has many types, mostly springing off of Nix's types. These include:
+   Salo's standard library has many types, mostly springing off of Nix's types. These include:
 
    * Bool
    * Int
@@ -54,7 +54,7 @@
    * Derivation
    * Function
 
-   Values are created with a (mostly optional) type signature and value, as such:
+   Values are created with a (/sometimes/ optional) type signature and value, as such:
 
    #+begin_src salo
    a : String
@@ -71,29 +71,34 @@
   
   Because Salo is smart enough to infer that ~a~'s type is String. More on type inference in the [[Type Inference]] section.
 
+  Unitialized values in Salo are invalid and will throw a compiler error. This means that code like this won't work:
+
+  #+begin_src salo
+  b : String
+  #+end_src
 
 **** A side note on dependent types
 
-     To better understand how our types work, let's create them.
+     To better understand how Salo's types work internally, let's examine how they're created in the standard library. Here's the simple declaration for natural numbers in the standard library:
 
      #+begin_src salo
      type Nat = Z | S Nat
      #+end_src
 
-     This declaration for Natural numbers in the prelude states that a Natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0= - =Z=.
+     Here we see that a natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0=, which is =Z=.
 
      This allows us to construct non-primitive types based on anything.
 
 *** Functions
 
-  Functions are defined in a slightly different syntax:
+    Functions are defined in a slightly different syntax:
 
-  #+begin_src salo
-  > f : String -> String
-  > f x = x
-  #+end_src
+    #+begin_src salo
+    > f : String -> String
+    > f x = x
+    #+end_src
 
-  Very Haskell-esque, indeed! If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
+    Very Haskell-esque, indeed! If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
 
 **** Currying
 
@@ -105,14 +110,16 @@
 
      > g : String -> String -> String
      > g x y = x + y
+
      > :t g
      g : String -> String -> String
+
      > :t g "Hello, "
      g "Hello, " : String -> String
      #+end_src
 
-     Cool, right?
- 
+     In the beginning, we check the type of =f= (defined above), and see that it's a =String -> String=: straightforward enough. Next, we declare =g= to have a type of =String -> String -> String=, implementing it to take two strings and produces their concatenation. We know that the type of =g= is =String -> String -> String=, but what's cool is that the type of =g "Hello, "= is a =String -> String=!
+
 **** Pattern matching
 
      Salo supports pattern matching, e.g.:
@@ -144,34 +151,21 @@
 
 **** Generic parameters
 
-     Functions don't have to have strict types - with polymorphism, we're able to allow any type to pass into our program, as long as it's generic enough. Again, similar to Haskell:
+     Functions don't have to have strict types - with polymorphism, we're able to allow any type to pass into our program, as long as the function definition is generic enough:
 
      #+begin_src salo
-     generic : a -> a -> a
-     generic x y = x + y
+     genericFunction : a -> a -> a
+     genericFunction x y = x + y
      #+end_src
 
-     This function will have a different type signature per call. For example, if we run:
+     This means that all of the following function calls are valid:
 
      #+begin_src salo
-     generic "A" "B"
+     genericFunction 1 1 -- 2
+     genericFunction "Foo" "Baz" -- "FooBaz"
      #+end_src
-
-     The type signature will be ~generic : String -> String -> String~. Salo knows the very second it sees that first argument ~"A"~ that the other two values in the type signature must also be a String.
      
-*** Returning
-
-    Earlier in this document, we mentioned that each top-level Salo configuration file *must* return an Attrset. Now, let's examine /how/ this is done.
-
-    #+begin_src salo
-    return true
-    #+end_src
-
-    This is a minimal, valid Salo file. Crazy, right? Just kidding.
-
-    Anyways, note the ~return~ keyword here. This indicates to Salo that this value should be returned, i.e. this file evaluates to ~true~.
-
-*** TODO Imports
+*** Imports
 
     Salo is also able to import other files using the ~import~ keyword. Imports can either bring a library file or a local file into scope. For example:
 
@@ -185,19 +179,30 @@
     import ./emacs.sa::backgroundColor
     #+end_src
 
-    Will search for =./emacs.sa=. If not found, Salo will throw a compile-time error. If found, it will import the ~backgroundColor~ value in emacs.sa.
+    Will search for =./emacs.sa=. If not found, Salo will throw a compile-time error. If found, it will import the ~backgroundColor~ value in emacs.sa. (If this is not found, Salo will again throw a compile-time error.)
 
     Finally, we have the ability to import the returned value of a file, e.g.
 
     #+begin_src 
-    git : Attrset
-    git = import ./git.sa
+    -- git.sa
+    {
+      name = "Git",
+      version = 1,
+    }
     #+end_src
 
-    Assuming =./git.sa= exists and returns an Attrset, the ~git~ value will contain that value. If any Salo rules are violated during the import - the file does not exist or the returned value isn't an Attrset - a compile-time error will be thrown.
+    
+    #+begin_src
+    -- default.sa
+    mygit = import ./git.sa
+    #+end_src
 
-** Example configuration
+    Here, =mygit='s value in =default.sa= is the Attrset defined in =git.sa=.
 
+** Example Configuration
+
+   Combining the syntax defined above, we are able to construct system configuration with Salo:
+   
 #+begin_src salo
 description : String; -- type is string
 description = "A system flake for my x86_64 server"; -- set value
@@ -247,7 +252,7 @@ Evaluates to:
   };
 }
 #+end_src
-** Depdent Types
+** Dependent Types
 
    Salo's dependently typed system allows the language's types to be expressive. A simple example of enforcing a program with dependent types is the standard library function that adds Vecs. In a non-dependently typed language, we could define the type signature like so:
 
@@ -264,18 +269,6 @@ Evaluates to:
    #+end_src
 
    In this case, ~n~ is the length of the first Vec, ~m~ is the length of the second Vec, and ~a~ is the type of both Vecs. Thanks to the type signature by itself, we know that ~addVec~ /must/ return a Vec that - most importantly - has a length of both the Vecs combined. Makes sense!
-   
-** TODO Modules
-
-   Salo provides a modules system, with which one can modularily enable/disable programs.
-
-** TODO Type Classes
-
-   A Type Class, similar to traits in Rust, is an "interface" that forces certain things to be implemented. 
-   
-** TODO Type Inference
-
-   Thanks to type inference, Salo has the ability to "guess" a value's type pre-compilation. THis is extremely useful because it saves time in typing, while also allowing optional verbosity by manually declaring type signatures.
    
 ** Deployment
 
@@ -323,4 +316,11 @@ Evaluates to:
     #+ATTR_ORG: :width 900
     [[./remote-diagram.png]]
 
-** TODO Literate programming
+** TODOS
+
+   This document is very much a work-in-progress! Here is a list of what's left to fill in:
+
+   * The module system
+   * Type classes (traits)
+   * Type inference
+   * Literate programming (org-mode)
