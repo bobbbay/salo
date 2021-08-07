@@ -214,13 +214,13 @@ packages = [
 ];
 
 hardware.pulseaudio = { -- an Attrset
-  enable = true; -- Booleans
-  extraModules = [ pkgs.pulseaudio-modules-bt ]; -- guess what type this is :P
-  package = pkgs.pulseaudioFull;
-  support32Bit = true;
+  enable = true, -- Booleans
+  extraModules = [ pkgs.pulseaudio-modules-bt ], -- guess what type this is :P
+  package = pkgs.pulseaudioFull,
+  support32Bit = true,
   extraConfig = "
     load-module module-bluetooth-policy auto_switch=2
-  "; -- multiline Strings also work
+  ", -- multiline Strings also work
 }; -- end of Attrset
 
 {
@@ -235,23 +235,29 @@ hardware.pulseaudio = { -- an Attrset
   -- If we placed a semicolon here, Salo would complain that nothing is returned
 #+end_src
 
-Evaluates to:
+This configuration will evaluate to a system that has:
+ * A hostname of "MyServer"
+ * Git installed
+ * Pulseaudio configured with extra modules and custom configuration
 
-#+begin_src nix
-{ config, pkgs, ... }:
+   The evaluated Nix file will look similar to the following:
+ 
+    #+begin_src nix
+    { config, pkgs, ... }:
+    
+    {
+      networking.hostName = "MyServer";
+      environment.systemPackages = [ pkgs.git ];
+      hardware.pulseaudio = {
+        enable = true;
+        extraModules = [ pkgs.pulseaudio-modules-bt ];
+        package = pkgs.pulseaudioFull;
+        support32Bit = true;
+        extraConfig = "load-module module-bluetooth-policy auto_switch=2";
+      };
+    }
+    #+end_src
 
-{
-  networking.hostName = "MyServer";
-  environment.systemPackages = [ pkgs.git ];
-  hardware.pulseaudio = {
-    enable = true;
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-    package = pkgs.pulseaudioFull;
-    support32Bit = true;
-    extraConfig = "load-module module-bluetooth-policy auto_switch=2";
-  };
-}
-#+end_src
 ** Dependent Types
 
    Salo's dependently typed system allows the language's types to be expressive. A simple example of enforcing a program with dependent types is the standard library function that adds Vecs. In a non-dependently typed language, we could define the type signature like so:
@@ -276,7 +282,7 @@ Evaluates to:
 
    Deployment in Salo is /incremental/. This means that, during the deployment of an operating system, it will only send the files that have /changed/ - not the whole OS itself. However, Salo also markets itself as stateless - hence, it cannot store a state file of which programs are installed on the remote machine on the local machine. To work around this, Salo makes two requests to remote machines - the first during the apply stage, and the second during the deploy stage.
 
-*** The apply stage
+*** The Apply Stage
 
     Salo's apply stage generally takes three steps:
 
@@ -286,14 +292,14 @@ Evaluates to:
 
     Once Salo knows which files are /already/ on the remote machine, it is able to decide which ones it needs to deploy, which it pipes onto the deploy stage.
 
-*** The deploy stage
+*** The Deploy Stage
 
     The deploy stage receives a list of programs it needs to compile, and takes two steps:
 
     - Compile the programs, producing binaries and library files as needed;
     - Sends these files via a remote connection to the remote machine.
 
-*** Defining a remote configuration
+*** Defining a Remote Configuration
 
     Up until now, it's all been theory. Let's write a configuration that deploys to a remote machine, via ~ssh~.
 
