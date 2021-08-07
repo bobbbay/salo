@@ -1,8 +1,6 @@
 //! An implementation of the Salo standard in Rust.
 
-#![feature(format_args_capture)]
-#![feature(crate_visibility_modifier)]
-#![feature(test)]
+#![feature(format_args_capture, crate_visibility_modifier, test)]
 // [TODO] I would like to deny missing_docs too, but LALRPOP does not write docs to generated files.
 #![deny(unsafe_code, unused_import_braces)]
 
@@ -16,31 +14,25 @@ mod util;
 lalrpop_mod!(pub salo);
 
 use clap::{load_yaml, App};
-use tracing::{error, info};
+use color_eyre::eyre::WrapErr;
+use color_eyre::Help;
+use tracing::info;
 
 use crate::parser::parse;
 use crate::repl::repl;
-use crate::util::{setup, Code, Result};
+use crate::util::{setup, Code};
 
-fn main() -> Result<()> {
+fn main() -> color_eyre::Result<()> {
     setup()?;
 
     let yaml = load_yaml!("../cli.yaml");
     let matches = App::from(yaml).get_matches();
 
-    match matches.subcommand() {
-        Some(("eval", subcommands)) => {
-            let filename = subcommands.value_of("FILE").unwrap();
-            let content = std::fs::read_to_string(filename);
-
-            let content = match content {
-                Ok(content) => content,
-                Err(_) => {
-                    eprintln!("Error: File not found.");
-                    error!("File not found");
-                    std::process::exit(1);
-                }
-            };
+    match matches.value_of("FILE") {
+        Some(filename) => {
+            let content = std::fs::read_to_string(filename)
+                .wrap_err("Unable to read config")
+                .suggestion("Try using a file that exists")?;
 
             info!("Evaluating file {}", filename);
 
@@ -49,7 +41,7 @@ fn main() -> Result<()> {
 
             info!("Finished evaluation");
         }
-        _ => repl(),
+        None => repl()?,
     }
 
     Ok(())

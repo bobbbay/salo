@@ -1,30 +1,38 @@
-use color_eyre::owo_colors::OwoColorize;
-use color_eyre::Report;
+use color_eyre::eyre::Result;
 use tracing::info;
 
-crate type Result<T> = std::result::Result<T, Report>;
-
 crate fn setup() -> Result<()> {
-    if std::env::var("SALO_LOG").unwrap_or("0".to_string()) == "1" {
-        if std::env::var("RUST_BACKTRACE").is_err() {
-            std::env::set_var("RUST_BACKTRACE", "1")
-        }
-        color_eyre::install()?;
+    let loglevel = std::env::var("SALO_LOG").unwrap_or("0".to_string());
+    let hook = color_eyre::config::HookBuilder::blank();
 
-        if std::env::var("RUST_LOG").is_err() {
-            std::env::set_var("RUST_LOG", "info")
+    let hook = match &*loglevel {
+        "1" => {
+            std::env::set_var("RUST_BACKTRACE", "1");
+            std::env::set_var("RUST_LOG", "info");
+
+            tracing_subscriber::fmt::fmt()
+                .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+                .init();
+
+            hook
         }
-        tracing_subscriber::fmt::fmt()
-            .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
-            .init();
-    } else {
-        // We're in a non-debug environment
-        color_eyre::config::HookBuilder::default()
+        "2" => {
+            std::env::set_var("RUST_BACKTRACE", "full");
+            std::env::set_var("RUST_LOG", "full");
+            std::env::set_var("COLORBT_SHOW_HIDDEN", "1");
+
+            tracing_subscriber::fmt::fmt()
+                .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+                .init();
+
+            hook
+        }
+        _ => hook
             .issue_url(concat!(env!("CARGO_PKG_REPOSITORY"), "/issues/new"))
-            .add_issue_metadata("version", env!("CARGO_PKG_VERSION"))
-            .panic_section(format!("{}", "This is a compiler error.".red()))
-            .install()?;
-    }
+            .display_env_section(false),
+    };
+
+    hook.install()?;
 
     info!("Setup complete");
     Ok(())

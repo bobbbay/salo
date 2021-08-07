@@ -1,5 +1,6 @@
 [workspace]
 
 members = [
-    "saloc"
+    "saloc", # The salo compiler
+    "salo",  # Salo command-line tools
 ]

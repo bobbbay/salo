@@ -1,11 +1,11 @@
 use ariadne::{ColorGenerator, Label, Report, ReportKind, Source};
 use lalrpop_util::ParseError;
 use tracing::{error, info, warn};
+use color_eyre::eyre::{Result, eyre};
 
 use crate::ast::Expr;
 use crate::salo::SaloParser;
 use crate::util::Code;
-use crate::util::Result;
 
 // [HACK]
 fn vec_str(v: &Vec<String>) -> String {
@@ -80,7 +80,7 @@ crate fn parse(code: Code) -> Result<Vec<Expr>> {
                 .finish()
                 .print((code.filename, Source::from(code.content)))?;
 
-            return Ok(vec![]);
+            return Err(eyre!("An error was encountered during parsing"));
         }
     }
 }

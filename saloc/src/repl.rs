@@ -1,3 +1,4 @@
+use color_eyre::eyre::Result;
 use crate::parser::parse;
 use crate::Code;
 use linefeed::complete::{Completer, Completion};
@@ -12,7 +13,7 @@ static COMMANDS: &[(&str, &str)] = &[
     (":q", "Goodbye"),
 ];
 
-crate fn repl() {
+crate fn repl() -> Result<()> {
     let interface = Arc::new(Interface::new("salo-repl").unwrap());
 
     println!("Dropping to the REPL");
@@ -46,12 +47,13 @@ crate fn repl() {
             ":quit" | ":q" => break,
             _ => {
                 let code = Code::new(&line, "stdin");
-                parse(code).unwrap();
+                parse(code);
             }
         }
     }
 
     println!("Goodbye.");
+    Ok(())
 }
 
 fn split_first_word(s: &str) -> (&str, &str) {

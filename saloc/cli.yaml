@@ -1,32 +1,7 @@
-name: Salo
+name: saloc
 version: "0.1.0"
-author: SEMC Team
-about: TODO
+author: SEMC
+about: Official implementation of the Salo language standard.
 args:
-    - verbose:
-        short: v
-        multiple: true
-        about: Sets the level of verbosity
-subcommands:
-    - eval:
-        about: evaluate FILE
-        args:
-            - FILE:
-                about: The file to evaluate
-                required: true
-                index: 1
-#    - remote:
-#        about: remote deployment commands
-#        args:
-#            - FILE:
-#                about: The file to evaluate
-#                required: true
-#                index: 1
-#            - apply:
-#                short: a
-#                long: apply
-#                about: Apply a configuration
-#            - deploy:
-#                short: d
-#                long: deploy
-#                about: Deploy a configuration
+    - FILE:
+        about: the file to compile
