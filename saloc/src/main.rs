@@ -11,18 +11,17 @@ mod ast;
 mod parser;
 mod repl;
 mod util;
-lalrpop_mod!(pub salo);
 
 use clap::{load_yaml, App};
-use color_eyre::eyre::WrapErr;
+use color_eyre::{Result, eyre::WrapErr};
 use color_eyre::Help;
 use tracing::info;
 
-use crate::parser::parse;
+use crate::parser::parser::parse;
 use crate::repl::repl;
 use crate::util::{setup, Code};
 
-fn main() -> color_eyre::Result<()> {
+fn main() -> Result<()> {
     setup()?;
 
     let yaml = load_yaml!("../cli.yaml");

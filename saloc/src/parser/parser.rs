@@ -3,8 +3,8 @@ use lalrpop_util::ParseError;
 use tracing::{error, info, warn};
 use color_eyre::eyre::{Result, eyre};
 
+use crate::parser::language::SaloParser;
 use crate::ast::Expr;
-use crate::salo::SaloParser;
 use crate::util::Code;
 
 // [HACK]

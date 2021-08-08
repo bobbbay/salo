@@ -1,5 +1,5 @@
 use color_eyre::eyre::Result;
-use crate::parser::parse;
+use crate::parser::parser::parse;
 use crate::Code;
 use linefeed::complete::{Completer, Completion};
 use linefeed::terminal::Terminal;
@@ -42,7 +42,7 @@ crate fn repl() -> Result<()> {
             }
             ":ast" | ":a" => {
                 let code = Code::new(args, "stdin");
-                println!("{:#?}", parse(code).unwrap());
+                println!("{:#?}", parse(code));
             }
             ":quit" | ":q" => break,
             _ => {
