@@ -18,12 +18,18 @@ $ cargo run -- eval ./examples/simple.sa
 
 To run the built-in tests, run:
 
-#+begin_src 
+#+begin_src shell
 $ cargo t  
 #+end_src
 
 To run benchmarks, run:
 
-#+begin_src 
+#+begin_src shell
 $ cargo bench  
+#+end_src
+
+To generate documentation, run:
+
+#+begin_src shell
+$ cargo doc --open --no-deps
 #+end_src

@@ -1,5 +1,4 @@
 use color_eyre::eyre::Result;
-use crate::parser::parser::parse;
 use crate::Code;
 use linefeed::complete::{Completer, Completion};
 use linefeed::terminal::Terminal;
@@ -13,6 +12,7 @@ static COMMANDS: &[(&str, &str)] = &[
     (":q", "Goodbye"),
 ];
 
+/// Invokes the Linefeed REPL.
 crate fn repl() -> Result<()> {
     let interface = Arc::new(Interface::new("salo-repl").unwrap());
 
@@ -41,13 +41,14 @@ crate fn repl() -> Result<()> {
                 unimplemented!()
             }
             ":ast" | ":a" => {
-                let code = Code::new(args, "stdin");
-                println!("{:#?}", parse(code));
+                let mut code = Code::new(args, "stdin");
+                code.parse();
+                println!("{:#?}", code.ast);
             }
             ":quit" | ":q" => break,
             _ => {
-                let code = Code::new(&line, "stdin");
-                parse(code);
+                let mut code = Code::new(&line, "stdin");
+                code.parse();
             }
         }
     }
@@ -56,6 +57,7 @@ crate fn repl() -> Result<()> {
     Ok(())
 }
 
+/// [HACK] Splits the first word
 fn split_first_word(s: &str) -> (&str, &str) {
     let s = s.trim();
 
@@ -65,6 +67,7 @@ fn split_first_word(s: &str) -> (&str, &str) {
     }
 }
 
+/// Default completion for the language.
 struct SaloCompleter;
 
 impl<Term: Terminal> Completer<Term> for SaloCompleter {

@@ -17,7 +17,6 @@ use color_eyre::{Result, eyre::WrapErr};
 use color_eyre::Help;
 use tracing::info;
 
-use crate::parser::parser::parse;
 use crate::repl::repl;
 use crate::util::{setup, Code};
 
@@ -35,8 +34,8 @@ fn main() -> Result<()> {
 
             info!("Evaluating file {}", filename);
 
-            let code = Code::new(&content, "stdin");
-            let _ast = parse(code)?;
+            let mut code = Code::new(&content, "stdin");
+            code.parse()?;
 
             info!("Finished evaluation");
         }
@@ -53,7 +52,6 @@ mod tests {
 
     use super::*;
     use crate::ast::*;
-    use crate::parser::parse;
 
     #[bench]
     fn parse_1(b: &mut Bencher) -> Result<()> {
@@ -63,12 +61,11 @@ mod tests {
             description = "A simple example of Salo's syntax";
             "#;
 
-            let code = Code::new(content, "stdin");
-
-            let res = parse(code)?;
+            let mut code = Code::new(content, "stdin");
+            code.parse()?;
 
             assert_eq!(
-                res,
+                code.ast.unwrap(),
                 [
                     Expr::Var {
                         name: Ident("description",),
