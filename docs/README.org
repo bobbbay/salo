@@ -9,8 +9,8 @@
    In short...
 
    * Salo is a dependently typed ML-inspired configuration language;
-   * Salo provides a modular platform for creating OS-level configurations;
-   * With Salo, you can write, build, and deploy your systems with ease.
+   * Salo provides a modular platform for creating and deploying OS-level configurations;
+   * Salo /extends/ (not /subsumes/) the Nix package manager to ease mass and remote device management.
 
 ** Goals
 
@@ -18,7 +18,6 @@
 
    * Use a static and dependent type system to check code at compile-time;
    * Enable modular configuration;
-   * /Extend/ the Nix package manager (not /subsume/ it) to ease mass and remote device management.
 
 ** The basics
 
@@ -39,16 +38,16 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
    * ~:a expr~: get the generated AST of ~expr~
    * ~:q~: quit
 
+   Run ~:h~ for more information. 
+
    Now that we're familiar with the REPL, we can continue to learning Salo's configuration language. From this point on, every code block that begins with ~>~ is run in the REPL.
 
 *** Types
  
-   Salo's standard library has many types, mostly springing off of Nix's types. These include:
+   Salo has two primitive types: ~Int~ and ~Str~. More types are defined in the standard library, such as:
 
    * Bool
-   * Int
    * Nat
-   * Str
    * Attrs
    * Array
    * Derivation
@@ -75,6 +74,7 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
 
   #+begin_src salo
   b : String
+  -- What is b's value?
   #+end_src
 
 **** A side note on dependent types
@@ -87,18 +87,18 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
 
      Here we see that a natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0=, which is =Z=.
 
-     This allows us to construct non-primitive types based on anything.
+     This allows users to construct non-primitive types that are as expressive as the language itself. For more information on expressive types, check out the [[Dependent Types]] chapter.
 
 *** Functions
 
-    Functions are defined in a slightly different syntax:
+    Functions are defined in a slightly similar syntax:
 
     #+begin_src salo
     > f : String -> String
     > f x = x
     #+end_src
 
-    Very Haskell-esque, indeed! If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
+    If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
 
 **** Currying
 
@@ -132,7 +132,7 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
 
      In this case, if the Bool given to ~name~ is true, it will evaluate to "Bob". If it is given false, then it will evaluate to "Jeffrey".
 
-     Salo pattern matches /must/ be exhaustive. Meaning, this won't work:
+     Salo pattern matches /must/ be exhaustive. This means that the following won't work:
 
      #+begin_src salo
      isOne : Int -> Bool
@@ -147,24 +147,24 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
      isOne _ = false
      #+end_src
 
-     With the ~_~ character, Salo can match every other variant. 
+     With the ~_~ character, Salo can match every other variant.
 
-**** Generic parameters
+**** Polymorphic arguments
 
-     Functions don't have to have strict types - with polymorphism, we're able to allow any type to pass into our program, as long as the function definition is generic enough:
+     Functions don't have to have strict types - with polymorphism, we're able to allow any type to pass into our program, as long as the function definition is "generic" enough:
 
      #+begin_src salo
-     genericFunction : a -> a -> a
-     genericFunction x y = x + y
+     genericAdder : a -> a -> a
+     genericAdder x y = x + y
      #+end_src
 
      This means that all of the following function calls are valid:
 
      #+begin_src salo
-     genericFunction 1 1 -- 2
-     genericFunction "Foo" "Baz" -- "FooBaz"
+     genericAdder 1 1         --> 2
+     genericAdder "Foo" "Baz" --> "FooBaz"
      #+end_src
-     
+
 *** Imports
 
     Salo is also able to import other files using the ~import~ keyword. Imports can either bring a library file or a local file into scope. For example:
@@ -173,7 +173,7 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
     import std::prelude::*;
     #+end_src
 
-    Will import everything in the ~prelude~ module of the standard library. This line is actually automatically inserted into every Salo file for ease-of-use. Note that glob imports are not recommended, but are possible.
+    Will evaluate and bring everything in the ~prelude~ module of the standard library into scope. This line is actually automatically inserted into the beginning of every Salo file. Note that glob imports are not recommended, but are possible.
 
     #+begin_src 
     import ./emacs.sa::backgroundColor
@@ -190,7 +190,6 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
       version = 1,
     }
     #+end_src
-
     
     #+begin_src
     -- default.sa
@@ -321,6 +320,21 @@ This configuration will evaluate to a system that has:
 
     #+ATTR_ORG: :width 900
     [[./remote-diagram.png]]
+
+** Rust implementation internals
+
+   The Rust implementation uses typestates to specify a strict pipeline. There are three states, each with its own content:
+
+   * ~Source~
+     * ~Filename~: the name of the file, or ~<stdin>~
+     * ~Code~: the code content
+   * ~AST~
+     * ~Tree~: the Abstract Syntax Tree
+   * ~Metadata~
+     * ~Sam~: the generated SAlo Metadata content
+     * ~Nix~: the generated NixOS expression
+
+   There is also an ~Error~ state (containing ~line~, ~start~, ~end~, ~message~, and an optional ~suggestion~), that will be returned when one of the steps encounters an issue. 
 
 ** TODOS
 
