@@ -8,18 +8,23 @@
 
    In short...
 
-   * Salo is a dependently typed ML-inspired configuration language;
-   * Salo provides a modular platform for creating and deploying OS-level configurations;
-   * Salo /extends/ (not /subsumes/) the Nix package manager to ease mass and remote device management.
+   * Salo is a static and dependently typed ML-inspired configuration language;
+   * Salo provides a modular platform for creating and deploying OS-level configurations.
 
 ** Goals
 
    Salo aims to:
 
-   * Use a static and dependent type system to check code at compile-time;
-   * Enable modular configuration;
+   * Enable modular, OS-level configuration for multiple Linux distributions;
+   * Use a static and dependent type system to check code at compile-time.
 
-** The basics
+** Components
+
+   Salo comes in two components: the compiler, which evaluates the Salo language, and the tool, which takes the compiler's output and puts it to use.
+
+   The compiler outputs ~.sam~ /(SAlo Metadata)/ files, which is the evaluated value of the inputted file. The tool takes ~.sam~ files, builds them (into ~.iso~ or ~.sar~), and (optionally) deploys them. 
+
+** The Salo language
 
 This section outlines the basics of Salo's syntax. If you'd like to skip this and check out an example instead, scroll down to the [[Example Configuration]].
 
@@ -48,16 +53,14 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
 
    * Bool
    * Nat
-   * Attrs
    * Array
    * Derivation
-   * Function
 
    Values are created with a (/sometimes/ optional) type signature and value, as such:
 
    #+begin_src salo
-   a : String
-   a = "Hello, world!"
+   a : String;
+   a = "Hello, world!";
    #+end_src
 
    This is very similar to ML syntax.
@@ -65,7 +68,7 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
    In the example above, the definition of ~a~ could have been rewritten as:
 
    #+begin_src salo
-   a = "Hello, world!"
+   a = "Hello, world!";
    #+end_src
   
   Because Salo is smart enough to infer that ~a~'s type is String. More on type inference in the [[Type Inference]] section.
@@ -73,16 +76,25 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
   Unitialized values in Salo are invalid and will throw a compiler error. This means that code like this won't work:
 
   #+begin_src salo
-  b : String
+  b : String;
   -- What is b's value?
   #+end_src
 
+  However, Salo is ok with delegating assignment until later on, as long as that value is not used:
+
+  #+begin_src salo
+  b : String;
+  x : String;
+  x = "Goodbye, world!";
+  b = "Hello, world!";
+  #+begin_src
+
 **** A side note on dependent types
 
-     To better understand how Salo's types work internally, let's examine how they're created in the standard library. Here's the simple declaration for natural numbers in the standard library:
+     Salo has so little primitives thanks to it's dependent types. To better understand how these work internally, let's examine how they're put to use in the standard library. Here's the simple declaration for natural numbers:
 
      #+begin_src salo
-     type Nat = Z | S Nat
+     type Nat = Z | S Nat;
      #+end_src
 
      Here we see that a natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0=, which is =Z=.
@@ -94,8 +106,8 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
     Functions are defined in a slightly similar syntax:
 
     #+begin_src salo
-    > f : String -> String
-    > f x = x
+    > f : String -> String;
+    > f x = x;
     #+end_src
 
     If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
@@ -105,16 +117,16 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
      Salo's functions curry. Take the following code example (note the REPL prompt):
 
      #+begin_src salo-repl 
-     > :t f
+     > :t f;
      f : String -> String
 
-     > g : String -> String -> String
-     > g x y = x + y
+     > g : String -> String -> String;
+     > g x y = x + y;
 
-     > :t g
+     > :t g;
      g : String -> String -> String
 
-     > :t g "Hello, "
+     > :t g "Hello, ";
      g "Hello, " : String -> String
      #+end_src
 
@@ -203,59 +215,32 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
    Combining the syntax defined above, we are able to construct system configuration with Salo:
    
 #+begin_src salo
-description : String; -- type is string
-description = "A system flake for my x86_64 server"; -- set value
--- Note that `description` is not specifically used in the result
+use std::sys::ubuntu20::pkgs; -- 1
 
--- Type is inferred : Array<Derivation>
+description : String; -- 2
+description = "A system flake for my x86_64 server";
+
+packages : Vec pkgs _; -- 3, 4
 packages = [
-  pkgs.git -- type is Derivation
+  pkgs.git
 ];
 
-hardware.pulseaudio = { -- an Attrset
-  enable = true, -- Booleans
-  extraModules = [ pkgs.pulseaudio-modules-bt ], -- guess what type this is :P
-  package = pkgs.pulseaudioFull,
-  support32Bit = true,
-  extraConfig = "
-    load-module module-bluetooth-policy auto_switch=2
-  ", -- multiline Strings also work
-}; -- end of Attrset
+main: drv: { -- 5
+  description, -- 6
+  networking.hostName = "MyServer",
+  packages,
+};
 
-{
-  networking.hostName = "MyServer", -- can inline value
-
-  environment.systemPackages = packages, -- can use variable's value as long as the type checks
-
-  hardware, /* desugars into `hardware = hardware`
-               hardware is an Attrset which contains 
-               Attrset, `pulseaudio`. */
-} -- Note that the semicolon is omitted here, because this is what will be returned
-  -- If we placed a semicolon here, Salo would complain that nothing is returned
+return main; -- 7
 #+end_src
 
-This configuration will evaluate to a system that has:
- * A hostname of "MyServer"
- * Git installed
- * Pulseaudio configured with extra modules and custom configuration
-
-   The evaluated Nix file will look similar to the following:
- 
-    #+begin_src nix
-    { config, pkgs, ... }:
-    
-    {
-      networking.hostName = "MyServer";
-      environment.systemPackages = [ pkgs.git ];
-      hardware.pulseaudio = {
-        enable = true;
-        extraModules = [ pkgs.pulseaudio-modules-bt ];
-        package = pkgs.pulseaudioFull;
-        support32Bit = true;
-        extraConfig = "load-module module-bluetooth-policy auto_switch=2";
-      };
-    }
-    #+end_src
+ 1. We bring ubuntu20's ~pkgs~ into scope
+ 2. We declare ~description~ to have a type of ~String~ (this could also be inferred)
+ 3. ~packages~ has a type of ~Vec~, which is from the standard prelude (~std::prelude~)
+ 4. ~Vec pkgs _~ means that the Vec contains an inferred amount of ~pkgs~ (which are ~std::sys::ubuntu20::pkgs~)
+ 5. ~main~ is a derivation that contains the description, packages, and a hostname of "MyServer"
+ 6. ~description,~ is the same as ~description = description~
+ 7. We return ~main~ as the result of this file
 
 ** Dependent Types
 
