@@ -87,7 +87,7 @@ This section outlines the basics of Salo's syntax. If you'd like to skip this an
   x : String;
   x = "Goodbye, world!";
   b = "Hello, world!";
-  #+begin_src
+  #+end_src
 
 **** A side note on dependent types
 
