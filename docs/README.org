@@ -325,7 +325,8 @@ return main; -- 7
 
    This document is very much a work-in-progress! Here is a list of what's left to fill in:
 
-   * The module system
-   * Type classes (traits)
+   * The module system: Salo provides a modular system for enabling/disabling specific configurations
+   * Type classes (traits): Grouping types by classes, enabling polymorphism
    * Type inference
-   * Literate programming (org-mode)
+   * Literate programming (org-mode): Salo enables programming side-by-side with org-mode content
+   * Notation: stricter, macros alternative
