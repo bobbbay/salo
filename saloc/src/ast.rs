@@ -1,3 +1,27 @@
+/*! This module allows us to construct abstract syntax trees for Salo.
+
+Here is an example tree:
+```rust
+# use saloc::ast::{Expr, Type, Ident};
+vec![
+  // A variable declaration
+  Expr::Var {
+    // A name of "MYVAR"
+    name: Ident("MYVAR"),
+    // An integer
+    t: Some(Type::Num),
+    // No value (yet)
+    value: None,
+  }
+];
+```
+
+This is basically equivalent to the following Salo:
+```salo
+MYVAR : Int
+```
+*/
+
 use std::fmt::Debug;
 
 /// A whole expression. An AST is usually a `Vec` of these.
@@ -27,7 +51,7 @@ pub enum Type {
     Bool,
     Num,
     Str,
-    Fn,
+    // Fn,
 }
 
 /// A value. Can be seen as an "implementation" of each type name (see [`Type`]).

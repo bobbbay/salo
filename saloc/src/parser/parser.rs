@@ -20,7 +20,7 @@ fn vec_str(v: &Vec<String>) -> String {
 
 impl<'life> Code<'life> {
     /// Parse code
-    crate fn parse(&mut self) -> Result<()> {
+    pub fn parse(&mut self) -> Result<()> {
         let expr = SaloParser::new().parse(self.content);
 
         match expr {
