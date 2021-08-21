@@ -10,8 +10,6 @@ use color_eyre::Help;
 use color_eyre::{eyre::WrapErr, Result};
 use tracing::info;
 
-use saloc::util::Code;
-
 fn main() -> Result<()> {
     setup()?;
 
@@ -20,14 +18,31 @@ fn main() -> Result<()> {
 
     match matches.value_of("FILE") {
         Some(filename) => {
+            todo!();
+
             let content = std::fs::read_to_string(filename)
                 .wrap_err("Unable to read config")
                 .suggestion("Try using a file that exists")?;
 
             info!("Evaluating file {}", filename);
 
-            let mut code = Code::new(&content, "stdin");
-            code.parse()?;
+            use saloc::compiler::*;
+
+            let parser = Parser::<Source>::new("<stdin>", &content);
+
+            let ast = match parser.parse() {
+                MaybeAST::AST(ast) => ast,
+                MaybeAST::Error(error) => {
+                    error.report();
+                }
+            };
+
+            let output = match ast.evaluate() {
+                MaybeOutput::Output(output) => output,
+                MaybeOutput::Error(error) => error.report(),
+            };
+
+            output.export();
 
             info!("Finished evaluation");
         }
@@ -84,6 +99,8 @@ pub mod repl {
 
     /// Invokes the Linefeed REPL.
     pub fn repl() -> Result<()> {
+        todo!();
+        
         let interface = Arc::new(Interface::new("salo-repl").unwrap());
 
         println!("Dropping to the REPL");
@@ -96,7 +113,14 @@ pub mod repl {
                 interface.add_history_unique(line.clone());
             }
 
-            let (cmd, args) = split_first_word(&line);
+            let line = line.trim();
+
+            let (cmd, args) = match line.find(|ch: char| ch.is_whitespace()) {
+                Some(pos) => (&line[..pos], line[pos..].trim_start()),
+                None => (line, ""),
+            };
+
+            split_first_word(&line);
 
             match cmd {
                 ":help" | ":h" => {
@@ -111,14 +135,22 @@ pub mod repl {
                     unimplemented!()
                 }
                 ":ast" | ":a" => {
-                    let mut code = Code::new(args, "stdin");
-                    let _ = code.parse();
-                    println!("{:#?}", code.ast);
+                    use saloc::compiler::*;
+
+                    let parser = Parser::<Source>::new("<stdin>", args);
+
+                    let ast = match parser.parse() {
+                        MaybeAST::AST(ast) => ast,
+                        MaybeAST::Error(error) => {
+                            error.report();
+                        }
+                    };
+
+                    println!("{:#?}", ast.state.0);
                 }
                 ":quit" | ":q" => break,
                 _ => {
                     let mut code = Code::new(&line, "stdin");
-                    let _ = code.parse();
                 }
             }
         }

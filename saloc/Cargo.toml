@@ -18,3 +18,5 @@ lalrpop-util = "0.19.6"                                       # Parsing
 ariadne = "0.1.2"                                             # Parser error formatting
 
 linefeed = "0.6.0"                                            # REPL
+
+typestate = "0.8.0"                                           # Typestate macros
