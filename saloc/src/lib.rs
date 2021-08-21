@@ -87,6 +87,7 @@ mod tests {
 
 #[typestate(enumerate)]
 pub mod compiler {
+    //! Compiler for the Salo language (enforced by typestate)
     use ariadne::Report;
 
     use crate::ast::Expr;

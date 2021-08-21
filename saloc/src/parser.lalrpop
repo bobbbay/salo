@@ -1,3 +1,5 @@
+//! Parser for the Salo language
+
 use std::str::FromStr;
 use crate::ast::{Expr, Ident, Type, Value};
 
