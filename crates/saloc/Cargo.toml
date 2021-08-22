@@ -1,22 +1,14 @@
 [package]
 name = "saloc"
-version = "0.1.0"
+version = "0.0.0"
 edition = "2018"
-repository = "https://github.com/semc-labs/salo"
-
-[build-dependencies]
-lalrpop = "0.19.6"
 
 [dependencies]
+saloc-lib = { path = "../saloc-lib" }
+
 clap = { version = "3.0.0-beta.2", features = ["yaml"] }      # Command-line args
+linefeed = "0.6.0"                                            # REPL
 
 color-eyre = { version = "0.5.11", features = ["issue-url"] } # Error handling
 tracing = "0.1.26"                                            # Tracing
 tracing-subscriber = "0.2.19"                                 # More of that
-
-lalrpop-util = "0.19.6"                                       # Parsing
-ariadne = "0.1.2"                                             # Parser error formatting
-
-linefeed = "0.6.0"                                            # REPL
-
-typestate = "0.8.0"                                           # Typestate macros

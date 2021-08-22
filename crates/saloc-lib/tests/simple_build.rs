@@ -1,4 +1,4 @@
-use saloc::compiler::compiler::*;
+use saloc_lib::compiler::compiler::*;
 
 #[test]
 /// Test the full workflow of the typestate compiler.

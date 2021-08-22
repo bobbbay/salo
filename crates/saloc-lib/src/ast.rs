@@ -2,7 +2,7 @@
 
 Here is an example tree:
 ```rust
-# use saloc::ast::{Expr, Type, Ident};
+# use saloc_lib::ast::{Expr, Type, Ident};
 vec![
   // A variable declaration
   Expr::Var {

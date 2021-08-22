@@ -4,7 +4,7 @@
 #![deny(unsafe_code, unused_import_braces)]
 
 use self::repl::repl;
-use saloc::compiler::compiler::*;
+use saloc_lib::compiler::compiler::*;
 
 use clap::{load_yaml, App};
 use color_eyre::Help;
@@ -14,7 +14,7 @@ use tracing::info;
 fn main() -> Result<()> {
     setup()?;
 
-    let yaml = load_yaml!("../../cli.yaml");
+    let yaml = load_yaml!("../cli.yaml");
     let matches = App::from(yaml).get_matches();
 
     match matches.value_of("FILE") {
@@ -93,7 +93,7 @@ pub fn setup() -> Result<()> {
 }
 
 pub mod repl {
-    use saloc::compiler::compiler::*;
+    use saloc_lib::compiler::compiler::*;
     use color_eyre::Result;
 
     /// Invokes the Linefeed REPL.

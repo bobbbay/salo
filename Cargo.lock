@@ -968,21 +968,32 @@ checksum = "71d301d4193d031abdd79ff7e3dd721168a9572ef3fe51a1517aba235bd8f86e"
 
 [[package]]
 name = "salo"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "clap",
 ]
 
 [[package]]
 name = "saloc"
-version = "0.1.0"
+version = "0.0.0"
+dependencies = [
+ "clap",
+ "color-eyre",
+ "linefeed",
+ "saloc-lib",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "saloc-lib"
+version = "0.0.0"
 dependencies = [
  "ariadne",
  "clap",
  "color-eyre",
  "lalrpop",
  "lalrpop-util",
- "linefeed",
  "tracing",
  "tracing-subscriber",
  "typestate",
