@@ -3,7 +3,8 @@
 #![feature(format_args_capture)]
 #![deny(unsafe_code, unused_import_braces)]
 
-use crate::repl::repl;
+use self::repl::repl;
+use saloc::compiler::compiler::*;
 
 use clap::{load_yaml, App};
 use color_eyre::Help;
@@ -25,8 +26,6 @@ fn main() -> Result<()> {
                 .suggestion("Try using a file that exists")?;
 
             info!("Evaluating file {}", filename);
-
-            use saloc::compiler::*;
 
             let parser = Parser::<Source>::new("<stdin>", &content);
 
@@ -94,8 +93,8 @@ pub fn setup() -> Result<()> {
 }
 
 pub mod repl {
+    use saloc::compiler::compiler::*;
     use color_eyre::Result;
-    use saloc::util::Code;
 
     /// Invokes the Linefeed REPL.
     pub fn repl() -> Result<()> {
@@ -135,8 +134,6 @@ pub mod repl {
                     unimplemented!()
                 }
                 ":ast" | ":a" => {
-                    use saloc::compiler::*;
-
                     let parser = Parser::<Source>::new("<stdin>", args);
 
                     let ast = match parser.parse() {
@@ -150,7 +147,7 @@ pub mod repl {
                 }
                 ":quit" | ":q" => break,
                 _ => {
-                    let mut code = Code::new(&line, "stdin");
+                    todo!()
                 }
             }
         }

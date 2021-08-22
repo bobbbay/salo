@@ -1,89 +1,10 @@
-//! An implementation of the Salo standard in Rust.
-
-#![feature(format_args_capture, crate_visibility_modifier, test)]
-// [TODO] I would like to deny missing_docs too, but LALRPOP does not write docs to generated files.
-#![deny(unsafe_code, unused_import_braces)]
-
-#[macro_use]
-extern crate lalrpop_util;
-#[macro_use]
-extern crate typestate;
-
-pub mod ast;
-pub mod util;
-
-lalrpop_mod!(pub parser);
-
 use crate::parser::SaloParser;
 use ariadne::{ColorGenerator, Label, Report, ReportKind};
 use lalrpop_util::ParseError;
 use tracing::{error, info, warn};
 
-#[cfg(test)]
-mod tests {
-    extern crate test;
-    use color_eyre::Result;
-    use test::Bencher;
-
-    use crate::ast::*;
-    use crate::util::Code;
-
-    #[bench]
-    fn parse_1(b: &mut Bencher) -> Result<()> {
-        b.iter(|| -> Result<()> {
-            let content = r#"
-            description : Str;
-            description = "A simple example of Salo's syntax";
-            "#;
-
-            let mut code = Code::new(content, "stdin");
-            code.parse()?;
-
-            assert_eq!(
-                code.ast.unwrap(),
-                [
-                    Expr::Var {
-                        name: Ident("description",),
-                        t: Some(Type::Str),
-                        value: None,
-                    },
-                    Expr::Var {
-                        name: Ident("description",),
-                        t: None,
-                        value: Some(Box::new(Value::Str(
-                            "\"A simple example of Salo's syntax\""
-                        ))),
-                    },
-                ]
-            );
-
-            Ok(())
-        });
-
-        Ok(())
-    }
-
-    #[test]
-    fn typestate_test() {
-        use crate::compiler::*;
-
-        let parser = Parser::<Source>::new("<stdin>", "a : Str;");
-
-        let ast = match parser.parse() {
-            MaybeAST::AST(ast) => ast,
-            MaybeAST::Error(error) => {
-                error.report();
-            }
-        };
-
-        let output = match ast.evaluate() {
-            MaybeOutput::Output(output) => output,
-            MaybeOutput::Error(error) => error.report(),
-        };
-
-        output.export();
-    }
-}
+use self::compiler::*;
+use crate::util::vec_str;
 
 #[typestate(enumerate)]
 pub mod compiler {
@@ -145,7 +66,6 @@ pub mod compiler {
     }
 }
 
-use crate::compiler::*;
 impl SourceState for Parser<Source> {
     fn new(filename: &'static str, content: &'static str) -> compiler::Parser<compiler::Source> {
         Parser {
@@ -165,7 +85,7 @@ impl SourceState for Parser<Source> {
                     filename: self.filename,
                     content: self.content,
                     state: AST(expr),
-                })
+                });
             }
             Err(e) => {
                 warn!("Encountered error, will abort soon");
@@ -210,18 +130,16 @@ impl SourceState for Parser<Source> {
                             .with_message("Encountered extra token")
                             .with_label(Label::new(token.0..token.2))
                     }
-                    ParseError::User { error } => {
-                        Report::build(ReportKind::Error, (), 0)
-                            .with_code(9999)
-                            .with_message(format!("Unspecified error {}", error))
-                    }
+                    ParseError::User { error } => Report::build(ReportKind::Error, (), 0)
+                        .with_code(9999)
+                        .with_message(format!("Unspecified error {}", error)),
                 };
 
                 return MaybeAST::Error(Parser {
                     filename: self.filename,
                     content: self.content,
-                    state: Error(report.finish())
-                })
+                    state: Error(report.finish()),
+                });
             }
         }
     }
@@ -249,19 +167,7 @@ impl ErrorState for Parser<Error> {
             .0
             .eprint(ariadne::Source::from(self.content))
             .unwrap();
+        dbg!();
         std::process::exit(0);
     }
-}
-
-/// [HACK] Format a vec so that it's easier on our eyes.
-fn vec_str(v: &Vec<String>) -> String {
-    let mut res = String::new();
-
-    for i in &v[0..v.len() - 1] {
-        res.push_str(i);
-        res.push_str(", ");
-    }
-    res.push_str(&v[v.len() - 1].to_string());
-
-    res
 }

@@ -19,7 +19,7 @@ $ cargo run -- eval ./examples/simple.sa
 To run the built-in tests, run:
 
 #+begin_src shell
-$ cargo t  
+$ cargo t
 #+end_src
 
 To run benchmarks, run:
