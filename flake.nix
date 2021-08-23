@@ -18,11 +18,19 @@
           pkgs = nixpkgs.legacyPackages.${system};
         in
           {
-            packages.saloc = (
-              naersk.lib.${system}.override {
-                inherit (fenix.packages.${system}.minimal) cargo rustc;
-              }
-            ).buildPackage { src = ./saloc; };
+            packages = {
+              saloc = (
+                naersk.lib.${system}.override {
+                  inherit (fenix.packages.${system}.minimal) cargo rustc;
+                }
+              ).buildPackage { src = ./crates/saloc; };
+
+              salo = (
+                naersk.lib.${system}.override {
+                  inherit (fenix.packages.${system}.minimal) cargo rustc;
+                }
+              ).buildPackage { src = ./crates/salo; };
+            };
 
             defaultPackage = self.packages.${system}.saloc;
 
