@@ -2,9 +2,12 @@
 name = "saloc"
 version = "0.0.0"
 edition = "2018"
+repository = "https://github.com/semc-labs/salo"
+description = "Frontend of the compiler for the Salo language: a toolset to agnostically build and deploy OS images remotely."
+license = "MIT"
 
 [dependencies]
-saloc-lib = { path = "../saloc-lib" }
+saloc-lib = { path = "../saloc-lib", version = "0.0.0" }
 
 clap = { version = "3.0.0-beta.2", features = ["yaml"] }      # Command-line args
 linefeed = "0.6.0"                                            # REPL
