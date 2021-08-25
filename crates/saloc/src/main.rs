@@ -19,15 +19,13 @@ fn main() -> Result<()> {
 
     match matches.value_of("FILE") {
         Some(filename) => {
-            todo!();
-
             let content = std::fs::read_to_string(filename)
                 .wrap_err("Unable to read config")
                 .suggestion("Try using a file that exists")?;
 
             info!("Evaluating file {}", filename);
 
-            let parser = Parser::<Source>::new("<stdin>", &content);
+            let parser = Parser::<Source>::new("<stdin>", Box::leak(content.into_boxed_str()));
 
             let ast = match parser.parse() {
                 MaybeAST::AST(ast) => ast,
@@ -93,13 +91,11 @@ pub fn setup() -> Result<()> {
 }
 
 pub mod repl {
-    use saloc_lib::compiler::compiler::*;
     use color_eyre::Result;
+    use saloc_lib::compiler::compiler::*;
 
     /// Invokes the Linefeed REPL.
     pub fn repl() -> Result<()> {
-        todo!();
-        
         let interface = Arc::new(Interface::new("salo-repl").unwrap());
 
         println!("Dropping to the REPL");
@@ -112,7 +108,7 @@ pub mod repl {
                 interface.add_history_unique(line.clone());
             }
 
-            let line = line.trim();
+            let line: &str = Box::leak(line.into_boxed_str());
 
             let (cmd, args) = match line.find(|ch: char| ch.is_whitespace()) {
                 Some(pos) => (&line[..pos], line[pos..].trim_start()),
@@ -147,7 +143,21 @@ pub mod repl {
                 }
                 ":quit" | ":q" => break,
                 _ => {
-                    todo!()
+                    let parser = Parser::<Source>::new("<stdin>", line);
+
+                    let ast = match parser.parse() {
+                        MaybeAST::AST(ast) => ast,
+                        MaybeAST::Error(error) => {
+                            error.report();
+                        }
+                    };
+
+                    let output = match ast.evaluate() {
+                        MaybeOutput::Output(output) => output,
+                        MaybeOutput::Error(error) => error.report(),
+                    };
+
+                    output.export();
                 }
             }
         }
