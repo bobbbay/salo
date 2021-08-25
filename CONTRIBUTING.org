@@ -24,7 +24,7 @@
     #+begin_src shell
     git clone https://github.com/semc-labs/salo
     cd salo
-    cargo r –-bin saloc
+    cargo r --bin saloc
     #+end_src
 
     This will clone the repository, enter it, and run the binary for =saloc=. That’s it! You may now edit the code, commit and open a PR.

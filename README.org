@@ -16,15 +16,15 @@
 
     With cargo:
 
-    #+begin_src
+    #+begin_src shell
     $ cargo install salo
-    $ salo –-help
+    $ salo --help
     #+end_src
 
     With Nix (Flakes):
-    #+begin_src 
+    #+begin_src shell
     $ nix shell github:semc-labs/salo
-    $ salo –-help
+    $ salo --help
     #+end_src
 
 ** Contributing

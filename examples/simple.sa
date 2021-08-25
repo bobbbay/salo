@@ -2,5 +2,3 @@ description : Str;
 description = "A simple example of Salo's syntax";
 
 -- This is a comment.
-
-\
