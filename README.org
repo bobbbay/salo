@@ -2,9 +2,9 @@
 
 * Salo
 
-  | [[https://img.shields.io/crates/v/saloc-lib?style=flat-square]] |
-  | [[https://img.shields.io/crates/v/saloc?style=flat-square]]     |
-  | https://img.shields.io/crates/v/salo?style=flat-square      |
+  | [[https://img.shields.io/crates/v/saloc-lib?style=flat-square][https://img.shields.io/crates/v/saloc-lib.svg?style=flat-square]] |
+  | [[https://img.shields.io/crates/v/saloc?style=flat-square][https://img.shields.io/crates/v/saloc.svg?style=flat-square]]     |
+  | [[https://img.shields.io/crates/v/salo?style=flat-square][https://img.shields.io/crates/v/salo.svg?style=flat-square]]      |
 
   Salo is a toolset to agnostically build and deploy OS images remotely.
 
