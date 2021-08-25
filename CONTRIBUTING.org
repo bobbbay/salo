@@ -1,0 +1,71 @@
+* Contributing
+
+** Introduction
+
+*** Salo?
+
+    Salo is a configuration language, as well as a system to generate operating systems. Hence, there are two main componenets to Salo:
+
+    1. =Salo=, the tool that generates /ISO/s from /metadata/
+    2. =Saloc=, the tool that generates /metadata/ from Salo /code/
+    
+*** How the project is structured
+
+    All crates (to be published to =crates.io=) are kept in the ~/crates~ directory. Here are a few, with their descriptions:
+
+    * =Salo=: frontend to the OS generator
+    * =Saloc=: frontend to the compiler
+    * =Saloc-lib=: the compiler
+
+    If need be, any internal-only crates (code not to be published to =crates.io=) is kept in ~/internal~. Currently, we do not have the need for this.
+
+*** Developer’s quickstart
+
+    #+begin_src shell
+    git clone https://github.com/semc-labs/salo
+    cd salo
+    cargo r –-bin saloc
+    #+end_src
+
+    This will clone the repository, enter it, and run the binary for =saloc=. That’s it! You may now edit the code, commit and open a PR.
+    
+** Issues
+
+*** Labels
+
+    Labels are used to categorize issues in the repository. They enable filtering and a quick understanding of each issue. Currently, there are a few categories of issues:
+
+    * 0.kind: bug/enhancement/question
+    * 1.priority: backlog/low/medium/high
+    * 2.status: duplicate/unassigned/assigned/ready for review/wontfix
+    * 3.difficulty: trivial/complicated/chaotic
+    * 4.topic: standard (documentation)/standard library/compiler
+    * 7: great first issue
+
+    [[https://github.com/semc-labs/salo/labels][The labels page]] can be consulted for more up-to-date info.
+
+*** Picking up a good first issue
+
+    The best way to pick up a good first issue is searching for issues that have:
+
+    * Priority: low or medium
+    * Status: unassigned
+    * Difficulty: trivial
+
+    Or, with the tag:
+
+    * Good first issue
+
+    Either combination will do.
+
+    We welcome contributions and offer mentoring for PRs. Please see [[Open channels]] for more details.
+    
+** Open channels
+
+   Most of our communication happens on the [[https://bit.ly/NADiscord][Nexus Aurora Discord]]. Ensure to grab the =SEMC= role/scroll down to the =SEMC= chat!
+
+   We also offer mentoring for PRs. To ask for mentoring, please ping =@Bobbbay= in the =#semc-chat= channel.
+
+** Conclusion
+    
+Thank you for (considering to be) contributing to Salo! If there are any more questions, please contact us on Discord.

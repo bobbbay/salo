@@ -1,6 +1,34 @@
-* SEMC
+#+STARTUP: inlineimages
 
-This is the monorepository for Salo, the system configuration and deployment toolset.
+* Salo
 
- * To find documentation, please visit [[./docs]]
- * To find the Salo compiler source code, please visit [[./saloc]]
+  | [[https://img.shields.io/crates/v/saloc-lib?style=flat-square]] |
+  | [[https://img.shields.io/crates/v/saloc?style=flat-square]]     |
+  | https://img.shields.io/crates/v/salo?style=flat-square      |
+
+  Salo is a toolset to agnostically build and deploy OS images remotely.
+
+** Usage
+   
+   Salo comes in two parts: =saloc=, which is the language “compiler”, and =salo=, which generates and deploys images. Most of the time, you’ll be interacting with =salo=, but it’s good to know the underlying tools, too.
+
+*** Installing =salo=
+
+    With cargo:
+
+    #+begin_src
+    $ cargo install salo
+    $ salo –-help
+    #+end_src
+
+    With Nix (Flakes):
+    #+begin_src 
+    $ nix shell github:semc-labs/salo
+    $ salo –-help
+    #+end_src
+
+** Contributing
+
+   Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Furthermore, please make sure to update tests as appropriate.
+
+   Please see [[./CONTRIBUTING.org]] for more details.

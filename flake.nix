@@ -16,8 +16,13 @@
       system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+
+          cargo = fenix.packages.${system}.minimal.cargo;
+          rustc = fenix.packages.${system}.minimal.rustc;
         in
           {
+            nixpkgs.overlays = [ fenix.overlay ];
+
             packages = {
               saloc = (
                 naersk.lib.${system}.override {
@@ -35,7 +40,11 @@
             defaultPackage = self.packages.${system}.saloc;
 
             devShell = pkgs.mkShell {
-              buildInputs = with pkgs; [ cargo-watch ];
+              buildInputs = with pkgs; [
+                openssl
+                pkg-config
+                cargo-watch
+              ];
             };
           }
     );

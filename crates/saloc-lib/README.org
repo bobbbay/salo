@@ -1,35 +1,5 @@
 * Salo
 
-This is the WIP implementation for Salo, SEMC's configuration toolset. More information on Salo can be found in [[../docs]].
+  This is the implementation for the Salo language. The frontend can be found at [[../saloc]].
 
-** Usage
-
-To open the REPL, run:
-
-#+begin_src shell
-$ cargo run
-#+end_src
-
-To evaluate a specific file, run:
-
-#+begin_src shell
-$ cargo run -- eval ./examples/simple.sa
-#+end_src
-
-To run the built-in tests, run:
-
-#+begin_src shell
-$ cargo t
-#+end_src
-
-To run benchmarks, run:
-
-#+begin_src shell
-$ cargo bench  
-#+end_src
-
-To generate documentation, run:
-
-#+begin_src shell
-$ cargo doc --open --no-deps
-#+end_src
+  For more information about the Salo project, visit [[../../README.org]].

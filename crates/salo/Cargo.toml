@@ -2,8 +2,15 @@
 name = "salo"
 version = "0.0.0"
 edition = "2018"
-repository = "https://github.com/semc-labs/salo"
+
+authors = ["Bob <bobbbay.b@gmail.com>", "SEMC Team"]
 description = "Salo: a toolset to agnostically build and deploy OS images remotely."
+keywords = ["configuration", "operating-system", "dsl", "remote", "deployment"]
+categories = ["text-processing", "science", "parser-implementations", "compilers", "embedded"]
+
+readme = "../../README.org"
+homepage = "https://github.com/semc-labs/salo"
+repository = "https://github.com/semc-labs/salo"
 license = "MIT"
 
 [dependencies]

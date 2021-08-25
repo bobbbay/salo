@@ -1,0 +1,5 @@
+* Salo
+
+  This is the /frontend/ for the Salo compiler. You were probably looking for [[../saloc-lib]].
+
+  For more information about the Salo project, visit [[../../README.org]].
