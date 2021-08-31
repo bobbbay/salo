@@ -15,7 +15,7 @@ pub mod compiler {
 
     #[automaton]
     #[derive(Debug)]
-    pub struct Parser {
+    pub struct Parser<'a> {
         pub filename: &'static str,
         pub content: &'static str,
     }
@@ -24,15 +24,15 @@ pub mod compiler {
     pub struct Source;
     #[state]
     #[derive(Debug)]
-    pub struct AST(pub Vec<Expr<'static>>);
+    pub struct AST<'a>(pub Vec<Expr<'a>>);
     #[state]
     pub struct Output(pub &'static str);
     #[state]
     pub struct Error(pub Report);
 
-    pub enum MaybeAST {
+    pub enum MaybeAST<'a> {
         #[metadata(label = "Parsed into AST successfully.")]
-        AST,
+        AST<'a>,
         #[metadata(label = "Failed to parse into AST.")]
         Error,
     }
