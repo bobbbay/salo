@@ -4,30 +4,21 @@
 
 *** Salo?
 
-    Salo is a configuration language, as well as a system to generate operating systems. Hence, there are two main componenets to Salo:
+    Salo is a configuration language, as well as a system to generate operating systems.
 
-    1. =Salo=, the tool that generates /ISO/s from /metadata/
-    2. =Saloc=, the tool that generates /metadata/ from Salo /code/
-    
-*** How the project is structured
+*** Project structure
 
-    All crates (to be published to =crates.io=) are kept in the ~/crates~ directory. Here are a few, with their descriptions:
-
-    * =Salo=: frontend to the OS generator
-    * =Saloc=: frontend to the compiler
-    * =Saloc-lib=: the compiler
-
-    If need be, any internal-only crates (code not to be published to =crates.io=) is kept in ~/internal~. Currently, we do not have the need for this.
+    All Idris code is kept in ~/src~.
 
 *** Developer’s quickstart
 
     #+begin_src shell
-    git clone https://github.com/semc-labs/salo
-    cd salo
-    cargo r --bin saloc
+      git clone https://github.com/semc-labs/salo
+      cd salo
+      nix run
     #+end_src
 
-    This will clone the repository, enter it, and run the binary for =saloc=. That’s it! You may now edit the code, commit and open a PR.
+    This will clone the repository, enter it, and run the binary for =salo=. That’s it! You may now edit the code, commit and open a PR.
     
 ** Issues
 
