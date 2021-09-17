@@ -1,0 +1,8 @@
+package salo
+
+modules = Main
+        , Evaluator.Main
+main = Main
+executable = salo
+
+sourcedir = "src"

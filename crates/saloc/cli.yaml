@@ -1,7 +1,0 @@
-name: saloc
-version: "0.1.0"
-author: SEMC
-about: Official implementation of the Salo language standard.
-args:
-    - FILE:
-        about: the file to compile
