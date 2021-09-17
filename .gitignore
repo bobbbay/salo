@@ -1,5 +1,6 @@
-# Rust
-/target
+# Idris 2
+/build
 
 # Nix
+/result
 /.direnv

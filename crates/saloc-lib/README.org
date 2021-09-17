@@ -1,5 +1,0 @@
-* Salo
-
-  This is the implementation for the Salo language. The frontend can be found at [[../saloc]].
-
-  For more information about the Salo project, visit [[../../README.org]].

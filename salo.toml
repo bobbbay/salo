@@ -1,0 +1,6 @@
+name = "salo"
+version = "0.0"
+
+[ depends ]
+idrisLibs = [ ]
+buildInputs = [ ]

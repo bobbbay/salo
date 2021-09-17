@@ -1,5 +1,0 @@
-* Salo
-
-  This is the frontend for Salo’s OS generation and deployment.
-
-  For more information about the Salo project, visit [[../../README.org]].

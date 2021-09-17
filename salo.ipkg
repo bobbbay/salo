@@ -1,0 +1,7 @@
+package salo
+
+modules = Main
+main = Main
+executable = salo
+
+sourcedir = "src"

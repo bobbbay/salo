@@ -1,51 +1,21 @@
 {
-  inputs = {
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+  description = "My Idris 2 package";
 
-    naersk.url = "github:nix-community/naersk";
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.idris2-pkgs.url = "github:claymager/idris2-pkgs";
 
-    flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
-  };
-
-  outputs = { self, fenix, naersk, flake-utils, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (
+  outputs = { self, nixpkgs, idris2-pkgs, flake-utils }:
+    flake-utils.lib.eachSystem [ "x86_64-linux" "i686-linux" ] (
       system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
-
-          cargo = fenix.packages.${system}.minimal.cargo;
-          rustc = fenix.packages.${system}.minimal.rustc;
+          pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
+          salo = pkgs.idris2.buildTOMLSource ./. ./salo.toml;
+          saloc = pkgs.idris2.buildTOMLSource ./. ./saloc.toml;
         in
           {
-            nixpkgs.overlays = [ fenix.overlay ];
-
-            packages = {
-              saloc = (
-                naersk.lib.${system}.override {
-                  inherit (fenix.packages.${system}.minimal) cargo rustc;
-                }
-              ).buildPackage { src = ./crates/saloc; };
-
-              salo = (
-                naersk.lib.${system}.override {
-                  inherit (fenix.packages.${system}.minimal) cargo rustc;
-                }
-              ).buildPackage { src = ./crates/salo; };
-            };
-
-            defaultPackage = self.packages.${system}.saloc;
-
-            devShell = pkgs.mkShell {
-              buildInputs = with pkgs; [
-                openssl
-                pkg-config
-                cargo-watch
-              ];
-            };
+            packages.salo = salo;
+            packages.saloc = saloc;
+            defaultPackage = self.packages.${system}.salo;
           }
     );
 }
