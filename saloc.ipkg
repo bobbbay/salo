@@ -1,7 +1,0 @@
-package saloc
-
-modules = Main
-main = Main
-executable = saloc
-
-sourcedir = "src"
