@@ -1,6 +1,4 @@
-module Main
-
-import Evaluator.Main
+module Salo
 
 main : IO ()
 main = printLn "Hello world!"
