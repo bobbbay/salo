@@ -4,6 +4,3 @@
 # Nix
 /result
 /.direnv
-
-# Sphinx
-/docs/_build/
