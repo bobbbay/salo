@@ -1,8 +1,10 @@
 package salo
 
-modules = Main
-        , Evaluator.Main
-main = Main
+main = Salo
 executable = salo
+
+modules = Salo
+        , Compiler.Parser.Main
+        , Compiler.Evaluator.Main
 
 sourcedir = "src"

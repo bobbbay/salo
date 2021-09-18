@@ -1,4 +1,4 @@
-module Evaluator.Main
+module Compiler.Evaluator.Main
 
 eval : String -> String
 eval x = x
