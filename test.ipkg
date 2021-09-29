@@ -1,4 +1,4 @@
-package salo-test
+package test
 
 main = Test.Main
 executable = runTest

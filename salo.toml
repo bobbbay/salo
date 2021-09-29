@@ -3,12 +3,11 @@ version = "0.0"
 
 [ depends ]
 idrisLibs = [ ]
-buildInputs = [ ]
 
 [ test ]
 enable = true
 idrisLibs = [ "hedgehog", "sop", "pretty-show" ]
-command = """
+command = '''
 idris2 --build test.ipkg
 build/exec/runTest
-"""
+'''

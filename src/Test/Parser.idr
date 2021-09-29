@@ -7,7 +7,7 @@ exampleGenerator = list (linear 0 30) alphaNum
 
 initialTest : Property
 initialTest = property $ do xs <- forAll exampleGenerator
-                            xs === xs
+                            xs === ['a']
 
 export
 test : IO Bool

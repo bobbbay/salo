@@ -37,15 +37,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1631201576,
-        "narHash": "sha256-Zr95edDrY5vZIazWtgCWh4meDrMn11QgsoHAQNXxx4g=",
+        "lastModified": 1632023953,
+        "narHash": "sha256-L2sdq8ZqeXW5NjWTFH0bKXBMpMF2klZRr+CSk2LJ8l8=",
         "owner": "claymager",
         "repo": "idris2-pkgs",
-        "rev": "0079b07480cd4bc81bd6caf9ff5d5dc5457652fa",
+        "rev": "315cd699c132d412d90977e11ad8feb26187a80f",
         "type": "github"
       },
       "original": {
         "owner": "claymager",
+        "ref": "callToml-tweaks",
         "repo": "idris2-pkgs",
         "type": "github"
       }

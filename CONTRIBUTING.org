@@ -2,15 +2,13 @@
 
 ** Introduction
 
-*** Salo?
-
-    Salo is a configuration language, as well as a system to generate operating systems.
-
 *** Project structure
 
-    All Idris code is kept in ~/src~.
+All Idris code is kept in ~/src~.
 
 *** Developer’s quickstart
+
+Please install either ~Nix~ or ~Idris2~ - preferably, the former. Once complete, run the following:
 
     #+begin_src shell
       git clone https://github.com/semc-labs/salo
@@ -18,44 +16,64 @@
       nix run
     #+end_src
 
-    This will clone the repository, enter it, and run the binary for =salo=. That’s it! You may now edit the code, commit and open a PR.
+This will clone the repository, enter it, and run the binary for =salo=. That’s it! You may now edit the code, commit and open a PR.
     
 ** Issues
 
 *** Labels
 
-    Labels are used to categorize issues in the repository. They enable filtering and a quick understanding of each issue. Currently, there are a few categories of issues:
-
-    * 0.kind: bug/enhancement/question
-    * 1.priority: backlog/low/medium/high
-    * 2.status: duplicate/unassigned/assigned/ready for review/wontfix
-    * 3.difficulty: trivial/complicated/chaotic
-    * 4.topic: standard (documentation)/standard library/compiler
-    * 7: great first issue
-
-    [[https://github.com/semc-labs/salo/labels][The labels page]] can be consulted for more up-to-date info.
+Labels are used to categorize issues in the repository. They enable filtering and a quick understanding of each issue. [[https://github.com/semc-labs/salo/labels][The labels page]] can be consulted for more up-to-date info.
 
 *** Picking up a good first issue
 
-    The best way to pick up a good first issue is searching for issues that have:
+The best way to pick up a good first issue is searching for issues that have:
 
-    * Priority: low or medium
-    * Status: unassigned
-    * Difficulty: trivial
+ * Priority: low or medium
+ * Status: unassigned
+ * Difficulty: trivial
 
-    Or, with the tag:
+ Or, with the tag:
 
-    * Good first issue
+ * Good first issue
 
-    Either combination will do.
+ Either combination will do.
 
-    We welcome contributions and offer mentoring for PRs. Please see [[Open channels]] for more details.
-    
+ We welcome contributions and offer mentoring for PRs. Please see [[Open channels]] for more details.
+
+** Commit messages
+
+At SEMC, we have a separate commit message standard, that has the following format:
+
+#+begin_src
+[category] High-level description.
+
+Optional, long-form description.
+#+end_src
+
+~category~ can be one of the following:
+
+ * ~build~: Changes that affect the build system or external dependencies
+ * ~ci~: Changes to CI configuration files and scripts
+ * ~docs~: Documentation only changes (including changes to the standard)
+ * ~feat~: A new feature
+ * ~fix~: A bug fix
+ * ~perf~: A code change that improves performance
+ * ~refactor~: A code change that neither fixes a bug nor adds a feature
+ * ~style~: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+ * ~test~: Adding missing tests or correcting existing tests
+
+Please start high-level descriptions with a capital letter and end them with periods. These descriptions may pass the usually recomended 100-character limit, but it's recommended that they do not.
+
+Long-form descriptions are not mandatory as commit messages in Salo, but encouraged. Some example topics for descriptions are:
+
+ * Interesting implementation details
+ * A reference to a related issue/PR
+
 ** Open channels
 
-   Most of our communication happens on the [[https://bit.ly/NADiscord][Nexus Aurora Discord]]. Ensure to grab the =SEMC= role/scroll down to the =SEMC= chat!
+Most of our communication happens on the [[https://bit.ly/NADiscord][Nexus Aurora Discord]]. Ensure to grab the =SEMC= role/scroll down to the =SEMC= chat!
 
-   We also offer mentoring for PRs. To ask for mentoring, please ping =@Bobbbay= in the =#semc-chat= channel.
+We also offer mentoring for PRs. To ask for mentoring, please ping =@Bobbbay= in the =#semc-chat= channel.
 
 ** Conclusion
     
