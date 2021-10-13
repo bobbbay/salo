@@ -37,11 +37,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1632023953,
-        "narHash": "sha256-L2sdq8ZqeXW5NjWTFH0bKXBMpMF2klZRr+CSk2LJ8l8=",
+        "lastModified": 1632255658,
+        "narHash": "sha256-nPEmaidzG2u/jSRnNU0GOnTEGc/dDNZ1AjGtkXD50LM=",
         "owner": "claymager",
         "repo": "idris2-pkgs",
-        "rev": "315cd699c132d412d90977e11ad8feb26187a80f",
+        "rev": "ca70d6e04edf35c045953e1d14ab9715727e3d8c",
         "type": "github"
       },
       "original": {

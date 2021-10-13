@@ -16,7 +16,7 @@
 
 ** Status
 
-A [[./docs][standard]] for Salo is being written, and it has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
+A [[./docs][standard]] for Salo is being written, but has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
 
 ** Contributing
 

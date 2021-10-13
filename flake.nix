@@ -8,14 +8,7 @@
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (
       system:
         let
-          overlay = final: prev: {
-            idris2 = prev.idris2 // {
-              packages = prev.idris2.packages // {
-                effect = pkgs.idris2.callNix ./nix/packages/effect.nix {};
-              };
-            };
-          };
-          pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay overlay ]; };
+          pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
           salo = pkgs.idris2.buildTOMLSource ./. ./salo.toml;
         in
           {
