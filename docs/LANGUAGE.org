@@ -1,0 +1,187 @@
+#+TITLE: Language
+
+* The Salo language
+
+This section outlines the basics of Salo's syntax. If you'd like to skip this and check out an example instead, scroll down to the [[Example Configuration]].
+
+** The REPL
+
+   Before starting, let's get familiar with Salo's REPL. Run ~salo~ with no arguments in the command line (once Salo is installed) to open up the prompt:
+
+   #+begin_src salo-repl
+   > Welcome to the Salo REPL!
+   >
+   #+end_src
+
+   The REPL supports a few commands:
+
+   * ~:t expr~: get the type of ~expr~
+   * ~:a expr~: get the generated AST of ~expr~
+   * ~:q~: quit
+
+   Run ~:h~ for more information.
+
+   Now that we're familiar with the REPL, we can continue to learning Salo's configuration language. From this point on, every code block that begins with ~>~ is run in the REPL.
+
+** Types
+
+   Salo has two primitive types: ~Int~ and ~Str~. More types are defined in the standard library, such as:
+
+   * Bool
+   * Nat
+   * Array
+   * Derivation
+
+   Values are created with a (/sometimes/ optional) type signature and value, as such:
+
+   #+begin_src salo
+   a : String;
+   a = "Hello, world!";
+   #+end_src
+
+   This is very similar to ML syntax.
+
+   In the example above, the definition of ~a~ could have been rewritten as:
+
+   #+begin_src salo
+   a = "Hello, world!";
+   #+end_src
+
+  Because Salo is smart enough to infer that ~a~'s type is String. More on type inference in the [[Type Inference]] section.
+
+  Unitialized values in Salo are invalid and will throw a compiler error. This means that code like this won't work:
+
+  #+begin_src salo
+  b : String;
+  -- What is b's value?
+  #+end_src
+
+  However, Salo is ok with delegating assignment until later on, as long as that value is not used:
+
+  #+begin_src salo
+  b : String;
+  x : String;
+  x = "Goodbye, world!";
+  b = "Hello, world!";
+  #+end_src
+
+*** A side note on dependent types
+
+     Salo has so little primitives thanks to it's dependent types. To better understand how these work internally, let's examine how they're put to use in the standard library. Here's the simple declaration for natural numbers:
+
+     #+begin_src salo
+     type Nat = Z | S Nat;
+     #+end_src
+
+     Here we see that a natural number can either be ~Z~ - Zero, or ~S Nat~ - a successor to another Nat. For example, =4= is a successor to =3=, which is a successor to =2=, which is a successor to =1=, which is a successor to =0=, which is =Z=.
+
+     This allows users to construct non-primitive types that are as expressive as the language itself. For more information on expressive types, check out the [[Dependent Types]] chapter.
+
+** Functions
+
+    Functions are defined in a slightly similar syntax:
+
+    #+begin_src salo
+    > f : String -> String;
+    > f x = x;
+    #+end_src
+
+    If you're unfamiliar with ML syntax, this defines a function that takes a String and returns a String. In the implementation, ~f~ takes ~x~ and returns ~x~ without modifications.
+
+*** Currying
+
+     Salo's functions curry. Take the following code example (note the REPL prompt):
+
+     #+begin_src salo-repl
+     > :t f;
+     f : String -> String
+
+     > g : String -> String -> String;
+     > g x y = x + y;
+
+     > :t g;
+     g : String -> String -> String
+
+     > :t g "Hello, ";
+     g "Hello, " : String -> String
+     #+end_src
+
+     In the beginning, we check the type of =f= (defined above), and see that it's a =String -> String=: straightforward enough. Next, we declare =g= to have a type of =String -> String -> String=, implementing it to take two strings and produces their concatenation. We know that the type of =g= is =String -> String -> String=, but what's cool is that the type of =g "Hello, "= is a =String -> String=!
+
+*** Pattern matching
+
+     Salo supports pattern matching, e.g.:
+
+     #+begin_src
+     name : Bool -> String
+     name true = "Bob"
+     name false = "Jeffrey"
+     #+end_src
+
+     In this case, if the Bool given to ~name~ is true, it will evaluate to "Bob". If it is given false, then it will evaluate to "Jeffrey".
+
+     Salo pattern matches /must/ be exhaustive. This means that the following won't work:
+
+     #+begin_src salo
+     isOne : Int -> Bool
+     isOne 1 = true
+     #+end_src
+
+     Salo will complain /during compile time/ that this match does not cover every variant. What if we pass on 5, 6, or 7? Salo has no idea what to evaluate to. This, however, will work:
+
+     #+begin_src salo
+     isOne : Int -> Bool
+     isOne 1 = true
+     isOne _ = false
+     #+end_src
+
+     With the ~_~ character, Salo can match every other variant.
+
+*** Polymorphic arguments
+
+     Functions don't have to have strict types - with polymorphism, we're able to allow any type to pass into our program, as long as the function definition is "generic" enough:
+
+     #+begin_src salo
+     genericAdder : a -> a -> a
+     genericAdder x y = x + y
+     #+end_src
+
+     This means that all of the following function calls are valid:
+
+     #+begin_src salo
+     genericAdder 1 1         --> 2
+     genericAdder "Foo" "Baz" --> "FooBaz"
+     #+end_src
+
+** Imports
+
+    Salo is also able to import other files using the ~import~ keyword. Imports can either bring a library file or a local file into scope. For example:
+
+    #+begin_src
+    import std::prelude::*;
+    #+end_src
+
+    Will evaluate and bring everything in the ~prelude~ module of the standard library into scope. This line is actually automatically inserted into the beginning of every Salo file. Note that glob imports are not recommended, but are possible.
+
+    #+begin_src
+    import ./emacs.sa::backgroundColor
+    #+end_src
+
+    Will search for =./emacs.sa=. If not found, Salo will throw a compile-time error. If found, it will import the ~backgroundColor~ value in emacs.sa. (If this is not found, Salo will again throw a compile-time error.)
+
+    Finally, we have the ability to import the returned value of a file, e.g.
+
+    #+begin_src
+    -- git.sa
+    {
+      name = "Git",
+      version = 1,
+    }
+    #+end_src
+
+    #+begin_src
+    -- default.sa
+    mygit = import ./git.sa
+    #+end_src
+
+    Here, =mygit='s value in =default.sa= is the Attrset defined in =git.sa=.

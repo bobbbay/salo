@@ -6,13 +6,17 @@
 
 ** Usage
    
-*** Installing =salo=
+*** Running =salo=
 
     With Nix (Flakes):
     #+begin_src shell
     $ nix shell github:semc-labs/salo
     $ salo --help
     #+end_src
+
+** Status
+
+A [[./docs][standard]] for Salo is being written, and it has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
 
 ** Contributing
 

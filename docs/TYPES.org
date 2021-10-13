@@ -1,0 +1,19 @@
+#+TITLE: Types
+
+* Dependent Types
+
+Salo's dependently typed system allows the language's types to be expressive. A simple example of enforcing a program with dependent types is the standard library function that adds Vecs. In a non-dependently typed language, we could define the type signature like so:
+
+#+begin_src salo
+addVec : Vec -> Vec -> Vec;
+#+end_src
+
+However, this doesn't really enforce much. In fact, we have no gaurantees from the type signature alone that this function /really/ adds Vecs. Dependent programmers have trust issues.
+
+We can solve this like so:
+
+#+begin_src salo
+addVec : Vec n a -> Vec m a -> Vec (m + n) a;
+#+end_src
+
+In this case, ~n~ is the length of the first Vec, ~m~ is the length of the second Vec, and ~a~ is the type of both Vecs. Thanks to the type signature by itself, we know that ~addVec~ /must/ return a Vec that - most importantly - has a length of both the Vecs combined. Makes sense!

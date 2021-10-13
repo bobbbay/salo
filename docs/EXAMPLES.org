@@ -1,0 +1,36 @@
+#+TITLE: Examples
+
+* Example Configuration
+
+Combining the syntax defined under [[LANGUAGE.org]], we are able to construct system configuration with Salo:
+
+#+begin_src salo
+use std::pkgs; -- 1
+
+description : String; -- 2
+description = "A system flake for my x86_64 server";
+
+packages : Vec pkgs _; -- 3, 4
+packages = [
+  pkgs.git
+];
+
+main = system: { -- 5
+  description, -- 6
+  networking.hostName = "MyServer",
+  packages,
+};
+
+return main; -- 7
+#+end_src
+
+ 1. We bring all distro-agnostic ~pkgs~ into scope
+ 2. We declare ~description~ to have a type of ~String~ (this could also be inferred)
+ 3. ~packages~ has a type of ~Vec~, which is from the standard prelude (~std::prelude~)
+ 4. ~Vec pkgs _~ means that the Vec contains an inferred amount of ~pkgs~ (which are ~std::sys::ubuntu20::pkgs~)
+ 5. ~main~ is a system derivation that contains the description, packages, and a hostname of "MyServer"
+ 6. ~description,~ is the same as ~description = description~
+ 7. We return ~main~ as the result of this file
+
+
+More examples can be found in [[../examples/]].
