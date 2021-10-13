@@ -1,13 +1,11 @@
 #+TITLE: Deployment
 #+STARTUP: inlineimages
 
-** Deployment
-
 Salo offers an incremental deployment suite native to the toolset. This allows users to define remote configurations and deploy with ease.
 
 Deployment in Salo is /incremental/. This means that, during the deployment of an operating system, it will only send the files that have /changed/ - not the whole OS itself. However, Salo also markets itself as stateless - hence, it cannot store a state file of which programs are installed on the remote machine on the local machine. To work around this, Salo makes two requests to remote machines - the first during the apply stage, and the second during the deploy stage.
 
-*** The Apply Stage
+** The Apply Stage
 
 Salo's apply stage generally takes three steps:
 
@@ -17,14 +15,14 @@ Salo's apply stage generally takes three steps:
 
 Once Salo knows which files are /already/ on the remote machine, it is able to decide which ones it needs to deploy, which it pipes onto the deploy stage.
 
-*** The Deploy Stage
+** The Deploy Stage
 
 The deploy stage receives a list of programs it needs to compile, and takes two steps:
 
 - Compile the programs, producing binaries and library files as needed;
 - Sends these files via a remote connection to the remote machine.
 
-*** Defining a Remote Configuration
+** Defining a Remote Configuration
 
 Up until now, it's all been theory. Let's write a configuration that deploys to a remote machine, via ~ssh~.
 

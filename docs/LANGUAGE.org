@@ -1,7 +1,5 @@
 #+TITLE: Language
 
-* The Salo language
-
 This section outlines the basics of Salo's syntax.
 
 ** The REPL

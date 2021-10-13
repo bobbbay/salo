@@ -1,7 +1,5 @@
 #+TITLE: Examples
 
-* Example Configuration
-
 Combining the syntax defined under [[LANGUAGE.org]], we are able to construct system configuration with Salo:
 
 #+begin_src salo

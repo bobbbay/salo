@@ -1,7 +1,5 @@
 #+TITLE: Types
 
-* Dependent Types
-
 Salo's dependently typed system allows the language's types to be expressive. A simple example of enforcing a program with dependent types is the standard library function that adds Vecs. In a non-dependently typed language, we could define the type signature like so:
 
 #+begin_src salo

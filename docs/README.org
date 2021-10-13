@@ -1,9 +1,7 @@
 #+TITLE: Salo standard
 #+STARTUP: inlineimages
 
-* Salo MVP
-
-  Welcome to the Salo MVP document. The following documents outline the Salo standard, Salo's goals and aspirations, and what advantages Salo provides.
+Welcome to the Salo MVP document. The following documents outline the Salo standard, Salo's goals and aspirations, and what advantages Salo provides.
 
 ** Overview
 

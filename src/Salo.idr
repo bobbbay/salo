@@ -1,4 +1,4 @@
 module Salo
 
 main : IO ()
-main = printLn "Hello world!"
+main = printLn "Hello, world!"
