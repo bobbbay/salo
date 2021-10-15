@@ -1,4 +1,4 @@
-description : Str;
+description : String
 description = "A simple example of Salo's syntax";
 
 -- This is a comment.
