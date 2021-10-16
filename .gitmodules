@@ -1,0 +1,3 @@
+[submodule "depends/idris-server"]
+	path = depends/idris-server
+	url = https://gitlab.com/avidela/idris-server

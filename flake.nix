@@ -9,7 +9,8 @@
       system:
         let
           pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
-          salo = pkgs.idris2.buildTOMLSource ./. ./salo.toml;
+          extended = {};
+          salo = pkgs.idris2.extendCallTOML extended ./salo.toml;
         in
           {
             packages.salo = salo;

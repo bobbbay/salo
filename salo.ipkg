@@ -8,3 +8,6 @@ modules = Salo
         , Salo.Compiler.Evaluator
 
 sourcedir = "src"
+
+depends = base
+        , contrib
