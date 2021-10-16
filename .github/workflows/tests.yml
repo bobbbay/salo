@@ -11,6 +11,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Install tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install jq
+
       # Install Nix
     - uses: cachix/install-nix-action@v13
       with:
@@ -18,16 +23,17 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
 
+      # Set up cachix pulling and pushing
+    - uses: cachix/cachix-action@v10
+      with:
+        name: semcix
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
     - name: Build
       run: nix build
 
     - name: Test
       run: ./result/bin/runTest
-
-    - uses: cachix/cachix-action@v10
-      with:
-        name: semcix
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       # Push to cachix
       # Cachix token is uploaded as an organization secret.
