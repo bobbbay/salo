@@ -1,8 +1,9 @@
-module Salo.Compiler.Parser
+module Salo.Language.Lexer
 
 import Text.Lexer
 import Data.List
 
+||| All possible tokens.
 public export
 data Token
   = Arrow
@@ -24,6 +25,7 @@ Eq Token where
     (Comment, Comment) => True
     _                  => False
 
+||| All possible errors that the parser can encounter.
 public export
 data ParseError : Type where
   LexError    : Int -> Int -> String -> ParseError
@@ -35,6 +37,9 @@ Show ParseError where
   show (LexError l c msg)       = "Lex error at " ++ show (l, c) ++ ": " ++ msg
   show (SyntaxError l c msg ts) = "Parse error at " ++ show (l, c) ++ ": " ++ msg ++ "; next up: " ++ show [tok t | t <- take 8 ts]
 
+||| Lexes a given string.
+|||
+|||  @ src String to parse.
 export
 lex : String -> Either ParseError (List (TokenData Token))
 lex src = case lex tokens src of

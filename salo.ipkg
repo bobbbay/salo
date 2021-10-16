@@ -4,8 +4,9 @@ main = Salo
 executable = salo
 
 modules = Salo
-        , Salo.Compiler.Parser
-        , Salo.Compiler.Evaluator
+
+        , Salo.Language.Lexer
+        , Salo.Language.Parser
 
 sourcedir = "src"
 

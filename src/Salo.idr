@@ -1,7 +1,7 @@
 module Salo
 
-import Salo.Compiler.Parser
+import Salo.Language.Lexer
 import Text.Lexer
 
 main : IO ()
-main = putStrLn (show (Salo.Compiler.Parser.lex "       ->            ->  "))
+main = putStrLn (show (Salo.Language.Lexer.lex "       ->            ->  "))
