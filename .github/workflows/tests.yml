@@ -1,4 +1,4 @@
-name: "Build, test and upload artifacts"
+name: "Build + test + cachix"
 
 on: [pull_request, push, workflow_dispatch]
 
@@ -24,7 +24,14 @@ jobs:
     - name: Test
       run: ./result/bin/runTest
 
-#    - name: Cachix
-#      run: nix flake archive --json \
-#           | jq -r '.path,(.inputs|to_entries[].value.path)' \
-#           | cachix push mycache
+    - uses: cachix/cachix-action@v10
+      with:
+        name: semcix
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      # Push to cachix
+      # Cachix token is uploaded as an organization secret.
+    - name: Cachix
+      run: nix flake archive --json \
+           | jq -r '.path,(.inputs|to_entries[].value.path)' \
+           | cachix push semcix
