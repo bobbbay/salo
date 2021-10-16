@@ -38,6 +38,4 @@ jobs:
       # Push to cachix
       # Cachix token is uploaded as an organization secret.
     - name: Cachix
-      run: nix flake archive --json \
-           | jq -r '.path,(.inputs|to_entries[].value.path)' \
-           | cachix push semcix
+      run: nix flake archive --json | jq -r '.path,(.inputs|to_entries[].value.path)' | cachix push semcix
