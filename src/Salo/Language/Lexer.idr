@@ -11,18 +11,30 @@ data Token
   | Space
   | Comment
 
+  | Keyword String
+  | Ident String
+
 public export
 Show Token where
-  show Arrow = "->"
-  show Space = "(space)"
-  show Comment = "(comment)"
+  show Arrow       = "->"
+
+  show Space       = "(space)"
+  show Comment     = "(comment)"
+
+  show (Keyword s) = "keyword " ++ show s
+  show (Ident s)   = "identifier " ++ show s
 
 public export
 Eq Token where
   (==) x y = case (x, y) of
     (Arrow, Arrow)     => True
+
     (Space, Space)     => True
     (Comment, Comment) => True
+
+    (Keyword s, Keyword s') => s == s'
+    (Ident s,   Ident s')   => s == s'
+
     _                  => False
 
 ||| All possible errors that the parser can encounter.
@@ -56,10 +68,26 @@ lex src = case lex tokens src of
             ident : Lexer
             ident = some $ pred (\x => isAlpha x || isDigit x || x == '_' || x == '\'')
 
+            ||| Given a string, check if it's a keyword from the list of
+            ||| keywords, or an identifier.
+            kwdOrIdent : String -> Token
+            kwdOrIdent s =
+              if s `elem` keywords
+                then Keyword s
+                else Ident   s
+              where
+                keywords : List String
+                keywords =
+                  [ "Type"
+                  , "data"
+                  ]
+
             tokens : TokenMap Token
             tokens =
               [ (exact "->",                const Arrow)
 
               , (space,                     const Space)
               , (lineComment (exact "--"),  const Comment)
+
+              , (ident,                     kwdOrIdent)
             ]
