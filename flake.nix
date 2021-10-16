@@ -21,6 +21,7 @@
             devShell = pkgs.mkShell {
               buildInputs = with pkgs; [
                 idris2.packages.lsp
+                cachix
               ];
               buildInputsFrom = [ self.packages.${system}.salo ];
             };
