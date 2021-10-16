@@ -4,6 +4,7 @@ main = Test
 executable = runTest
 
 modules = Test
+
         , Test.Parser
 
 depends = base          >= 0.4.0
