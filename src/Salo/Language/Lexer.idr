@@ -40,8 +40,9 @@ Eq Token where
 ||| All possible errors that the parser can encounter.
 public export
 data ParseError : Type where
+  --            Line,  Col,   Rest
   LexError    : Int -> Int -> String -> ParseError
-  --            Line,  Col,   Message
+  --            Line,  Col,   Message,  Rest
   SyntaxError : Int -> Int -> String -> List (TokenData Token) -> ParseError
 
 public export
