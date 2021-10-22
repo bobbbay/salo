@@ -45,7 +45,12 @@ challenge = Salo.Language.Lexer.lex #"""
   -- In this sample file, we didn't cover imports.
   """#
 
+challenge2 : Either ParseError (List (TokenData Token))
+challenge2 = Salo.Language.Lexer.lex #"""
+  "Hello, world!"
+  """#
+
 main : IO ()
-main = case challenge of
+main = case challenge2 of
         Left err => putStrLn (show err)
         Right toks => putStrLn (show toks)

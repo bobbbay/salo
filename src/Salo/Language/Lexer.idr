@@ -2,38 +2,48 @@ module Salo.Language.Lexer
 
 import Text.Lexer
 import Data.List
+import Data.String
 
 ||| All possible tokens.
 public export
 data Token
   = Arrow
+  | Colon
+  | Equals
 
   | Space
   | Comment
 
   | Keyword String
   | Ident String
+  | StringLit String
 
 public export
 Show Token where
   show Arrow       = "->"
+  show Colon       = ":"
+  show Equals      = "="
 
   show Space       = "(space)"
   show Comment     = "(comment)"
 
   show (Keyword s) = "keyword " ++ show s
   show (Ident s)   = "identifier " ++ show s
+  show (StringLit s) = show s
 
 public export
 Eq Token where
   (==) x y = case (x, y) of
     (Arrow, Arrow)     => True
+    (Colon, Colon)     => True
+    (Equals, Equals)   => True
 
-    (Space, Space)     => True
+    (Space,   Space)   => True
     (Comment, Comment) => True
 
-    (Keyword s, Keyword s') => s == s'
-    (Ident s,   Ident s')   => s == s'
+    (Keyword s,   Keyword s')   => s == s'
+    (Ident s,     Ident s')     => s == s'
+    (StringLit s, StringLit s') => s == s'
 
     _                  => False
 
@@ -69,6 +79,9 @@ lex src = case lex tokens src of
             ident : Lexer
             ident = some $ pred (\x => isAlpha x || isDigit x || x == '_' || x == '\'')
 
+            parseString : String -> Token
+            parseString s = StringLit $ assert_total (strTail (reverse (strTail (reverse s))))
+
             ||| Given a string, check if it's a keyword from the list of
             ||| keywords, or an identifier.
             kwdOrIdent : String -> Token
@@ -86,9 +99,12 @@ lex src = case lex tokens src of
             tokens : TokenMap Token
             tokens =
               [ (exact "->",                const Arrow)
+              , (exact ":",                 const Colon)
+              , (exact "=",                 const Equals)
 
               , (space,                     const Space)
               , (lineComment (exact "--"),  const Comment)
 
               , (ident,                     kwdOrIdent)
+              , (stringLit,                 parseString)
             ]
