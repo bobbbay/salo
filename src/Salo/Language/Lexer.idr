@@ -10,9 +10,12 @@ data Token
   = Arrow
   | Colon
   | Equals
+  | Bar
 
   | Space
   | Comment
+
+  | DocComment String
 
   | Keyword String
   | Ident String
@@ -20,16 +23,19 @@ data Token
 
 public export
 Show Token where
-  show Arrow       = "->"
-  show Colon       = ":"
-  show Equals      = "="
+  show Arrow          = "->"
+  show Colon          = ":"
+  show Equals         = "="
+  show Bar            = "|"
 
-  show Space       = "(space)"
-  show Comment     = "(comment)"
+  show Space          = "(space)"
+  show Comment        = "(comment)"
 
-  show (Keyword s) = "keyword " ++ show s
-  show (Ident s)   = "identifier " ++ show s
-  show (StringLit s) = show s
+  show (DocComment s) = "doc comment: " ++ show s
+
+  show (Keyword s)    = "keyword "      ++ show s
+  show (Ident s)      = "identifier "   ++ show s
+  show (StringLit s)  = show s
 
 public export
 Eq Token where
@@ -37,9 +43,12 @@ Eq Token where
     (Arrow, Arrow)     => True
     (Colon, Colon)     => True
     (Equals, Equals)   => True
+    (Bar, Bar)         => True
 
     (Space,   Space)   => True
     (Comment, Comment) => True
+
+    (DocComment s, DocComment s') => s == s'
 
     (Keyword s,   Keyword s')   => s == s'
     (Ident s,     Ident s')     => s == s'
@@ -96,15 +105,96 @@ lex src = case lex tokens src of
                   , "data"
                   ]
 
+            mkDocComment : String -> Token
+            mkDocComment s = DocComment s
+
             tokens : TokenMap Token
             tokens =
-              [ (exact "->",                const Arrow)
-              , (exact ":",                 const Colon)
-              , (exact "=",                 const Equals)
+              [ (exact "->",             const Arrow)
+              , (is ':',                 const Colon)
+              , (is '=',                 const Equals)
+              , (is '|',                 const Bar)
 
-              , (space,                     const Space)
-              , (lineComment (exact "--"),  const Comment)
+              , (space,                                    const Space)
+              , (lineComment (exact "--"),                 const Comment)
+              , (blockComment (exact "{--") (exact "--}"), const Comment)
+
+              , (lineComment (exact "||"),                 mkDocComment)
+              , (blockComment (exact "{||") (exact "||}"), mkDocComment)
 
               , (ident,                     kwdOrIdent)
               , (stringLit,                 parseString)
             ]
+
+-- TODO: There are no assertions in these tests :)
+namespace Test
+  namespace Examples
+    export
+    exampleProg : String
+    exampleProg = #"""
+      -- This is a comment.
+
+      || This is a doc comment
+      myvalue : String
+      myvalue = "This is an immutable value, myvalue, with the type of String."
+
+      myfunction : String -> String
+      myfunction "" = "This is a function that pattern matches on its first argument."
+      myfunction _  = "If the first argument is a blank String, it evaluates to ^"
+      -- Else, `myfunction` evaluates to ^.
+
+      -- This is a type declaration. Here, we declare that the type `MyType` as EITHER
+      -- `True` or `False`.
+      type MyType = True | False
+
+      -- This is a dependent type declaration. Here, we declare `MyDependentType` to
+      -- be a type that depends on two Nats.
+      type MyDependentType = Nat -> Nat
+
+      {--
+        Here's a block comment.
+
+        We can have quite long block comments!
+      --}
+
+      {||
+        Here's a block doc comment.
+
+        We can have quite long block doc comments, too!
+      ||}
+
+      -- Functions can also be polymorphic
+      f : a -> a
+      f x = x
+
+      -- `f` can now be called on anything.
+
+      -- In this sample file, we didn't cover imports.
+    """#
+
+    export
+    docComments : String
+    docComments = #"""
+      {||
+        AAA!
+      ||}
+    """#
+
+  LexerType : Type
+  LexerType = Either ParseError (List (TokenData Token))
+
+  lexExampleProg : LexerType
+  lexExampleProg = Salo.Language.Lexer.lex exampleProg
+
+  lexDocComments : LexerType
+  lexDocComments = Salo.Language.Lexer.lex docComments
+
+  testHarness : LexerType -> IO ()
+  testHarness t = case t of
+            Left err => putStrLn (show err)
+            Right toks => putStrLn (show toks)
+
+  export
+  test : IO ()
+  test = do testHarness lexExampleProg
+            testHarness lexDocComments
