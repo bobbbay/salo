@@ -191,10 +191,11 @@ namespace Test
 
   testHarness : LexerType -> IO ()
   testHarness t = case t of
-            Left err => putStrLn (show err)
-            Right toks => putStrLn (show toks)
+            Left err   => putStrLn $ "  -> Error: " ++ (show err)
+            Right toks => putStrLn $ "  -> Success"
 
   export
   test : IO ()
-  test = do testHarness lexExampleProg
+  test = do putStrLn "Lexer:"
+            testHarness lexExampleProg
             testHarness lexDocComments

@@ -9,3 +9,7 @@ record Binding (n : Nat) where
   constructor B
   name : String
   type : TT Bool n
+
+public export
+implementation Show (Binding n) where
+  show x = show x.name

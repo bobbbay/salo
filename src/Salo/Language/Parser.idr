@@ -24,10 +24,34 @@ dataDecl = do
   kwd "data"
   pure (MkDef (B "AAA" (P)) Postulate)
 
+export
+parse : String -> Either ParseError (Definition)
+parse src = case lex src of
+  Left err => Left err
+  Right ts => case Text.Parser.Core.parse (dataDecl <* eof) ts of
+    Left (Error msg []) => Left $ SyntaxError 0 0 msg []
+    Left (Error msg (tt :: tts)) => Left $ SyntaxError (line tt) (col tt) msg (tt :: tts)
+    Right (gs, []) => Right gs
+    Right (gs, t::ts) => Left $ SyntaxError (line t) (col t) "eof expected" (t :: ts)
+
 namespace Test
   namespace Examples
     export
     exampleData : List (TokenData Token)
     exampleData = [MkToken 0 0 (Keyword "data")]
 
-  -- TODO: Complete tests with `parse`
+  ParserType : Type
+  ParserType = Either ParseError (Definition)
+
+  parseData : ParserType
+  parseData = parse "data"
+
+  testHarness : ParserType -> IO ()
+  testHarness t = case t of
+    Left err => putStrLn $ "  -> Error: "   ++ (show err)
+    Right gs => putStrLn $ "  -> Success: " ++ (show gs)
+
+  export
+  test : IO ()
+  test = do putStrLn "Parser:"
+            testHarness parseData
