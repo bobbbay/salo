@@ -10,7 +10,7 @@
 
     With Nix (Flakes):
     #+begin_src shell
-    $ nix shell github:semc-labs/salo
+    $ nix shell github:semc-labs/salo/v0.1.0-pre
     $ salo --help
     #+end_src
 
