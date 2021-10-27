@@ -7,8 +7,17 @@ import Salo.Language.AST
 import Text.Lexer
 import Text.Parser
 
+import Data.SortedMap
+
 Rule : Type -> Type
 Rule = Grammar (TokenData Token) True
+
+record Globals where
+  constructor MkGlobals
+  definitions : SortedMap Name (Definition)
+
+implementation Show Globals where
+  show x = "Globals: " ++ show x.definitions
 
 token : Token -> Rule ()
 token t = terminal ("expecting " ++ show t) $ \t' =>

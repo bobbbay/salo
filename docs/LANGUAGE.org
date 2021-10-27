@@ -30,7 +30,7 @@ Salo has two primitive types: ~Int~ and ~Str~. More types are defined in the sta
  * Array
  * Derivation
 
-Values are created with a (/sometimes/ optional) type signature and value, as such:
+Values are created with a type signature and value, as such:
 
 #+begin_src salo
 a : String
@@ -46,7 +46,9 @@ b : String;
 -- What is b's value?
 #+end_src
 
-However, Salo is okay with delegating assignment until later on, as long as that value is not used:
+But, if you enter Salo in edit mode, ~b~ will be valid - or rather, it will be a hole. Holes are uninitialized values that allow you to understand more about the type requirements, without writing an implementation. We'll talk more about holes in [[Holes]].
+
+Of course, Salo is also okay with delegating assignment until later on, as long as that value is not used:
 
 #+begin_src salo
 b : String;
@@ -105,8 +107,8 @@ Salo supports pattern matching, e.g.:
 
 #+begin_src
 name : Bool -> String
-name true = "Bob"
-name false = "Jeffrey"
+name True = "Bob"
+name False = "Jeffrey"
 #+end_src
 
 In this case, if the Bool given to ~name~ is true, it will evaluate to "Bob". If it is given false, then it will evaluate to "Jeffrey".
@@ -115,18 +117,18 @@ Salo pattern matches /must/ be exhaustive. This means that the following won't w
 
 #+begin_src salo
 isOne : Int -> Bool
-isOne 1 = true
+isOne 1 = True
 #+end_src
 
-     Salo will complain /during compile time/ that this match does not cover every variant. What if we pass on 5, 6, or 7? Salo has no idea what to evaluate to. This, however, will work:
+Salo will complain /during compile time/ that this match does not cover every variant. What if we pass on 5, 6, or 7? Salo has no idea what to evaluate to. This, however, will work:
 
-     #+begin_src salo
-     isOne : Int -> Bool
-     isOne 1 = true
-     isOne _ = false
-     #+end_src
+#+begin_src salo
+isOne : Int -> Bool
+isOne 1 = True
+isOne _ = False
+#+end_src
 
-     With the ~_~ character, Salo can match every other variant.
+With the ~_~ character, Salo can match every other variant.
 
 *** Polymorphic arguments
 
@@ -149,30 +151,12 @@ isOne 1 = true
     Salo is also able to import other files using the ~import~ keyword. Imports can either bring a library file or a local file into scope. For example:
 
     #+begin_src
-    import std.prelude
+    import Prelude
     #+end_src
 
-    Will evaluate and bring everything in the ~prelude~ module of the standard library into scope. This line is actually automatically inserted into the beginning of every Salo file. Note that glob imports are not recommended, but are possible.
+    Will evaluate and bring everything in the ~prelude~ module of the standard library into scope. This line is actually automatically inserted into the beginning of every Salo file.
 
-    #+begin_src
-    import ./emacs.sa.backgroundColor
-    #+end_src
 
-    Will search for =./emacs.sa=. If not found, Salo will throw a compile-time error. If found, it will import the ~backgroundColor~ value in emacs.sa. (If this is not found, Salo will again throw a compile-time error.)
+** Conclusion
 
-    Finally, we have the ability to import the returned value of a file, e.g.
-
-    #+begin_src
-    -- git.sa
-    {
-      name = "Git",
-      version = 1,
-    }
-    #+end_src
-
-    #+begin_src
-    -- default.sa
-    mygit = import ./git.sa
-    #+end_src
-
-    Here, =mygit='s value in =default.sa= is the Attrset defined in =git.sa=.
+That's it! We just outlined Salo's basic syntax, styling, and imports. However, there's a lot more documentation out there - just take a look!

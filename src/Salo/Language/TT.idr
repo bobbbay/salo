@@ -13,3 +13,10 @@ record Binding (n : Nat) where
 public export
 implementation Show (Binding n) where
   show x = show x.name
+
+public export
+data Name = UN String
+
+public export
+implementation Show Name where
+  show (UN s) = show s

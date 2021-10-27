@@ -19,8 +19,11 @@ Salo aims to:
 
 ** Continue reading...
 
+#+begin_quote
+    Warning: there is no complete implementation of Salo as of yet, so all notes referencing a working compiler in the following notes are imaginary.
+#+end_quote
+
  * [[./LANGUAGE.org]] for a description of the Salo standard and language
- * [[./EXAMPLES.org]] for a list of examples, and where to find more.
  * [[./TYPES.org]] for an in-depth description of (dependent) types in Salo
  * [[./DEPLOYMENT.org]] for an explanation of deployment in Salo
 
