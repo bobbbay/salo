@@ -1,7 +1,8 @@
 module Test
 
-import Test.Parser
+import Salo.Language.Lexer
+import Salo.Language.Parser
 
-main : IO Bool
-main = do
-        Test.Parser.test
+main : IO ()
+main = do Salo.Language.Lexer.Test.test
+          Salo.Language.Parser.Test.test

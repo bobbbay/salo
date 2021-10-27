@@ -6,5 +6,5 @@ import Salo.Language.Parser
 import Text.Lexer
 
 main : IO ()
-main = do Salo.Language.Lexer.Test.test
-          Salo.Language.Parser.Test.test
+main = do putStrLn "Hello, world!"
+          putStrLn "(You were probably looking for `nix run .#test`)"

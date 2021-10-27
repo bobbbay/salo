@@ -10,10 +10,13 @@
         let
           pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
           extended = {};
+
           salo = pkgs.idris2.extendCallTOML extended ./salo.toml;
+          test = pkgs.idris2.extendCallTOML extended ./test.toml;
         in
           {
             packages.salo = salo;
+            packages.test = test;
             defaultPackage = self.packages.${system}.salo;
 
             pkgs = pkgs;

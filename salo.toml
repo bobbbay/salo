@@ -6,11 +6,3 @@ host = "local"
 
 [ depends ]
 idrisLibs = [ ]
-
-[ test ]
-enable = true
-idrisLibs = [ "hedgehog", "sop", "pretty-show" ]
-command = '''
-idris2 --build test.ipkg
-build/exec/runTest
-'''
