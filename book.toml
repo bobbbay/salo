@@ -1,0 +1,6 @@
+[book]
+title = "The Salo book"
+authors = [ "SEMC Team" ]
+description = "A comprehensive guide to the Salo language."
+src = "./"
+language = "en"
