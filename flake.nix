@@ -25,6 +25,7 @@
               buildInputs = with pkgs; [
                 idris2.packages.lsp
                 cachix
+                mdbook
               ];
               buildInputsFrom = [ self.packages.${system}.salo ];
             };
