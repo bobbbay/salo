@@ -16,7 +16,7 @@
 
 ** Status
 
-A [[./docs][standard]] for Salo is being written, but has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
+A [[https://semc-labs.github.io/Salo/][standard, crash course, and backend cookbook]] for Salo is being written, but has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
 
 ** Contributing
 
