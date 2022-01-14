@@ -33,7 +33,7 @@ jobs:
       run: nix build
 
     - name: Test
-      run: nix run .#test
+      run: nix run .#runTests
 
       # Push to cachix
       # Cachix token is uploaded as an organization secret.
