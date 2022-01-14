@@ -1,0 +1,12 @@
+package test
+
+main = Salo.Test
+
+modules = Salo.Test
+executable = test
+
+sourcedir = "./"
+
+depends = base
+	, contrib
+	, salo

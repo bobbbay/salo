@@ -5,11 +5,6 @@ executable = salo
 
 modules = Salo
 
-        , Salo.Language.Lexer
-        , Salo.Language.TT
-        , Salo.Language.AST
-        , Salo.Language.Parser
-
 sourcedir = "src"
 
 depends = base

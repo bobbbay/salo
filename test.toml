@@ -1,8 +1,0 @@
-name = "test"
-version = "0.0"
-
-[ source ]
-host = "local"
-
-[ depends ]
-idrisLibs = [ "hedgehog", "sop", "elab-util", "pretty-show" ]

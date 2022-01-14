@@ -1,8 +1,0 @@
-name = "salo"
-version = "0.0"
-
-[ source ]
-host = "local"
-
-[ depends ]
-idrisLibs = [ ]

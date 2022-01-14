@@ -1,34 +1,29 @@
 {
   description = "Salo is a toolset to agnostically build and deploy OS images remotely.";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.idris2-pkgs.url = "github:claymager/idris2-pkgs/callToml-tweaks";
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    idris2-pkgs.url = "github:claymager/idris2-pkgs";
+    nixpkgs.follows = "idris2-pkgs/nixpkgs";
+  };
 
   outputs = { self, nixpkgs, idris2-pkgs, flake-utils }:
-    flake-utils.lib.eachSystem [ "x86_64-linux" ] (
-      system:
-        let
-          pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
-          extended = {};
+    flake-utils.lib.eachSystem [ "x86_64-darwin" "x86_64-linux" "i686-linux" ] (system:
+      let
+        pkgs = import nixpkgs { inherit system; overlays = [ idris2-pkgs.overlay ]; };
+        inherit (pkgs.idris2-pkgs._builders) idrisPackage devEnv;
 
-          salo = pkgs.idris2.extendCallTOML extended ./salo.toml;
-          test = pkgs.idris2.extendCallTOML extended ./test.toml;
-        in
-          {
-            packages.salo = salo;
-            packages.test = test;
-            defaultPackage = self.packages.${system}.salo;
+        salo = idrisPackage ./. { };
+        runTests = idrisPackage ./test { extraPkgs.salo = salo; };
+      in
+      {
+        defaultPackage = salo;
 
-            pkgs = pkgs;
+        packages = { inherit salo runTests; };
 
-            devShell = pkgs.mkShell {
-              buildInputs = with pkgs; [
-                idris2.packages.lsp
-                cachix
-                mdbook
-              ];
-              buildInputsFrom = [ self.packages.${system}.salo ];
-            };
-          }
+        devShell = pkgs.mkShell {
+          buildInputs = [ (devEnv salo) ];
+        };
+      }
     );
 }
