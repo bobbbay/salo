@@ -2,22 +2,6 @@
 
 ** Introduction
 
-*** Project structure
-
-All Idris code is kept in ~/src~.
-
-*** Developer’s quickstart
-
-Please install either ~Nix~ or ~Idris2~ - preferably, the former. Once complete, run the following:
-
-    #+begin_src shell
-      git clone https://github.com/semc-labs/salo
-      cd salo
-      nix run
-    #+end_src
-
-This will clone the repository, enter it, and run the binary for =salo=. That’s it! You may now edit the code, commit and open a PR.
-    
 ** Issues
 
 *** Labels

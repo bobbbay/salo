@@ -8,11 +8,13 @@
    
 *** Running =salo=
 
-    With Nix (Flakes):
+    With Cabal installed, just run:
+
     #+begin_src shell
-    $ nix shell github:semc-labs/salo/v0.1.0-pre
-    $ salo --help
+    $ cabal run
     #+end_src
+
+    ... in order to start.
 
 ** Status
 
