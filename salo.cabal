@@ -1,0 +1,34 @@
+cabal-version:      2.4
+name:               salo
+version:            0.1.0.0
+synopsis:           Salo is a toolset to agnostically build and deploy OS images remotely.
+license:            MIT
+author:             SEMC
+maintainer:         bobbbay.b@gmail.com
+
+extra-source-files:
+    README.org
+
+library
+    exposed-modules:  Salo
+                    , Salo.Language.Lexer
+
+    Build-depends:    base, array
+    build-depends:    base ^>=4.14.3.0
+                    , mtl        >= 2.2 && <2.4
+    hs-source-dirs:   src
+    default-language: Haskell2010
+
+    build-tool-depends: alex:alex
+                      , happy:happy
+
+
+executable salo
+    main-is:          Main.hs
+
+    build-depends:
+        base ^>=4.14.3.0,
+        salo
+
+    hs-source-dirs:   app
+    default-language: Haskell2010
