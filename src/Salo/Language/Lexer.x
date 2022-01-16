@@ -19,38 +19,36 @@ tokens :-
   $white+                       ;
 
   -- Comments
-  "#".*                         ;
+  "--".*                         ;
+  "---".*                        ;
+  "{-".*"-}"                     ;
+  "{--".*"--}"                   ;
 
   -- Syntax
-  let                           { \s -> TokenLet }
+  -- > Booleans
   True                          { \s -> TokenTrue }
   False                         { \s -> TokenFalse }
-  in                            { \s -> TokenIn }
-  $digit+                       { \s -> TokenNum (read s) }
+
+  -- > Misc
   "->"                          { \s -> TokenArrow }
-  \=                            { \s -> TokenEq }
-  \\                            { \s -> TokenLambda }
-  [\+]                          { \s -> TokenAdd }
-  [\-]                          { \s -> TokenSub }
-  [\*]                          { \s -> TokenMul }
-  \(                            { \s -> TokenLParen }
-  \)                            { \s -> TokenRParen }
-  $alpha [$alpha $digit \_ \']* { \s -> TokenSym s }
+  "="                           { \s -> TokenEq }
+  ":"                           { \s -> TokenColon }
+  "("                           { \s -> TokenLParen }
+  ")"                           { \s -> TokenRParen }
+  "|"                           { \s -> TokenBar }
+
+  -- > Literals
+  $digit+                       { \s -> TokenNum (read s) }
 
 {
 data Token 
-  = TokenLet
+  = TokenBar
   | TokenTrue
   | TokenFalse
-  | TokenIn
-  | TokenLambda
+  | TokenColon
   | TokenNum Int
-  | TokenSym String
   | TokenArrow
   | TokenEq
-  | TokenAdd
-  | TokenSub
-  | TokenMul
   | TokenLParen
   | TokenRParen
   | TokenEOF
