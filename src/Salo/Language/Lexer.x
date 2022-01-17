@@ -4,8 +4,7 @@ module Salo.Language.Lexer (
   scanTokens
 ) where
 
-import Data.Text (Text)
-import Data.Text qualified as T
+import Control.Monad.Except
 }
 
 %wrapper "basic"
@@ -28,35 +27,52 @@ tokens :-
 
   -- Syntax
   module                        { \s -> TokenModule }
-  True                          { \s -> TokenTrue }
-  False                         { \s -> TokenFalse }
+  true                          { \s -> TokenTrue }
+  false                         { \s -> TokenFalse }
 
+  ":"                           { \s -> TokenColon }
+  "|"                           { \s -> TokenBar }
   "->"                          { \s -> TokenArrow }
   "="                           { \s -> TokenEq }
-  ":"                           { \s -> TokenColon }
   "("                           { \s -> TokenLParen }
   ")"                           { \s -> TokenRParen }
-  "|"                           { \s -> TokenBar }
+  "+"                           { \s -> TokenAdd }
+  "-"                           { \s -> TokenSub }
+  "*"                           { \s -> TokenMul }
+  "/"                           { \s -> TokenDiv }
 
   $digit+                       { \s -> TokenNum (read s) }
-  -- $alpha [$alpha $digit \_]*    { \s -> TokenIdent s }
+  $alpha [$alpha $digit \_]*    { \s -> TokenIdent s }
 
 {
 data Token 
-  = TokenModule
-  | TokenBar
-  | TokenTrue
-  | TokenFalse
-  | TokenColon
-  | TokenNum Int
-  | TokenIdent String
-  | TokenArrow
-  | TokenEq
-  | TokenLParen
-  | TokenRParen
-  | TokenEOF
+  = TokenModule       -- module
+  | TokenTrue         -- true
+  | TokenFalse        -- false
+  | TokenColon        -- :
+  | TokenBar          -- \|
+  | TokenArrow        -- ->
+  | TokenEq           -- =
+  | TokenLParen       -- (
+  | TokenRParen       -- )
+  | TokenAdd          -- +
+  | TokenSub          -- -
+  | TokenMul          -- \*
+  | TokenDiv          -- /
+  | TokenEOF          -- EOF
+  | TokenNum Int      -- 1, 2, 3
+  | TokenIdent String -- "A", "B", "C"
   deriving (Eq,Show)
 
-scanTokens :: String -> [Token]
-scanTokens = alexScanTokens
+scanTokens :: String -> Except String [Token]
+scanTokens str = go ('\n',[],str) where 
+  go inp@(_,_bs,str) =
+    case alexScan inp 0 of
+     AlexEOF -> return []
+     AlexError _ -> throwError "Invalid lexeme."
+     AlexSkip  inp' len     -> go inp'
+     AlexToken inp' len act -> do
+      res <- go inp'
+      let rest = act (take len str)
+      return (rest : res)
 }

@@ -11,11 +11,20 @@ data Expr
   | Def Name Expr
     -- | A function application
   | App Expr Expr
+    -- | Operator application
+  | Op Expr Op Expr
     -- | A literal value
   | Lit Lit
-  deriving (Eq,Show)
+  deriving (Show, Eq)
 
 data Lit
   = LInt Int
   | LBool Bool
   deriving (Show, Eq, Ord)
+
+data Op
+  = Plus
+  | Minus
+  | Multiply
+  | Divide
+  deriving (Show, Eq)
