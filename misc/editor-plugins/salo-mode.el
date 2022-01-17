@@ -22,7 +22,7 @@
           )))
 
 ;;;###autoload
-(define-derived-mode salo-mode idris-mode "Salo mode"
+(define-derived-mode salo-mode idris2-mode "Salo mode"
   "Major mode for editing Salo code."
   (setq font-lock-defaults '((salo-font-lock-keywords))))
 

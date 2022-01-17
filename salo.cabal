@@ -6,32 +6,37 @@ license:            MIT
 author:             SEMC
 maintainer:         bobbbay.b@gmail.com
 
-extra-source-files:
-    README.org
+common base
+    default-language:   Haskell2010
+    default-extensions: ImportQualifiedPost
+
+    build-depends:      base
+                      , text
 
 library
+    import:             base
+    visibility:         public
+    hs-source-dirs:     src
+    
     exposed-modules:    Salo
                       , Salo.Language.Lexer
                       , Salo.Language.Syntax
 
-    build-depends:      base                  ^>=4.14.3.0
-    Build-depends:      base, array
-    hs-source-dirs:     src
-    default-language:   Haskell2010
-
     build-tool-depends: alex:alex
                       , happy:happy
 
+    build-depends:      array
+
 Test-Suite test-salo-language
+    import:             base
     type:               detailed-0.9
     hs-source-dirs:     src
     test-module:        Salo.Language.Test
-    build-depends:      base                  ^>=4.14.3.0
-                      , Cabal                 ^>=3.2.1.0
+    build-depends:      Cabal
+                      , salo
 
 executable salo
+    import:             base
     main-is:            Main.hs
-    build-depends:      base                                  ^>=4.14.3.0
-                      , salo
+    build-depends:      salo
     hs-source-dirs:   app
-    default-language: Haskell2010
