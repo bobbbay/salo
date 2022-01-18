@@ -1,4 +1,4 @@
-cabal-version:      3.6
+cabal-version:      3.0
 name:               salo
 version:            0.1.0.0
 synopsis:           Salo is a toolset to agnostically build and deploy OS images remotely.
