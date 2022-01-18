@@ -1,12 +1,10 @@
 {
-
 module Salo.Language.Parser ( parseExpr ) where
 
 import Salo.Language.Lexer
 import Salo.Language.Syntax
 
 import Control.Monad.Except
-  
 }
 
 %tokentype { Token }
