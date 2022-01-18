@@ -27,12 +27,14 @@ data Expr
 
 data Lit
   =
-    -- | An integer, based off of Haskell's Int
-    LInt Int
     -- | A boolean type, based on Haskell's Bool
-  | LBool Bool
+    LitBool Bool
+    -- | An integer, based off of Haskell's Int
+  | LitInt Int
+    -- | A string, based off of Haskell's String
+  | LitString String
     -- | A unit type ()
-  | LUnit
+  | LitUnit
   deriving (Show, Eq, Ord)
 
 data Op

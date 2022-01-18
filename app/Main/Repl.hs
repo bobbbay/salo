@@ -1,13 +1,27 @@
 module Main.Repl where
 
-import Salo.Language.Syntax ( Expr )
-import Salo.Language.Parser ( parseExpr, parseTokens )
+import Salo.Language.Lexer ( scanner )
+import Salo.Language.Syntax ( Salo )
+import Salo.Language.Parser ( parse )
 
 import Control.Monad.Trans
 import System.Console.Haskeline
+import System.IO ( hPutStrLn, stderr )
 
 process :: String -> IO ()
 process input = do
+  putStrLn $ show input
+  let tokens = Salo.Language.Lexer.scanner input
+  case tokens of
+      Left  st -> hPutStrLn stderr $ "E" ++ st
+      Right ls
+        -> do putStrLn $ show ls
+              let ast = parse ls
+              case ast of
+                  Left e ->  putStrLn $ show e
+                  Right a -> putStrLn $ show a
+                      
+  {-
   putStrLn $ replPreprocess input
   let ast = parseExpr $ replPreprocess input
   putStrLn (show ast)
@@ -15,6 +29,7 @@ process input = do
     Left err -> do
       putStrLn $ "Parse Error: " ++ err
     Right ast -> putStrLn "Success!"
+-}
 
 -- | Preprocess a REPL line to be valid Salo syntax.
 replPreprocess :: String -> String

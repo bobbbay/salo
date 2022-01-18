@@ -28,6 +28,7 @@ library
 
     build-depends:      array
                       , mtl
+                      , containers
 
 Test-Suite test-salo-language
     import:             base

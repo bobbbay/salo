@@ -1,31 +1,37 @@
 {
-module Salo.Language.Parser ( parseExpr, parseTokens ) where
+module Salo.Language.Parser ( parse ) where
 
 import Salo.Language.Lexer
 import Salo.Language.Syntax
-
 import Control.Monad.Except
 }
 
-%tokentype { Token }
+%tokentype { Lexeme }
 
 %token
-  module   { TokenModule }
-  true     { TokenTrue }
-  false    { TokenFalse }
-  ':'      { TokenColon }
-  '|'      { TokenBar }
-  '->'     { TokenArrow }
-  '='      { TokenEq }
-  '('      { TokenLParen }
-  ')'      { TokenRParen }
-  '+'      { TokenAdd }
-  '-'      { TokenSub }
-  '*'      { TokenMul }
-  '/'      { TokenDiv }
-  '\n'     { TokenNewline }
-  NUM      { TokenNum $$ }
-  IDENT    { TokenIdent $$ }
+  -- Literals
+  BOOL     { L _ (LBool $$) _ }
+
+  INT      { L _ (LInt $$) _ }
+  STRING   { L _ (LString $$) _ }
+
+  -- Reserved keywords
+  module   { L _ (LModule) _ }
+  '+'      { L _ (LPlus) _ }
+  '-'      { L _ (LMinus) _ }
+  '*'      { L _ (LMultiply) _ }
+  '/'      { L _ (LDivide) _ }
+
+  -- Symbols
+  '('      { L _ (LLParen) _ }
+  ')'      { L _ (LRParen) _ }
+  ':'      { L _ (LColon) _ }
+  '='      { L _ (LEqual) _ }
+  '|'      { L _ (LBar) _ }
+  '->'     { L _ (LArrow) _ }
+
+  -- Identifiers
+  IDENT    { L _ (LIdentifier $$) _ }
 
 %monad { Except String } { (>>=) } { return }
 %error { parseError }
@@ -38,34 +44,28 @@ import Control.Monad.Except
 %left '*' '/'
 %%
 
-Salo : Expr '\n'         { Expr $1 }
-     | module IDENT '\n' { Module $2 }
+Salo : Expr            { Expr $1 }
+     | module IDENT    { Module $2 }
 
 Expr : IDENT ':' IDENT { Decl $1 $3 }
      | IDENT '=' Expr  { Def $1 $3 }
      | Literal         { Lit $1 }
      | Expr Op Expr    { Op $1 $2 $3 }
 
-Literal : NUM     { LInt $1 }
-        | true    { LBool True }
-        | false   { LBool False }
-        | '('')'  { LUnit }
+Literal : INT          { LitInt $1 }
+        | BOOL         { LitBool $1 }
+        | STRING       { LitString $1 }
+        | '('')'       { LitUnit }
 
-Op : '+' { Plus }
-   | '-' { Minus }
-   | '*' { Multiply }
-   | '/' { Divide }
+Op : '+'               { Plus }
+   | '-'               { Minus }
+   | '*'               { Multiply }
+   | '/'               { Divide }
 
 {
-parseError :: [Token] -> Except String a
+parseError :: [Lexeme]  -> Except String a
 parseError (l:ls) = throwError (show l)
-parseError [] = throwError "Unexpected end of Input"
+parseError [] = throwError "Unexpected end of input."
 
-parseExpr :: String -> Either String Salo
-parseExpr input = runExcept $ do
-  tokenStream <- scanTokens input
-  salo tokenStream
-
-parseTokens :: String -> Either String [Token]
-parseTokens = runExcept . scanTokens
+parse = runExcept . salo
 }
