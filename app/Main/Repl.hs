@@ -8,9 +8,9 @@ import System.Console.Haskeline
 
 process :: String -> IO ()
 process input = do
-  let tokens = parseTokens $ replPreprocess input
-  putStrLn (show tokens)
-  let ast = parseExpr input
+  putStrLn $ replPreprocess input
+  let ast = parseExpr $ replPreprocess input
+  putStrLn (show ast)
   case ast of
     Left err -> do
       putStrLn $ "Parse Error: " ++ err

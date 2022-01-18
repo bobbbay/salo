@@ -3,6 +3,14 @@ module Salo.Language.Syntax where
 type Name = String
 type Type = Name
 
+data Salo
+  =
+    -- | A module declaration
+    Module Name
+    -- | An expression
+  | Expr Expr
+  deriving (Show, Eq)
+
 data Expr
   =
     -- | A value type declaration
@@ -18,8 +26,13 @@ data Expr
   deriving (Show, Eq)
 
 data Lit
-  = LInt Int
+  =
+    -- | An integer, based off of Haskell's Int
+    LInt Int
+    -- | A boolean type, based on Haskell's Bool
   | LBool Bool
+    -- | A unit type ()
+  | LUnit
   deriving (Show, Eq, Ord)
 
 data Op

@@ -23,6 +23,7 @@ import Control.Monad.Except
   '-'      { TokenSub }
   '*'      { TokenMul }
   '/'      { TokenDiv }
+  '\n'     { TokenNewline }
   NUM      { TokenNum $$ }
   IDENT    { TokenIdent $$ }
 
@@ -30,12 +31,15 @@ import Control.Monad.Except
 %error { parseError }
 
 -- Entry point
-%name expr
+%name salo
 
 -- Operators
 %left '+' '-'
 %left '*' '/'
 %%
+
+Salo : Expr '\n'         { Expr $1 }
+     | module IDENT '\n' { Module $2 }
 
 Expr : IDENT ':' IDENT { Decl $1 $3 }
      | IDENT '=' Expr  { Def $1 $3 }
@@ -45,6 +49,7 @@ Expr : IDENT ':' IDENT { Decl $1 $3 }
 Literal : NUM     { LInt $1 }
         | true    { LBool True }
         | false   { LBool False }
+        | '('')'  { LUnit }
 
 Op : '+' { Plus }
    | '-' { Minus }
@@ -56,10 +61,10 @@ parseError :: [Token] -> Except String a
 parseError (l:ls) = throwError (show l)
 parseError [] = throwError "Unexpected end of Input"
 
-parseExpr :: String -> Either String Expr
+parseExpr :: String -> Either String Salo
 parseExpr input = runExcept $ do
   tokenStream <- scanTokens input
-  expr tokenStream
+  salo tokenStream
 
 parseTokens :: String -> Either String [Token]
 parseTokens = runExcept . scanTokens

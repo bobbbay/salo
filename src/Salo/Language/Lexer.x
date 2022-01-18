@@ -15,8 +15,8 @@ $misc  = [\_]
 $eol   = [\n]
 
 tokens :-
-  -- Whitespace insensitive
-  $eol                          ;
+  -- Whitespace
+  $eol                          { \s -> TokenNewline }
   $white+                       ;
 
   -- Comments
@@ -59,6 +59,7 @@ data Token
   | TokenSub          -- -
   | TokenMul          -- \*
   | TokenDiv          -- /
+  | TokenNewline      -- \n
   | TokenEOF          -- EOF
   | TokenNum Int      -- 1, 2, 3
   | TokenIdent String -- "A", "B", "C"
