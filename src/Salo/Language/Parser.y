@@ -1,5 +1,5 @@
 {
-module Salo.Language.Parser ( parseExpr ) where
+module Salo.Language.Parser ( parseExpr, parseTokens ) where
 
 import Salo.Language.Lexer
 import Salo.Language.Syntax

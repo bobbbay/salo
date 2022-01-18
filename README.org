@@ -8,10 +8,10 @@
    
 *** Running =salo=
 
-    With Cabal installed, just run:
+    With Stack installed, just run:
 
     #+begin_src shell
-    $ cabal run
+    $ stack run
     #+end_src
 
     ... in order to start.

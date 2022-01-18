@@ -39,7 +39,10 @@ Test-Suite test-salo-language
 
 executable salo
     import:             base
-    main-is:            Main.hs
     hs-source-dirs:     app
+    other-modules:      Main.Repl
+    main-is:            Main.hs
     build-depends:      salo
                       , optparse-applicative
+                      , mtl
+                      , haskeline

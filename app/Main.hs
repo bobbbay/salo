@@ -4,6 +4,8 @@ import Options.Applicative
 import Data.Monoid
 import Data.List
 
+import Main.Repl ( repl )
+
 main :: IO ()
 main = execParser opts >>= run
 
@@ -19,7 +21,7 @@ sample = subparser
        )
 
 run :: Sample -> IO ()
-run Repl = putStrLn "Hello, world!"
+run Repl = repl
 
 opts :: ParserInfo Sample
 opts = info (sample <**> helper)

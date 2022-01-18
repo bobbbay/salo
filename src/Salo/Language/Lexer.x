@@ -65,11 +65,11 @@ data Token
   deriving (Eq,Show)
 
 scanTokens :: String -> Except String [Token]
-scanTokens str = go ('\n',[],str) where 
+scanTokens str = go ('\n',[],str) where
   go inp@(_,_bs,str) =
     case alexScan inp 0 of
      AlexEOF -> return []
-     AlexError _ -> throwError "Invalid lexeme."
+     AlexError x -> throwError "Invalid lexeme. "
      AlexSkip  inp' len     -> go inp'
      AlexToken inp' len act -> do
       res <- go inp'
