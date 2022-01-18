@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               salo
-version:            0.1.0.0
+version:            0.0.0
 synopsis:           Salo is a toolset to agnostically build and deploy OS images remotely.
 license:            MIT
 author:             SEMC
@@ -16,7 +16,6 @@ common base
 
 library
     import:             base
-    visibility:         public
     hs-source-dirs:     src
     
     exposed-modules:    Salo
@@ -41,5 +40,6 @@ Test-Suite test-salo-language
 executable salo
     import:             base
     main-is:            Main.hs
+    hs-source-dirs:     app
     build-depends:      salo
-    hs-source-dirs:   app
+                      , optparse-applicative
