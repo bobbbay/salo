@@ -42,8 +42,10 @@ executable salo
     import:             base
     hs-source-dirs:     app
     other-modules:      Main.Repl
+                      , Main.Run
     main-is:            Main.hs
     build-depends:      salo
                       , optparse-applicative
                       , mtl
                       , haskeline
+                      , directory

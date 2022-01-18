@@ -29,10 +29,10 @@ someVal = if z == 2 then True else 5
 myproduct : (Int, Int)
 
 -- Sum types are represented as dependent types:
-data MyType : Data String | Info Int
+data MyType = Data String | Info Int
 
 -- And can also be recursive, like natural numbers:
-data Nat : Z | S Nat
+data Nat = Z | S Nat
 
 -- We have a type for types!
 -- The type for Nat is Type.

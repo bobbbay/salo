@@ -20,16 +20,6 @@ process input = do
               case ast of
                   Left e ->  putStrLn $ show e
                   Right a -> putStrLn $ show a
-                      
-  {-
-  putStrLn $ replPreprocess input
-  let ast = parseExpr $ replPreprocess input
-  putStrLn (show ast)
-  case ast of
-    Left err -> do
-      putStrLn $ "Parse Error: " ++ err
-    Right ast -> putStrLn "Success!"
--}
 
 -- | Preprocess a REPL line to be valid Salo syntax.
 replPreprocess :: String -> String

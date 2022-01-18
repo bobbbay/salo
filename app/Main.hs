@@ -5,12 +5,14 @@ import Data.Monoid
 import Data.List
 
 import Main.Repl ( repl )
+import Main.Run ( run )
 
 main :: IO ()
-main = execParser opts >>= run
+main = execParser opts >>= start
 
 data Sample
   = Repl
+  | Run String
   deriving (Eq, Show)
 
 sample :: Parser Sample
@@ -18,10 +20,17 @@ sample = subparser
        ( command "repl"
          (info (pure Repl)
                (progDesc "Open the Salo REPL"))
-       )
+       <> ( command "eval"
+         (info runParser
+               (progDesc "Evaluate a specific Salo file"))))
 
-run :: Sample -> IO ()
-run Repl = repl
+runParser :: Parser Sample
+runParser = Run
+       <$> argument str (metavar "FILE")
+
+start :: Sample -> IO ()
+start Repl = repl
+start (Run s) = run s
 
 opts :: ParserInfo Sample
 opts = info (sample <**> helper)
