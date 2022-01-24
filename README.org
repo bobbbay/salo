@@ -4,21 +4,23 @@
 
   Salo is a toolset to agnostically build and deploy OS images remotely.
 
-** Usage
+** Abstract
+
+   In the modern computing industry, operating systems are one of the most widely-configured parts of a project. Their management of numerous key computers components - such as  input/output, memory, and packages - makes them a beehive for never-ending configuration. Without a unified system, information about current configuration can be lost over time. New members looking at a deployed OS are very unlikely to catch every modification at first glance, software updates are likely to introduce new configuration requirements, and making even small changes in general can be a complete mess. Enter Salo: a declarative, dependently-typed configuration language that eliminates these issues entirely. With a language such as Salo, changes to configuration are centralized in one set of declarations, solving all of the previously-mentioned issues with operating system maintainership - and more.
+
+** Installation
    
-*** Running =salo=
+   With Stack installed, just run:
 
-    With Stack installed, just run:
+   #+begin_src shell
+   $ stack run
+   #+end_src
 
-    #+begin_src shell
-    $ stack run
-    #+end_src
-
-    ... in order to start.
+   ... in order to start.
 
 ** Status
 
-A [[https://semc-labs.github.io/Salo/][standard, crash course, and backend cookbook]] for Salo is being written, but has no implementation. To contribute, please read [[./CONTRIBUTING.org]].
+A [[https://semc-labs.github.io/Salo/][standard, crash course, and backend cookbook]] for Salo is being written. So is a [[./paper][paper]]. There is a Haskell implementation in progress. To contribute, please read [[./CONTRIBUTING.org]].
 
 ** Contributing
 

@@ -13,7 +13,7 @@ process input = do
   putStrLn $ show input
   let tokens = Salo.Language.Lexer.scanner input
   case tokens of
-      Left  st -> hPutStrLn stderr $ "E" ++ st
+      Left  st -> hPutStrLn stderr $ st
       Right ls
         -> do putStrLn $ show ls
               let ast = parse ls

@@ -64,7 +64,7 @@ Op : '+'               { Plus }
 
 {
 parseError :: [Lexeme]  -> Except String a
-parseError (l:ls) = throwError (show l)
+parseError (l:ls) = throwError $ "Parse error at: " ++ (show l)
 parseError [] = throwError "Unexpected end of input."
 
 parse = runExcept . salo

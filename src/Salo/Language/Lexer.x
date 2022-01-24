@@ -1,6 +1,7 @@
 {
 module Salo.Language.Lexer ( scanner, Lexeme(..), LexemeClass(..) ) where
 
+import Salo
 import Control.Monad.Except
 import Numeric ( readDec )
 import Data.Map ( Map )
@@ -11,13 +12,13 @@ import Data.Char ( chr )
 
 %wrapper "monadUserState"
 
-$whitespace = [\ \t \b]
+$whitespace = [\ \t \b\n]
 
 $digit = 0-9
 @number = [$digit]+
 
 $alpha = [A-Za-z]
-@identifier = $alpha($alpha|_|$digit)*
+@identifier = $alpha($alpha|.|$digit)*
 
 state :-
 
@@ -55,8 +56,17 @@ state :-
 -- Whitespace
 <0>             $whitespace+          ;
 
+-- Comments
+<0>              "---".*              { skip }
+<0>              "--".*               { skip }
+<0>              "{-"                 { enterNewComment `andBegin` state_comment }
+<state_comment>  "{-"                 { embedComment }
+<state_comment>  "-}"                 { unembedComment }
+<state_comment>  .                    ;
+<state_comment>  \n                   { skip }
+
 -- Identifiers
-<0>             @identifier  { getVariable }
+<0>             @identifier           { getVariable }
  
 {
 data Lexeme = L AlexPosn LexemeClass (Maybe String) deriving Show
@@ -99,8 +109,24 @@ state_initial = 0
 
 type Action = AlexInput -> Int -> Alex Lexeme
 
+enterNewComment, embedComment, unembedComment :: Action
 enterNewString, leaveString, addCurrentToString, addAsciiToString, addControlToString :: Action
 getInteger, getVariable :: Action
+
+enterNewComment input len =
+    do setLexerCommentDepth 1
+       skip input len
+
+embedComment input len =
+    do cd <- getLexerCommentDepth
+       setLexerCommentDepth (cd + 1)
+       skip input len
+
+unembedComment input len =
+    do cd <- getLexerCommentDepth
+       setLexerCommentDepth (cd - 1)
+       when (cd == 1) (alexSetStartCode state_initial)
+       skip input len
 
 getInteger (p, _, _, input) len = if (length r == 1)
                                   then return (L p (LInt (fst (head r))) (Just s))
@@ -210,6 +236,9 @@ addCharToLexerStringValue c = Alex $ \s -> Right (s{alex_ust=(alex_ust s){lexerS
 -- | Get the depth of the current comment.
 getLexerCommentDepth :: Alex Int
 getLexerCommentDepth = Alex $ \s@AlexState{alex_ust=ust} -> Right (s, lexerCommentDepth ust)
+
+setLexerCommentDepth :: Int -> Alex ()
+setLexerCommentDepth ss = Alex $ \s -> Right (s{alex_ust=(alex_ust s){lexerCommentDepth=ss}}, ())
 
 -- Error handling
 

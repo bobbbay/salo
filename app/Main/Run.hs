@@ -12,6 +12,7 @@ run :: String -> IO ()
 run filename = do flag <- doesFileExist filename
                   when (not flag) (error ("The following file does not exist: " ++ filename))
                   s <- readFile filename
+                  putStrLn s
                   let tokens = Salo.Language.Lexer.scanner s
                   case tokens of
                     Left  st -> hPutStrLn stderr $ "E" ++ st
