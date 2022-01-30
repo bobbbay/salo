@@ -1,6 +1,6 @@
 <h1 align="center">Salo</h1>
 
-<h1 align="center">
+<h4 align="center">
     <a href="https://semc-labs.github.io/Salo/">Documentation</a>
   | <a href="https://github.com/orgs/semc-labs/projects/2/views/1?filterQuery=salo">Roadmap</a>
   | <a href="https://discord.gg/uxGFjp65pK">Community</a>
@@ -9,8 +9,6 @@
 
 <p align="center">
   <a href="https://github.com/semc-labs/salo/actions"><img alt="Build Status" src="https://github.com/semc-labs/Salo/actions/workflows/ci.yml/badge.svg"></a>
-[//]: #  <a href="https://hackage.haskell.org/package/salo"> <img alt="Hackage-Deps" src="https://img.shields.io/hackage-deps/v/salo"></a>
-[//]: #  <a href="https://hackage.haskell.org/package/salo"> <img alt="Hackage"      src="https://img.shields.io/hackage/v/salo"></a>
 </p>
 
 <p align="center"> A declarative, reproducible, statically-typed build/deployment toolset </p>
@@ -47,5 +45,5 @@ Now that your Salo daemon is up and running, you can learn more about how to dev
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Furthermore, please make sure to update tests as appropriate.
 
-Please see <./CONTRIBUTING.md> for more details.
+Please see [CONTRIBUTING.org](./CONTRIBUTING.org) for more details.
 
