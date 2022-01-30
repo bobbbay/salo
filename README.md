@@ -13,7 +13,7 @@
 
 <p align="center"> A declarative, reproducible, statically-typed build/deployment toolset </p>
 
-**Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images.
+**Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ. For more information about features, read [our documentation](https://semc-labs.github.io/Salo).
 
 ## Features
  * Expressive type system (dependent, first-class functions and types)
@@ -21,25 +21,15 @@
  
 ## Getting started
 
-### Install Salo
+To get started with Salo, run (with Stack):
 
-TODO
-
-## Write a declaration
-
-TODO
-
-## Start the daemon
-
-TODO
-
-## Build and deploy!
-
-TODO
+```shell
+stack run -- --help
+```
 
 ## Documentation
 
-Now that your Salo daemon is up and running, you can learn more about how to develop operating system configuration in [the documentation](https://semc-labs.github.io/Salo/).
+Now that you're ready with Salo, you can learn more about how to develop operating system configuration in [the documentation](https://semc-labs.github.io/Salo/).
 
 ## Contributing
 
