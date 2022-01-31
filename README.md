@@ -1,4 +1,4 @@
-[![Dependent, reproducible, static OS configuration](/docs/assets/banner.png)](https://github.com/semc-labs/salo)
+[![Dependent, reproducible, static OS configuration](/docs/assets/banner.svg)](https://github.com/semc-labs/salo)
 
 <h1 align="center">Salo</h1>
 
