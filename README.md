@@ -18,8 +18,12 @@
 **Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ. For more information about features, read [our documentation](https://semc-labs.github.io/Salo).
 
 ## Features
+
  * Expressive type system (dependent, first-class functions and types)
  * Efficient deployment (leveraging diffs to only deploy what you need)
+ * On-the-fly changes (configuring systems as quickly as possible)
+ * Powerful history management (view configuration history, and rollback to previous deployments)
+ * Staged changes (see exactly what your configuration does, before it's deployed)
  
 ## Getting started
 
