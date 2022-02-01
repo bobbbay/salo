@@ -1,17 +1,19 @@
-cabal-version:      3.0
-name:               salo
-version:            0.0.0
-synopsis:           Salo is a toolset to agnostically build and deploy OS images remotely.
-license:            MIT
-author:             SEMC
-maintainer:         bobbbay.b@gmail.com
+cabal-version:          3.0
+name:                   salo
+version:                0.0.0.0
+synopsis:               Declarative, reproducible, typed build and deployment for operating systems.
+description:            Salo is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ.
+category:               Language
+license:                MIT
+author:                 SEMC
+maintainer:             bobbbay.b@gmail.com
 
 common base
     default-language:   Haskell2010
     default-extensions: ImportQualifiedPost
                       , FlexibleContexts
 
-    build-depends:      base
+    build-depends:      base  <= 4.5
                       , text
 
 library
