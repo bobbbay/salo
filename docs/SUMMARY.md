@@ -7,7 +7,7 @@
    - [Contact us](intro/CONTACT.md)
  - [Getting started](getting-started/README.md)
    - [Installation](getting-started/INSTALLATION.md)
-   - [Quick start](getting-started/QUICKSTART.md)
+   - [Syntax](getting-started/SYNTAX.md)
    - [What's next?](getting-started/NEXT.md)
  - [Core concepts](core/README.md)
    - [Derivations](core/DERIVATIONS.md)
