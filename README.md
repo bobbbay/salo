@@ -9,10 +9,6 @@
   | <a href="./CONTRIBUTING.org">Contributing</a>
 </h1>
 
-<p align="center">
-  <a href="https://github.com/semc-labs/salo/actions"><img alt="Build Status" src="https://github.com/semc-labs/Salo/actions/workflows/ci.yml/badge.svg"></a>
-</p>
-
 <p align="center"> A declarative, reproducible, statically-typed build/deployment toolset </p>
 
 **Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ. For more information about features, read [our documentation](https://semc-labs.github.io/salo).
@@ -27,10 +23,10 @@
  
 ## Getting started
 
-To get started with Salo, run (with Stack):
+To get started with Salo, run (with Cargo):
 
 ```shell
-stack run -- --help
+cargo t
 ```
 
 ## Documentation
@@ -40,6 +36,3 @@ Now that you're ready with Salo, you can learn more about how to develop operati
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Furthermore, please make sure to update tests as appropriate.
-
-Please see [CONTRIBUTING.org](./CONTRIBUTING.org) for more details.
-
