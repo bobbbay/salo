@@ -3,7 +3,7 @@
 <h1 align="center">Salo</h1>
 
 <h4 align="center">
-    <a href="https://semc-labs.github.io/Salo/">Documentation</a>
+    <a href="https://semc-labs.github.io/salo/">Documentation</a>
   | <a href="https://github.com/orgs/semc-labs/projects/2/views/1?filterQuery=salo">Roadmap</a>
   | <a href="https://discord.gg/uxGFjp65pK">Community</a>
   | <a href="./CONTRIBUTING.org">Contributing</a>
@@ -15,7 +15,7 @@
 
 <p align="center"> A declarative, reproducible, statically-typed build/deployment toolset </p>
 
-**Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ. For more information about features, read [our documentation](https://semc-labs.github.io/Salo).
+**Salo** is a declarative, reproducible, statically-typed configuration language for building and deploying operating system images. This leads to composable, scalable, and functional operating systems in-situ. For more information about features, read [our documentation](https://semc-labs.github.io/salo).
 
 ## Features
 
@@ -35,7 +35,7 @@ stack run -- --help
 
 ## Documentation
 
-Now that you're ready with Salo, you can learn more about how to develop operating system configuration in [the documentation](https://semc-labs.github.io/Salo/).
+Now that you're ready with Salo, you can learn more about how to develop operating system configuration in [the documentation](https://semc-labs.github.io/salo/).
 
 ## Contributing
 
