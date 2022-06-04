@@ -1,2 +1,2 @@
 #[derive(Debug)]
-pub enum LexerError {}
+pub struct LexerError {}
