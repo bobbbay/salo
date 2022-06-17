@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-logos = "0.12.0"
+logos = "0.12.1"
 nom = "7.1.1"
 
 [package.metadata.nix]
